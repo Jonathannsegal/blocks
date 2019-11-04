@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "next-simple-starter",
+    "name": "Blocks",
     "routes": [
         {
             "src": "^/service-worker.js$",

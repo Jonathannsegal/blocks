@@ -15,8 +15,8 @@ class MyApp extends App {
 
     render() {
         const { Component, pageProps } = this.props;
-        const description = 'Creating a non-SSR map component inside a Next.js project.';
-        const title = `Next.js + Mapbox Demo - ${description}`;
+        const description = 'Blocks a map game built for SE319';
+        const title = `Blocks`;
 
         return (
             <div>
@@ -25,7 +25,7 @@ class MyApp extends App {
                     <meta charSet="utf-8" />
                     <meta content="IE=edge" httpEquiv="X-UA-Compatible" />
                     <meta content="width=device-width, initial-scale=1" name="viewport" />
-                    <meta name="theme-color" content="#673ab7" />
+                    <meta name="theme-color" content="#6FC8B9" />
                     <link rel="manifest" href="static/manifest.json" />
                     <link rel="icon" href="static/img/favicon.ico" />
                     <link href="https://api.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css" rel="stylesheet" />

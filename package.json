@@ -1,6 +1,6 @@
 {
     "name": "blocks",
-    "description": "Creating a non-SSR map component inside a Next.js project.",
+    "description": "Blocks a map game built for SE319",
     "version": "0.0.1",
     "author": {
         "name": "Jonathan Segal and Ben Cohen"
