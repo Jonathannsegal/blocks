@@ -1,5 +1,7 @@
 import { Component } from 'react';
-import ReactMapGL from 'react-map-gl';
+import ReactMapGL, {Marker} from 'react-map-gl';
+import { geolocated } from "react-geolocated";
+
 
 class Map extends Component {
     state = {
@@ -12,16 +14,62 @@ class Map extends Component {
         }
     };
 
+    // render() {
+    //     return (
+    //         <ReactMapGL
+    //             mapStyle="mapbox://styles/mapbox/streets-v9"
+    //             mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"
+    //             {...this.state.viewport}
+    //             onViewportChange={(viewport) => this.setState({ viewport })}
+    //
+    //         >
+    //         <Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>
+    //         <div className="yellow-box"></div>
+    //         </Marker>
+    //         <style jsx>{`
+    //           .yellow-box{
+    //             background-color: #0000ff;
+    //             width: 5px;
+    //             height: 5px;
+    //           }
+    //         `}</style>
+    //         </ReactMapGL>
+    //     );
+    // }
     render() {
-        return (
-            <ReactMapGL
-                mapStyle="mapbox://styles/mapbox/streets-v9"
-                mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"
-                {...this.state.viewport}
-                onViewportChange={(viewport) => this.setState({ viewport })}
-            />
-        );
+        return !this.props.isGeolocationAvailable ? (
+            <div>Your browser does not support Geolocation</div>
+        ) : !this.props.isGeolocationEnabled ? (
+            <div>Geolocation is not enabled</div>
+        ) : this.props.coords ? (
+          <ReactMapGL
+                      mapStyle="mapbox://styles/mapbox/streets-v9"
+                      mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"
+                      {...this.state.viewport}
+                      onViewportChange={(viewport) => this.setState({ viewport })}
+
+                  >
+                  <Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>
+                  <div className="yellow-box"></div>
+                  </Marker>
+                  <style jsx>{`
+                    .yellow-box{
+                      background-color: #0000ff;
+                      width: 5px;
+                      height: 5px;
+                    }
+                  `}</style>
+                  </ReactMapGL>
+        ) : (
+                        <div>Getting the location data&hellip; </div>
+                    );
     }
 }
 
-export default Map;
+
+export default geolocated({
+    positionOptions: {
+        enableHighAccuracy: false,
+    },
+    userDecisionTimeout: 5000,
+})(Map);
