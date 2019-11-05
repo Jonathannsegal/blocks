@@ -18,12 +18,16 @@
         "prettier": "prettier --write \"**/*.{js,json,md,yml}\""
     },
     "dependencies": {
+        "@zeit/next-less": "^1.0.1",
+        "less": "^3.10.3",
         "next": "^9.1.2",
         "next-offline": "^4.0.6",
         "react": "^16.7.0",
         "react-axe": "^3.2.0",
         "react-dom": "^16.7.0",
+        "react-geolocated": "^3.0.1",
         "react-map-gl": "^5.1.1",
+        "rsuite": "^4.0.5",
         "styled-components": "^4.4.1"
     },
     "devDependencies": {

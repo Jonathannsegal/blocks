@@ -1,7 +1,11 @@
 const withOffline = require('next-offline')
+const withLess = require('@zeit/next-less')
 
-const nextConfig = {
+module.exports = withOffline(withLess({
     target: process.env.NEXT_TARGET || 'serverless',
+    lessLoaderOptions: {
+        javascriptEnabled: true
+    },
     workboxOpts: {
         swDest: 'static/service-worker.js',
         runtimeCaching: [
@@ -31,6 +35,4 @@ const nextConfig = {
             }
         ]
     }
-}
-
-module.exports = withOffline(nextConfig)
+}))
