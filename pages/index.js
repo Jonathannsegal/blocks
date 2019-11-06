@@ -1,9 +1,10 @@
 import React from 'react';
 import Head from 'next/head';
-import Link from 'next/link'
-import { Button } from 'rsuite';
-import Nav from '../components/nav'
-import 'rsuite/lib/styles/index.less';
+// import Link from 'next/link'
+import { Button, Message } from 'rsuite';
+// import Nav from '../components/nav'
+import 'rsuite/lib/styles/themes/default/index.less';
+// import 'rsuite/lib/styles/index.less';
 
 const Home = () => (
   <div>
@@ -13,6 +14,7 @@ const Home = () => (
     </Head>
 
     {/* <Nav /> */}
+    <Message type="success" description="Success" />
 
     <div className="hero">
       <h1 className="title">Blocks</h1>
@@ -21,21 +23,21 @@ const Home = () => (
          <br />
         <br />
         <span>
-          <Link href='https://leerob.io/blog/using-mapbox-with-next-js'>
+          <a href='https://leerob.io/blog/using-mapbox-with-next-js'>
             link to blog about how to work with mapbox
-           </Link>
+            </a>
           <br />
-          <Link href='https://git.linux.iastate.edu/fall2019-cs319-gitprojects/g40'>
+          <a href='https://git.linux.iastate.edu/fall2019-cs319-gitprojects/g40'>
             Gitlab
-           </Link>
+            </a>
           <br />
-          <Link href='https://trello.com/b/ChA7nedI/g40'>
+          <a href='https://trello.com/b/ChA7nedI/g40'>
             Trello
-           </Link>
+            </a>
           <br />
         </span>
       </p>
-      <Button appearance="primary" href="/game">
+      <Button>
         Play Game
       </Button>
     </div>
