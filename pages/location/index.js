@@ -43,4 +43,5 @@ export default geolocated({
         enableHighAccuracy: false,
     },
     userDecisionTimeout: 5000,
+    watchPosition:true,
 })(Location);
