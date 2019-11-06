@@ -14,7 +14,7 @@ class Map extends Component {
         }
     };
 
-    
+
     render() {
         return !this.props.isGeolocationAvailable ? (
             <div>Your browser does not support Geolocation</div>
@@ -48,7 +48,8 @@ class Map extends Component {
 
 export default geolocated({
     positionOptions: {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
     },
     userDecisionTimeout: 5000,
+    watchPosition: true,
 })(Map);
