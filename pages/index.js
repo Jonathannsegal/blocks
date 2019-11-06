@@ -11,7 +11,7 @@ require('rsuite/lib/styles/index.less');
 const Home = () => (
 	<div>
 		<Head>
-			<title>Home change</title>
+			<title>Home</title>
 			<link rel="icon" href="/favicon.ico" />
 		</Head>
 
