@@ -91,7 +91,6 @@ import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link'
 import { Button } from 'rsuite';
-import location from '../components/location';
 import 'rsuite/lib/styles/index.less';
 
 const Home = () => (
