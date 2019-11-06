@@ -1,9 +1,10 @@
 import React from 'react';
 import Head from 'next/head';
-// import Link from 'next/link'
 import { Button, Message } from 'rsuite';
-// import Nav from '../components/nav'
 require('rsuite/lib/styles/index.less');
+
+// import Link from 'next/link'
+// import Nav from '../components/nav'
 // import 'rsuite/lib/styles/themes/default/index.less';
 // import 'rsuite/lib/styles/index.less';
 

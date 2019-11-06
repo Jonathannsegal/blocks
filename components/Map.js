@@ -1,6 +1,6 @@
-import { Component } from 'react';
-import ReactMapGL, { Marker } from 'react-map-gl';
-import { geolocated } from 'react-geolocated';
+import {Component} from 'react';
+import ReactMapGL, {Marker} from 'react-map-gl';
+import {geolocated} from 'react-geolocated';
 
 class Map extends Component {
 	state = {
@@ -25,7 +25,7 @@ class Map extends Component {
 				{...this.state.viewport}
 				latitude={this.props.coords.latitude}
 				longitude={this.props.coords.longitude}
-				onViewportChange={(viewport) => this.setState({ viewport })}
+				onViewportChange={(viewport) => this.setState({viewport})}
 			>
 				<Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>
 					<div className="yellow-box" />
@@ -42,8 +42,8 @@ class Map extends Component {
 				`}</style>
 			</ReactMapGL>
 		) : (
-						<div>Getting the location data&hellip; </div>
-					);
+			<div>Getting the location data&hellip; </div>
+		);
 	}
 }
 

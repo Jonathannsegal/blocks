@@ -14,7 +14,7 @@ class MyApp extends App {
 	// }
 
 	render() {
-		const { Component, pageProps } = this.props;
+		const {Component, pageProps} = this.props;
 		const description = 'Blocks a map game built for SE319';
 		const title = `Blocks`;
 

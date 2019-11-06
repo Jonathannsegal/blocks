@@ -7,11 +7,12 @@
     },
     "license": "MIT",
     "scripts": {
-        "tunnel": "npx localtunnel --port 3000",
         "dev": "next",
         "build": "next build",
-        "now-build": "next build",
         "start": "next start",
+        "deploy": "now --prod",
+        "now-build": "next build",
+        "tunnel": "npx localtunnel --port 3000",
         "prettier": "prettier --write \"**/*.{js,json,md,yml}\""
     },
     "dependencies": {
@@ -20,7 +21,6 @@
         "next": "^9.1.2",
         "next-offline": "^4.0.6",
         "react": "^16.7.0",
-        "react-axe": "^3.2.0",
         "react-dom": "^16.7.0",
         "react-geolocated": "^3.0.1",
         "react-map-gl": "^5.1.1",
