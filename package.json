@@ -10,18 +10,13 @@
         "tunnel": "npx localtunnel --port 3000",
         "dev": "next",
         "build": "next build",
-        "build:server": "NEXT_TARGET=server next build",
-        "export:server": "NEXT_TARGET=server next export",
-        "export": "npm run build:server && npm run export:server",
         "now-build": "next build",
         "start": "next start",
-        "start:static": "serve",
         "prettier": "prettier --write \"**/*.{js,json,md,yml}\""
     },
     "dependencies": {
         "@zeit/next-less": "^1.0.1",
         "less": "^3.10.3",
-        "localtunnel": "^2.0.0",
         "next": "^9.1.2",
         "next-offline": "^4.0.6",
         "react": "^16.7.0",
@@ -30,9 +25,11 @@
         "react-geolocated": "^3.0.1",
         "react-map-gl": "^5.1.1",
         "rsuite": "^4.0.5",
-        "styled-components": "^4.4.1"
+        "styled-components": "^4.4.1",
+        "webpack": "^4.41.2"
     },
     "devDependencies": {
+        "localtunnel": "^2.0.0",
         "prettier": "^1.15.3",
         "serve": "^11.1.0"
     }
