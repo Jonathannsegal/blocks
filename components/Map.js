@@ -25,6 +25,8 @@ class Map extends Component {
                       mapStyle="mapbox://styles/mapbox/streets-v9"
                       mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"
                       {...this.state.viewport}
+                      latitude = {this.props.coords.latitude}
+                      longitude = {this.props.coords.longitude}
                       onViewportChange={(viewport) => this.setState({ viewport })}
 
                   >
