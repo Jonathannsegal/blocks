@@ -19,10 +19,10 @@ const SignUp = () => (
                 <Line percent={50} status='active' strokeColor="#87d13f" showInfo={false} />
                 <br />
                 <GetUsername />
-                {/* <GetEmail />
+                <GetEmail />
                 <GetPassword />
                 <GetPasswordValidate />
-                <AddProfilePicture /> */}
+                <AddProfilePicture />
             </FlexboxGrid.Item>
         </FlexboxGrid>
     </Content>

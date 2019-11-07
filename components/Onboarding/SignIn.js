@@ -17,11 +17,11 @@ const SignIn = () => (
                 <Form fluid>
                     <FormGroup>
                         <ControlLabel>Username or email address</ControlLabel>
-                        <FormControl name="name" />
+                        <FormControl name="name" placeholder="Username or email address" />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Password</ControlLabel>
-                        <FormControl name="password" type="password" />
+                        <FormControl name="password" placeholder="Password" type="password" />
                     </FormGroup>
                     <FormGroup>
                         <ButtonToolbar>
