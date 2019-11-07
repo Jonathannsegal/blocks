@@ -14,7 +14,7 @@ class MyApp extends App {
 	// }
 
 	render() {
-		const {Component, pageProps} = this.props;
+		const { Component, pageProps } = this.props;
 		const description = 'Blocks a map game built for SE319';
 		const title = `Blocks`;
 
@@ -28,6 +28,7 @@ class MyApp extends App {
 					<meta name="theme-color" content="#6FC8B9" />
 					<link rel="manifest" href="static/manifest.json" />
 					<link rel="icon" href="static/img/favicon.ico" />
+					<link rel="apple-touch-icon" href="static/img/android-chrome-144x144.png" />
 					<link href="https://api.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css" rel="stylesheet" />
 					<meta content={description} name="description" />
 					<meta property="og:title" content={title} />

@@ -23,6 +23,7 @@
         "react": "^16.7.0",
         "react-dom": "^16.7.0",
         "react-geolocated": "^3.0.1",
+        "react-lottie": "^1.2.3",
         "react-map-gl": "^5.1.1",
         "rsuite": "^4.0.5",
         "styled-components": "^4.4.1",
@@ -32,5 +33,12 @@
         "localtunnel": "^2.0.0",
         "prettier": "^1.15.3",
         "serve": "^11.1.0"
-    }
+    },
+    "sideEffects": [
+        "lib/**/style/*",
+        "es/**/style/*",
+        "dist/*",
+        "*.less",
+        "*.css"
+    ]
 }

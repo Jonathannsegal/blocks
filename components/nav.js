@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-const links = [{href: 'https://zeit.co/now', label: 'ZEIT'}, {href: 'https://github.com', label: 'GitHub'}].map(
+const links = [{ href: 'https://zeit.co/now', label: 'ZEIT' }, { href: 'https://github.com', label: 'GitHub' }].map(
 	(link) => {
 		link.key = `nav-link-${link.href}-${link.label}`;
 		return link;
@@ -16,7 +16,7 @@ const Nav = () => (
 					<a>Home</a>
 				</Link>
 			</li>
-			{links.map(({key, href, label}) => (
+			{links.map(({ key, href, label }) => (
 				<li key={key}>
 					<a href={href}>{label}</a>
 				</li>
@@ -26,7 +26,6 @@ const Nav = () => (
 		<style jsx>{`
 			:global(body) {
 				margin: 0;
-				font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Helvetica, sans-serif;
 			}
 			nav {
 				text-align: center;
