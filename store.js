@@ -1,35 +1,54 @@
-//REDUX Example
 import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import SignUpState from './constants/signUpState';
+import HomeState from './constants/homeState';
 
 const initialState = {
-    lastUpdate: 0,
-    light: false,
-    count: 0
+    homeState: HomeState.signIn,
+    signUp: SignUpState.userName
 }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'TICK':
+        case 'signUpNone':
             return {
                 ...state,
-                lastUpdate: action.lastUpdate,
-                light: !!action.light
+                signUp: SignUpState.none
             }
-        case 'INCREMENT':
+        case 'signUpUsername':
             return {
                 ...state,
-                count: state.count + 1
+                signUp: SignUpState.userName
             }
-        case 'DECREMENT':
+        case 'signUpEmail':
             return {
                 ...state,
-                count: state.count - 1
+                signUp: SignUpState.email
             }
-        case 'RESET':
+        case 'signUpPassword':
             return {
                 ...state,
-                count: initialState.count
+                signUp: SignUpState.password
+            }
+        case 'signUpPasswordValidate':
+            return {
+                ...state,
+                signUp: SignUpState.passwordVerify
+            }
+        case 'done':
+            return {
+                ...state,
+                signUp: SignUpState.done
+            }
+        case 'homeSignIn':
+            return {
+                ...state,
+                homeState: HomeState.signIn
+            }
+        case 'homeSignUp':
+            return {
+                ...state,
+                homeState: HomeState.signUp
             }
         default:
             return state
