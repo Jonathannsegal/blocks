@@ -4,6 +4,8 @@ import SignUpState from './constants/signUpState';
 import HomeState from './constants/homeState';
 
 const initialState = {
+    authUser: null,
+    users: [],
     homeState: HomeState.signIn,
     signUp: SignUpState.userName,
     signUpFormValue: {
@@ -15,8 +17,24 @@ const initialState = {
     formError: {}
 }
 
+const applySetUsers = (state, action) => ({
+    ...state,
+    users: action.users
+});
+
+const applySetAuthUser = (state, action) => ({
+    ...state,
+    authUser: action.authUser
+});
+
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'USERS_SET': {
+            return applySetUsers(state, action);
+        }
+        case 'AUTH_USER_SET': {
+            return applySetAuthUser(state, action);
+        }
         case ('UPDATE_SIGNUP_USERNAME'):
             return {
                 ...state,

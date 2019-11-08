@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { useSelector } from 'react-redux'
 import Lottie from 'react-lottie';
 import * as success from '../../db/success.json'
+import Link from "next/link"
+import Router from "next/router"
+import { AppWithAuthentication } from "../App";
+import { auth, db } from "../../firebase";
 import {
     Content,
     FlexboxGrid,
@@ -37,7 +41,25 @@ import GetPasswordValidate from './components/GetPasswordValidate';
 
 const useSignUp = () => {
     const signUp = useSelector(state => state.signUp)
-    return { signUp }
+    const signUpFormValue = useSelector(state => state.signUpFormValue)
+    const onSubmit = event => {
+        auth
+            .doCreateUserWithEmailAndPassword(event.email, event.password)
+            .then(authUser => {
+                db.doCreateUser(authUser.user.uid, event.userName, event.email)
+                    .then(() => {
+                        Router.push('/dashboard');
+                    })
+                    .catch(error => {
+                        console.log("error", error);
+                    });
+            })
+            .catch(error => {
+                console.log("error", error);
+            });
+    }
+
+    return { signUp, signUpFormValue, onSubmit }
 }
 
 const successOptions = {
@@ -51,8 +73,14 @@ const successOptions = {
 
 const { Line } = Progress;
 
-const SignUp = () => {
-    const { signUp } = useSignUp()
+const SignUp = () => (
+    <AppWithAuthentication>
+        <SignUpBase />
+    </AppWithAuthentication>
+);
+
+const SignUpBase = () => {
+    const { signUp, signUpFormValue, onSubmit } = useSignUp()
     return (
         <Content>
             <FlexboxGrid justify="center">
@@ -70,10 +98,13 @@ const SignUp = () => {
                             case SignUpState.passwordVerify:
                                 return <GetPasswordValidate />;
                             case SignUpState.done:
-                                return <Lottie
-                                    options={successOptions}
-                                    isClickToPauseDisabled={true}
-                                />;
+                                {
+                                    onSubmit(signUpFormValue);
+                                    return <Lottie
+                                        options={successOptions}
+                                        isClickToPauseDisabled={true}
+                                    />;
+                                }
                             default:
                                 return null;
                         }

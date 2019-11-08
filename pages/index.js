@@ -1,19 +1,19 @@
-import React from 'react';
-import Lottie from 'react-lottie';
-import { withRedux } from '../lib/redux'
+import React from 'react'
+import Lottie from 'react-lottie'
+import { withRedux } from '../src/lib/redux'
 import { useSelector, useDispatch } from 'react-redux'
-import * as pinjump from '../db/pinjump.json'
-import * as worldspin from '../db/worldspin.json'
+import * as pinjump from '../src/db/pinjump.json'
+import * as worldspin from '../src/db/worldspin.json'
 import {
 	FlexboxGrid,
 	Container,
 	Header,
 	Button
 } from 'rsuite';
-import SignIn from '../components/Onboarding/SignIn';
-import SignUp from '../components/Onboarding/SignUp';
-import HomeState from '../constants/homeState';
-import SignUpState from '../constants/signUpState';
+import SignIn from '../src/components/Onboarding/SignIn'
+import SignUp from '../src/components/Onboarding/SignUp'
+import HomeState from '../src/constants/homeState'
+import SignUpState from '../src/constants/signUpState'
 require('rsuite/lib/styles/index.less');
 
 // import Link from 'next/link'

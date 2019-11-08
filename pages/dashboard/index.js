@@ -1,50 +1,20 @@
 import React from 'react';
-import { geolocated } from 'react-geolocated';
+import { withRedux } from '../../src/lib/redux'
+import { useSelector } from 'react-redux'
+import { AppWithAuthorization } from "../../src/components/App";
 
-class Location extends React.Component {
-    render() {
-        return !this.props.isGeolocationAvailable ? (
-            <div>Your browser does not support Geolocation</div>
-        ) : !this.props.isGeolocationEnabled ? (
-            <div>Geolocation is not enabled</div>
-        ) : this.props.coords ? (
-            <table>
-                <tbody>
-                    <tr>
-                        <td>DASHBOARD</td>
-                    </tr>
-                    <tr>
-                        <td>latitude</td>
-                        <td>{this.props.coords.latitude}</td>
-                    </tr>
-                    <tr>
-                        <td>longitude</td>
-                        <td>{this.props.coords.longitude}</td>
-                    </tr>
-                    <tr>
-                        <td>altitude</td>
-                        <td>{this.props.coords.altitude}</td>
-                    </tr>
-                    <tr>
-                        <td>heading</td>
-                        <td>{this.props.coords.heading}</td>
-                    </tr>
-                    <tr>
-                        <td>speed</td>
-                        <td>{this.props.coords.speed}</td>
-                    </tr>
-                </tbody>
-            </table>
-        ) : (
-                        <div>Getting the location data&hellip; </div>
-                    );
-    }
+const useDashboard = () => {
+    const authUser = useSelector(state => state.authUser)
+    return { authUser }
 }
 
-export default geolocated({
-    positionOptions: {
-        enableHighAccuracy: false
-    },
-    userDecisionTimeout: 5000,
-    watchPosition: true
-})(Location);
+const dashboard = () => {
+    const { authUser } = useDashboard()
+    return (
+        < AppWithAuthorization >
+            <h1>Account: {authUser.email}</h1>
+        </AppWithAuthorization >
+    )
+}
+
+export default withRedux(dashboard);
