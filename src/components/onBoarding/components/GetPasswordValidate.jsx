@@ -38,7 +38,7 @@ const GetPasswordValidate = () => {
             }}>
             <FormGroup>
                 <ControlLabel>Retype Password</ControlLabel>
-                <FormControl value={verifyPasswordValue} name="password" autoFocus={true} />
+                <FormControl value={verifyPasswordValue} name="password" autoFocus={true} type="password" />
             </FormGroup>
             <FormGroup>
                 <ButtonToolbar>

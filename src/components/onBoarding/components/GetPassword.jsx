@@ -38,7 +38,7 @@ const GetPassword = () => {
             }}>
             <FormGroup>
                 <ControlLabel>Password</ControlLabel>
-                <FormControl value={passwordValue} name="password" autoFocus={true} />
+                <FormControl value={passwordValue} name="password" autoFocus={true} type="password" />
             </FormGroup>
             <FormGroup>
                 <ButtonToolbar>

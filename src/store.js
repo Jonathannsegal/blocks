@@ -14,7 +14,10 @@ const initialState = {
         password: '',
         verifyPassword: ''
     },
-    formError: {}
+    signInFormValue: {
+        email: '',
+        password: ''
+    }
 }
 
 const applySetUsers = (state, action) => ({
@@ -35,6 +38,23 @@ const reducer = (state = { initialState, input: {} }, action) => {
         case 'AUTH_USER_SET': {
             return applySetAuthUser(state, action);
         }
+        case ('UPDATE_SIGNIN_EMAIL'):
+            return {
+                ...state,
+                signInFormValue: {
+                    ...state.signInFormValue,
+                    email: action.payload.txt
+                }
+            }
+        case ('UPDATE_SIGNIN_PASSWORD'):
+            return {
+                ...state,
+                signInFormValue: {
+                    ...state.signInFormValue,
+                    password: action.payload.txt
+                }
+            }
+
         case ('UPDATE_SIGNUP_USERNAME'):
             return {
                 ...state,
