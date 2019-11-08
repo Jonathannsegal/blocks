@@ -1,10 +1,12 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
+import Lottie from 'react-lottie';
+import * as success from '../../db/success.json'
 import {
     Content,
     FlexboxGrid,
     Progress,
-    Button
+    Schema
 } from 'rsuite';
 import SignUpState from '../../constants/signUpState'
 import GetUsername from './components/GetUsername';
@@ -12,31 +14,40 @@ import GetEmail from './components/GetEmail';
 import GetPassword from './components/GetPassword';
 import GetPasswordValidate from './components/GetPasswordValidate';
 
+// const { StringType } = Schema.Types;
+
+// const model = Schema.Model({
+//     name: StringType().isRequired('This field is required.'),
+//     email: StringType()
+//         .isEmail('Please enter a valid email address.')
+//         .isRequired('This field is required.'),
+//     password: StringType().isRequired('This field is required.'),
+//     verifyPassword: StringType()
+//         .addRule((value, data) => {
+//             console.log(data);
+
+//             if (value !== data.password) {
+//                 return false;
+//             }
+
+//             return true;
+//         }, 'The two passwords do not match')
+//         .isRequired('This field is required.')
+// });
+
 const useSignUp = () => {
     const signUp = useSelector(state => state.signUp)
-    const dispatch = useDispatch()
-    const signUpUsername = () =>
-        dispatch({
-            type: 'signUpUsername'
-        })
-    const signUpEmail = () =>
-        dispatch({
-            type: 'signUpEmail'
-        })
-    const signUpPassword = () =>
-        dispatch({
-            type: 'signUpPassword'
-        })
-    const signUpPasswordValidate = () =>
-        dispatch({
-            type: 'signUpPasswordValidate'
-        })
-    const done = () =>
-        dispatch({
-            type: 'done'
-        })
-    return { signUp, signUpUsername, signUpEmail, signUpPassword, signUpPasswordValidate, done }
+    return { signUp }
 }
+
+const successOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: success.default,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
 
 const { Line } = Progress;
 
@@ -58,6 +69,11 @@ const SignUp = () => {
                                 return <GetPassword />;
                             case SignUpState.passwordVerify:
                                 return <GetPasswordValidate />;
+                            case SignUpState.done:
+                                return <Lottie
+                                    options={successOptions}
+                                    isClickToPauseDisabled={true}
+                                />;
                             default:
                                 return null;
                         }

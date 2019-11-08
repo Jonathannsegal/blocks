@@ -5,11 +5,50 @@ import HomeState from './constants/homeState';
 
 const initialState = {
     homeState: HomeState.signIn,
-    signUp: SignUpState.userName
+    signUp: SignUpState.userName,
+    signUpFormValue: {
+        userName: '',
+        email: '',
+        password: '',
+        verifyPassword: ''
+    },
+    formError: {}
 }
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case ('UPDATE_SIGNUP_USERNAME'):
+            return {
+                ...state,
+                signUpFormValue: {
+                    ...state.signUpFormValue,
+                    userName: action.payload.txt.userName
+                }
+            }
+        case ('UPDATE_SIGNUP_EMAIL'):
+            return {
+                ...state,
+                signUpFormValue: {
+                    ...state.signUpFormValue,
+                    email: action.payload.txt.email
+                }
+            }
+        case ('UPDATE_SIGNUP_PASSWORD'):
+            return {
+                ...state,
+                signUpFormValue: {
+                    ...state.signUpFormValue,
+                    password: action.payload.txt.password
+                }
+            }
+        case ('UPDATE_SIGNUP_VERIFYPASSWORD'):
+            return {
+                ...state,
+                signUpFormValue: {
+                    ...state.signUpFormValue,
+                    verifyPassword: action.payload.txt.password
+                }
+            }
         case 'signUpNone':
             return {
                 ...state,

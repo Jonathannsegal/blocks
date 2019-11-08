@@ -2,14 +2,12 @@ import React from 'react';
 import Lottie from 'react-lottie';
 import { withRedux } from '../lib/redux'
 import { useSelector, useDispatch } from 'react-redux'
-import Counter from '../components/counter'
 import * as pinjump from '../db/pinjump.json'
 import * as worldspin from '../db/worldspin.json'
 import {
 	FlexboxGrid,
 	Container,
 	Header,
-	Footer,
 	Button
 } from 'rsuite';
 import SignIn from '../components/Onboarding/SignIn';
@@ -66,14 +64,24 @@ const Home = () => {
 					<FlexboxGrid justify="center">
 						<FlexboxGrid.Item colspan={12}>
 							<h1 className="title">Blocks</h1>
-							<Lottie
-								options={pinjumpOptions}
-								isClickToPauseDisabled={true}
-							/>
-							{/* <Lottie
-							options={worldspinOptions}
-							isClickToPauseDisabled={true}
-						/> */}
+							<div className="animationBox">
+								{(function () {
+									switch (homeState) {
+										case HomeState.signIn:
+											return <Lottie
+												options={pinjumpOptions}
+												isClickToPauseDisabled={true}
+											/>;
+										case HomeState.signUp:
+											return <Lottie
+												options={worldspinOptions}
+												isClickToPauseDisabled={true}
+											/>;
+										default:
+											return null;
+									}
+								})()}
+							</div>
 						</FlexboxGrid.Item>
 					</FlexboxGrid>
 				</Header>
@@ -113,6 +121,9 @@ const Home = () => {
 				padding-top: 40px;
 				line-height: 1.15;
 				font-size: 48px;
+			}
+			.animationBox {
+				height: 30vh;
 			}
 		`}</style>
 		</div >
