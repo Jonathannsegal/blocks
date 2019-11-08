@@ -1,10 +1,10 @@
 import React from 'react';
-import { withRedux } from '../../src/lib/redux'
+import { withRedux } from '../../lib/redux'
 import { useSelector } from 'react-redux'
 import {
     Button
 } from 'rsuite';
-import { AppWithAuthorization } from "../../src/components/App";
+import { AppWithAuthorization } from "../../components/App";
 
 const useDashboard = () => {
     const authUser = useSelector(state => state.authUser)
