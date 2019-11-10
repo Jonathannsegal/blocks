@@ -1,7 +1,18 @@
 import { Component } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import { geolocated } from 'react-geolocated';
+import Lottie from 'react-lottie'
+import * as locationdot from '../../db/locationdot.json'
 import MapOverlay from './MapOverlay';
+
+const locationdotOptions = {
+	loop: true,
+	autoplay: true,
+	animationData: locationdot.default,
+	rendererSettings: {
+		preserveAspectRatio: 'xMidYMid slice'
+	}
+};
 
 class Map extends Component {
 	state = {
@@ -31,16 +42,22 @@ class Map extends Component {
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
 					<Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>
-						<div className="yellow-box" />
+						<div className="locationContainer">
+							<Lottie
+								height={80}
+								width={80}
+								options={locationdotOptions}
+								isClickToPauseDisabled={true}
+							/>
+						</div>
 					</Marker>
 					<style jsx>{`
 					:global(body) {
 						margin: 0;
 					}
-					.yellow-box {
-						background-color: #0000ff;
-						width: 5px;
-						height: 5px;
+					.locationContainer {
+						margin-left: -40px;
+						margin-top: -40px;
 					}
 				`}</style>
 				</ReactMapGL>

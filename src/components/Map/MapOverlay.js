@@ -1,5 +1,6 @@
 import React from 'react';
 import Lottie from 'react-lottie'
+import Link from 'next/link';
 import * as loop from '../../db/loop.json'
 require('rsuite/lib/styles/index.less');
 
@@ -16,12 +17,16 @@ const MapOverlay = () => (
     <React.Fragment>
         <div className="overlay">
             <div className="animationMargin">
-                <Lottie
-                    height={60}
-                    width={60}
-                    options={loopOptions}
-                    isClickToPauseDisabled={true}
-                />
+                <Link>
+                    <a href="/dashboard">
+                        <Lottie
+                            height={60}
+                            width={60}
+                            options={loopOptions}
+                            isClickToPauseDisabled={true}
+                        />
+                    </a>
+                </Link>
             </div>
         </div>
         <style jsx>{`
@@ -34,7 +39,7 @@ const MapOverlay = () => (
                     margin: 1em;
                 }
 		`}</style>
-    </React.Fragment>
+    </React.Fragment >
 );
 
 export default MapOverlay;
