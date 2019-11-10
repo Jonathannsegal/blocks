@@ -9,7 +9,7 @@ const initialState = {
     authUser: null,
     users: [],
     homeState: HomeState.signIn,
-    signUp: SignUpState.userName,
+    signUpState: SignUpState.userName,
     signUpFormValue: {
         userName: '',
         email: '',
@@ -73,6 +73,11 @@ const reducer = (state = { initialState, input: {} }, action) => {
         case 'AUTH_USER_SET': {
             return applySetAuthUser(state, action);
         }
+        case ('UPDATE_SIGNIN_STATE'):
+            return {
+                ...state,
+                signUpState: action.payload.txt
+            }
         case ('UPDATE_SIGNIN_EMAIL'):
             return {
                 ...state,
@@ -124,32 +129,32 @@ const reducer = (state = { initialState, input: {} }, action) => {
         case 'signUpNone':
             return {
                 ...state,
-                signUp: SignUpState.none
+                signUpState: SignUpState.none
             }
         case 'signUpUsername':
             return {
                 ...state,
-                signUp: SignUpState.userName
+                signUpState: SignUpState.userName
             }
         case 'signUpEmail':
             return {
                 ...state,
-                signUp: SignUpState.email
+                signUpState: SignUpState.email
             }
         case 'signUpPassword':
             return {
                 ...state,
-                signUp: SignUpState.password
+                signUpState: SignUpState.password
             }
         case 'signUpPasswordValidate':
             return {
                 ...state,
-                signUp: SignUpState.passwordVerify
+                signUpState: SignUpState.passwordVerify
             }
         case 'done':
             return {
                 ...state,
-                signUp: SignUpState.done
+                signUpState: SignUpState.done
             }
         case 'homeSignIn':
             return {
@@ -166,10 +171,13 @@ const reducer = (state = { initialState, input: {} }, action) => {
     }
 }
 
+const composeEnhancers = composeWithDevTools({
+    trace: true
+})
 export const initializeStore = (preloadedState = initialState) => {
     return createStore(
         reducer,
         preloadedState,
-        composeWithDevTools(applyMiddleware())
+        composeEnhancers(applyMiddleware())
     )
 }

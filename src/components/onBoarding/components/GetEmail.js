@@ -29,8 +29,14 @@ const useGetEmail = () => {
     return { signUpUsername, signUpPassword, updateInput, emailValue }
 }
 
-const GetEmail = () => {
+const { forwardRef, useImperativeHandle } = React;
+const GetEmail = forwardRef((props, ref) => {
     const { signUpUsername, signUpPassword, updateInput, emailValue } = useGetEmail()
+    useImperativeHandle(ref, () => ({
+        setFocus() {
+            document.getElementById("textBoxEmail").focus();
+        }
+    }));
     return (
         < Form fluid
             onChange={formValue => {
@@ -38,16 +44,16 @@ const GetEmail = () => {
             }}>
             <FormGroup>
                 <ControlLabel>Email</ControlLabel>
-                <FormControl value={emailValue} name="email" autoFocus={true} />
+                <FormControl id={"textBoxEmail"} value={emailValue} name="email" />
             </FormGroup>
             <FormGroup>
                 <ButtonToolbar>
-                    <Button appearance="primary" onClick={signUpUsername}>Back</Button>
+                    <Button appearance="default" onClick={signUpUsername}>Back</Button>
                     <Button appearance="primary" type="submit" onClick={signUpPassword}>Continue</Button>
                 </ButtonToolbar>
             </FormGroup>
         </Form >
     )
-}
+});
 
 export default GetEmail;

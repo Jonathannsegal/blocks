@@ -29,8 +29,14 @@ const useGetPassword = () => {
     return { signUpEmail, signUpPasswordValidate, updateInput, passwordValue }
 }
 
-const GetPassword = () => {
+const { forwardRef, useImperativeHandle } = React;
+const GetPassword = forwardRef((props, ref) => {
     const { signUpEmail, signUpPasswordValidate, updateInput, passwordValue } = useGetPassword()
+    useImperativeHandle(ref, () => ({
+        setFocus() {
+            document.getElementById("textBoxPassword").focus();
+        }
+    }));
     return (
         < Form fluid
             onChange={formValue => {
@@ -38,16 +44,16 @@ const GetPassword = () => {
             }}>
             <FormGroup>
                 <ControlLabel>Password</ControlLabel>
-                <FormControl value={passwordValue} name="password" autoFocus={true} type="password" />
+                <FormControl id={"textBoxPassword"} value={passwordValue} name="password" type="password" />
             </FormGroup>
             <FormGroup>
                 <ButtonToolbar>
-                    <Button appearance="primary" onClick={signUpEmail}>Back</Button>
+                    <Button appearance="default" onClick={signUpEmail}>Back</Button>
                     <Button appearance="primary" type="submit" onClick={signUpPasswordValidate}>Continue</Button>
                 </ButtonToolbar>
             </FormGroup>
         </Form >
     )
-}
+});
 
 export default GetPassword;

@@ -1,9 +1,9 @@
 const SignUpState = {
     userName: 0,
-    email: 25,
-    password: 50,
-    passwordVerify: 75,
-    done: 100,
+    email: 1,
+    password: 2,
+    passwordVerify: 3,
+    done: 4,
 }
 
 export default SignUpState;

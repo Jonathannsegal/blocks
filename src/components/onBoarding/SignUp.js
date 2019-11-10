@@ -6,6 +6,7 @@ import Link from "next/link"
 import Router from "next/router"
 import { AppWithAuthentication } from "../App";
 import { auth, db } from "../../firebase";
+import SwipeableViews from 'react-swipeable-views';
 import {
     Content,
     FlexboxGrid,
@@ -40,7 +41,7 @@ import GetPasswordValidate from './components/GetPasswordValidate';
 // });
 
 const useSignUp = () => {
-    const signUp = useSelector(state => state.signUp)
+    const signUp = useSelector(state => state.signUpState)
     const signUpFormValue = useSelector(state => state.signUpFormValue)
     const onSubmit = event => {
         auth
@@ -81,36 +82,83 @@ const SignUp = () => (
 
 const SignUpBase = () => {
     const { signUp, signUpFormValue, onSubmit } = useSignUp()
+    const { useRef } = React;
+    const userNameRef = useRef();
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const passwordVerifyRef = useRef();
+    if (signUp == SignUpState.userName) {
+        if (userNameRef.current) {
+            userNameRef.current.setFocus();
+        }
+    } else if (signUp == SignUpState.email) {
+        if (emailRef.current) {
+            emailRef.current.setFocus();
+        }
+    } else if (signUp == SignUpState.password) {
+        if (passwordRef.current) {
+            passwordRef.current.setFocus()
+        }
+    } else if (signUp == SignUpState.passwordVerify) {
+        if (passwordVerifyRef.current) {
+            passwordVerifyRef.current.setFocus()
+        }
+    }
+
     return (
         <Content>
             <FlexboxGrid justify="center">
-                <FlexboxGrid.Item colspan={12}>
-                    <Line percent={signUp} status='active' strokeColor="#87d13f" showInfo={false} />
+                <FlexboxGrid.Item colspan={24}>
+                    <FlexboxGrid justify="center">
+                        <FlexboxGrid.Item colspan={12}>
+                            <Line percent={signUp * 25} status='active' strokeColor="#87d13f" showInfo={false} />
+                        </FlexboxGrid.Item>
+                    </FlexboxGrid>
                     <br />
                     {(function () {
                         switch (signUp) {
-                            case SignUpState.userName:
-                                return <GetUsername />;
-                            case SignUpState.email:
-                                return <GetEmail />;
-                            case SignUpState.password:
-                                return <GetPassword />;
-                            case SignUpState.passwordVerify:
-                                return <GetPasswordValidate />;
                             case SignUpState.done:
                                 {
                                     onSubmit(signUpFormValue);
-                                    return <Lottie
-                                        options={successOptions}
-                                        isClickToPauseDisabled={true}
-                                    />;
+                                    return (
+                                        <FlexboxGrid justify="center">
+                                            <FlexboxGrid.Item>
+                                                <Lottie
+                                                    height={300}
+                                                    width={300}
+                                                    options={successOptions}
+                                                    isClickToPauseDisabled={true}
+                                                />
+                                            </FlexboxGrid.Item>
+                                        </FlexboxGrid>
+                                    );
                                 }
                             default:
-                                return null;
+                                {
+                                    return <SwipeableViews resistance disabled={true} index={signUp}>
+                                        <div className="margins">
+                                            <GetUsername ref={userNameRef} />
+                                        </div>
+                                        <div className="margins">
+                                            <GetEmail ref={emailRef} />
+                                        </div>
+                                        <div className="margins">
+                                            <GetPassword ref={passwordRef} />
+                                        </div>
+                                        <div className="margins">
+                                            <GetPasswordValidate ref={passwordVerifyRef} />
+                                        </div>
+                                    </SwipeableViews>;
+                                }
                         }
                     })()}
                 </FlexboxGrid.Item>
             </FlexboxGrid>
+            <style jsx>{`
+                .margins{
+                    margin: 0 6em;
+                }
+		`}</style>
         </Content >
     )
 }

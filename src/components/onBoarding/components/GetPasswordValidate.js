@@ -29,8 +29,14 @@ const useGetPasswordValidate = () => {
     return { signUpPassword, done, updateInput, verifyPasswordValue }
 }
 
-const GetPasswordValidate = () => {
+const { forwardRef, useImperativeHandle } = React;
+const GetPasswordValidate = forwardRef((props, ref) => {
     const { signUpPassword, done, updateInput, verifyPasswordValue } = useGetPasswordValidate()
+    useImperativeHandle(ref, () => ({
+        setFocus() {
+            document.getElementById("textBoxPasswordVerify").focus();
+        }
+    }));
     return (
         < Form fluid
             onChange={formValue => {
@@ -38,16 +44,16 @@ const GetPasswordValidate = () => {
             }}>
             <FormGroup>
                 <ControlLabel>Retype Password</ControlLabel>
-                <FormControl value={verifyPasswordValue} name="password" autoFocus={true} type="password" />
+                <FormControl id={"textBoxPasswordVerify"} value={verifyPasswordValue} name="password" type="password" />
             </FormGroup>
             <FormGroup>
                 <ButtonToolbar>
-                    <Button appearance="primary" onClick={signUpPassword}>Back</Button>
+                    <Button appearance="default" onClick={signUpPassword}>Back</Button>
                     <Button appearance="primary" type="submit" onClick={done}>Submit</Button>
                 </ButtonToolbar>
             </FormGroup>
         </Form >
     )
-}
+});
 
 export default GetPasswordValidate;

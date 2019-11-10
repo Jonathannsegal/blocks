@@ -25,8 +25,14 @@ const useGetUsername = () => {
     return { signUpEmail, updateInput, userNameValue }
 }
 
-const GetUsername = () => {
+const { forwardRef, useImperativeHandle } = React;
+const GetUsername = forwardRef((props, ref) => {
     const { signUpEmail, updateInput, userNameValue } = useGetUsername()
+    useImperativeHandle(ref, () => ({
+        setFocus() {
+            document.getElementById("textBoxUsername").focus();
+        }
+    }));
     return (
         < Form fluid
             onChange={formValue => {
@@ -34,7 +40,7 @@ const GetUsername = () => {
             }}>
             <FormGroup>
                 <ControlLabel>Username</ControlLabel>
-                <FormControl value={userNameValue} name="userName" autoFocus={true} />
+                <FormControl id={"textBoxUsername"} value={userNameValue} name="userName" autoFocus={true} />
             </FormGroup>
             <FormGroup>
                 <ButtonToolbar>
@@ -43,6 +49,6 @@ const GetUsername = () => {
             </FormGroup>
         </Form >
     )
-}
+});
 
 export default GetUsername;

@@ -76,6 +76,15 @@ const dashboard = () => {
     // const { authUser } = useDashboard()
     const { currentDashboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
     const { Paragraph } = Placeholder;
+    const handleChangeIndex = index => {
+        if (index === DashboardState.profile) {
+            dashboardProfile();
+        } else if (index === DashboardState.home) {
+            dashboardHome();
+        } else {
+            dashboardLeaderboard();
+        }
+    };
     return (
         // < AppWithAuthorization >
         // <h1>Account: {authUser.email}</h1>
@@ -93,7 +102,6 @@ const dashboard = () => {
                                                 <Avatar circle size="xs">JS</Avatar>
                                             }> Username
                                         </Nav.Item>
-                                        <Nav.Item onClick={dashboardHome}>Home</Nav.Item>
                                     </Nav>
                                     <Nav pullRight>
                                         <Nav.Item onClick={dashboardLeaderboard} icon={<Lottie
@@ -107,7 +115,7 @@ const dashboard = () => {
                             </Navbar>
                         </Header>
                     </div>
-                    <SwipeableViews index={currentDashboardState}>
+                    <SwipeableViews index={currentDashboardState} onChangeIndex={handleChangeIndex}>
                         <Content> <br /><br /><br />Profile</Content>
                         <Content>
                             <FlexboxGrid justify="center">
