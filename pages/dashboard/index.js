@@ -86,15 +86,13 @@ const dashboard = () => {
                         <Header>
                             <Navbar>
                                 <Navbar.Body>
-                                    <Nav pullLeft>
+                                    <Nav>
                                         <Nav.Item
                                             onClick={dashboardProfile}
                                             icon={
                                                 <Avatar circle size="xs">JS</Avatar>
                                             }> Jonathan
                                         </Nav.Item>
-                                    </Nav>
-                                    <Nav>
                                         <Nav.Item onClick={dashboardHome}>Home</Nav.Item>
                                     </Nav>
                                     <Nav pullRight>

@@ -3,6 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import SignUpState from './constants/signUpState';
 import HomeState from './constants/homeState';
 import DashboardState from './constants/dashboardState';
+import GameState from './constants/gameState';
 
 const initialState = {
     authUser: null,
@@ -19,7 +20,9 @@ const initialState = {
         email: '',
         password: ''
     },
-    dashboardState: DashboardState.home
+    dashboardState: DashboardState.home,
+    gameState: GameState.main
+
 }
 
 const applySetUsers = (state, action) => ({
@@ -34,6 +37,22 @@ const applySetAuthUser = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'gameChat':
+            return {
+                ...state,
+                dashboardState: GameState.chat
+            }
+        case 'gameMain':
+            return {
+                ...state,
+                dashboardState: GameState.main
+            }
+        case 'gameStatus':
+            return {
+                ...state,
+                dashboardState: GameState.status
+            }
+
         case 'dashboardProfile':
             return {
                 ...state,

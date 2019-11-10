@@ -26,7 +26,7 @@ const FriendCard = () => {
     return (
         <div className="cardContent">
             <Panel shaded>
-                <FlexboxGrid justify="left">
+                <FlexboxGrid justify="start">
                     <FlexboxGrid.Item colspan={8}>
                         <Avatar
                             circle
