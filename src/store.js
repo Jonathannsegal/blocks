@@ -7,7 +7,7 @@ import GameState from './constants/gameState';
 
 const initialState = {
     authUser: null,
-    users: [],
+    users: {},
     homeState: HomeState.signIn,
     signUpState: SignUpState.userName,
     signUpFormValue: {
@@ -16,6 +16,7 @@ const initialState = {
         password: '',
         verifyPassword: ''
     },
+    signUpFormError: '',
     signInFormValue: {
         email: '',
         password: ''
@@ -37,6 +38,11 @@ const applySetAuthUser = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case ('SIGNUP_FORM_ERROR'):
+            return {
+                ...state,
+                signUpFormError: action.payload.txt
+            }
         case 'gameChat':
             return {
                 ...state,

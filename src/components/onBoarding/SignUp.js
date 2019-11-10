@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Lottie from 'react-lottie';
 import * as success from '../../db/success.json'
+import * as error from '../../db/error.json'
 import Link from "next/link"
 import Router from "next/router"
 import { AppWithAuthentication } from "../App";
@@ -11,7 +12,7 @@ import {
     Content,
     FlexboxGrid,
     Progress,
-    Schema
+    Message
 } from 'rsuite';
 import SignUpState from '../../constants/signUpState'
 import GetUsername from './components/GetUsername';
@@ -19,30 +20,21 @@ import GetEmail from './components/GetEmail';
 import GetPassword from './components/GetPassword';
 import GetPasswordValidate from './components/GetPasswordValidate';
 
-// const { StringType } = Schema.Types;
-
-// const model = Schema.Model({
-//     name: StringType().isRequired('This field is required.'),
-//     email: StringType()
-//         .isEmail('Please enter a valid email address.')
-//         .isRequired('This field is required.'),
-//     password: StringType().isRequired('This field is required.'),
-//     verifyPassword: StringType()
-//         .addRule((value, data) => {
-//             console.log(data);
-
-//             if (value !== data.password) {
-//                 return false;
-//             }
-
-//             return true;
-//         }, 'The two passwords do not match')
-//         .isRequired('This field is required.')
-// });
-
 const useSignUp = () => {
     const signUp = useSelector(state => state.signUpState)
     const signUpFormValue = useSelector(state => state.signUpFormValue)
+    const signUpFormErrorMessage = useSelector(state => state.signUpFormError)
+    const dispatch = useDispatch()
+    const signUpFormError = (input) => (
+        dispatch({
+            type: 'SIGNUP_FORM_ERROR',
+            payload: { txt: input }
+        })
+    )
+    const signUpUsername = () =>
+        dispatch({
+            type: 'signUpUsername'
+        })
     const onSubmit = event => {
         auth
             .doCreateUserWithEmailAndPassword(event.email, event.password)
@@ -52,21 +44,30 @@ const useSignUp = () => {
                         Router.push('/dashboard');
                     })
                     .catch(error => {
-                        console.log("error", error);
+                        signUpFormError(error.message);
                     });
             })
             .catch(error => {
-                console.log("error", error);
+                signUpFormError(error.message);
             });
     }
 
-    return { signUp, signUpFormValue, onSubmit }
+    return { signUp, signUpUsername, signUpFormValue, signUpFormError, signUpFormErrorMessage, onSubmit }
 }
 
 const successOptions = {
     loop: true,
     autoplay: true,
     animationData: success.default,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
+
+const errorOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: error.default,
     rendererSettings: {
         preserveAspectRatio: 'xMidYMid slice'
     }
@@ -81,12 +82,17 @@ const SignUp = () => (
 );
 
 const SignUpBase = () => {
-    const { signUp, signUpFormValue, onSubmit } = useSignUp()
+    const { signUp, signUpUsername, signUpFormValue, signUpFormError, signUpFormErrorMessage, onSubmit } = useSignUp()
     const { useRef } = React;
     const userNameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordVerifyRef = useRef();
+    if (signUpFormErrorMessage != "") {
+        setTimeout(() => {
+            signUpFormError("");
+        }, 10000);
+    }
     if (signUp == SignUpState.userName) {
         if (userNameRef.current) {
             userNameRef.current.setFocus();
@@ -107,6 +113,21 @@ const SignUpBase = () => {
 
     return (
         <Content>
+            {
+                signUpFormErrorMessage != "" ? (
+                    <div className="stickyHeader">
+                        < Message
+                            showIcon
+                            type="error"
+                            title="Error"
+                            description={signUpFormErrorMessage}
+                        />
+                    </div>
+                ) : (
+                        null
+                    )
+            }
+            <br />
             <FlexboxGrid justify="center">
                 <FlexboxGrid.Item colspan={24}>
                     <FlexboxGrid justify="center">
@@ -122,13 +143,31 @@ const SignUpBase = () => {
                                     onSubmit(signUpFormValue);
                                     return (
                                         <FlexboxGrid justify="center">
+                                            {(function () {
+                                                switch (signUpFormErrorMessage) {
+                                                    case "":
+                                                        {
+                                                            return (<Lottie
+                                                                height={300}
+                                                                width={300}
+                                                                options={successOptions}
+                                                                isClickToPauseDisabled={true}
+                                                            />);
+                                                        }
+                                                    default:
+                                                        {
+                                                            signUpUsername();
+                                                            return (
+                                                                <Lottie
+                                                                    height={300}
+                                                                    width={300}
+                                                                    options={errorOptions}
+                                                                    isClickToPauseDisabled={true}
+                                                                />);
+                                                        }
+                                                }
+                                            })()}
                                             <FlexboxGrid.Item>
-                                                <Lottie
-                                                    height={300}
-                                                    width={300}
-                                                    options={successOptions}
-                                                    isClickToPauseDisabled={true}
-                                                />
                                             </FlexboxGrid.Item>
                                         </FlexboxGrid>
                                     );
@@ -157,6 +196,12 @@ const SignUpBase = () => {
             <style jsx>{`
                 .margins{
                     margin: 0 6em;
+                }
+                .stickyHeader {
+                    z-index: 1;
+                    top:0;
+                    position: fixed;
+                    width: 100vw;
                 }
 		`}</style>
         </Content >
