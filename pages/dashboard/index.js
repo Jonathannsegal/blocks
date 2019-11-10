@@ -5,6 +5,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { useSelector, useDispatch } from 'react-redux'
 import DashboardState from '../../src/constants/dashboardState';
 import {
+    Avatar,
     Container,
     Header,
     Content,
@@ -75,14 +76,20 @@ const dashboard = () => {
                         <Header>
                             <Navbar>
                                 <Navbar.Body>
-                                    <Nav>
-                                        <Nav.Item onClick={dashboardProfile}>Profile</Nav.Item>
-                                        <Nav.Item onClick={dashboardHome}>Home</Nav.Item>
-                                        <Nav.Item onClick={dashboardLeaderboard}>Leaderboard</Nav.Item>
+                                    <Nav pullLeft>
+                                        <Nav.Item
+                                            onClick={dashboardProfile}
+                                            icon={
+                                                <Avatar circle size="xs">JS</Avatar>
+                                            }> Jonathan
+                                        </Nav.Item>
                                     </Nav>
-                                    {/* <Nav pullRight>
-                                    <Nav.Item icon={<Icon icon="cog" />} >Settings</Nav.Item>
-                                </Nav> */}
+                                    <Nav>
+                                        <Nav.Item onClick={dashboardHome}>Home</Nav.Item>
+                                    </Nav>
+                                    <Nav pullRight>
+                                        <Nav.Item onClick={dashboardLeaderboard} icon={<Icon icon="bars" size="lg" />}></Nav.Item>
+                                    </Nav>
                                 </Navbar.Body>
                             </Navbar>
                         </Header>
@@ -119,21 +126,12 @@ const dashboard = () => {
                                 </FlexboxGrid.Item>
                                 <FlexboxGrid.Item colspan={24}>
                                     <div className="card">
-                                        <div className="cardContent">
-                                            <FriendCard />
-                                        </div>
-                                        <div className="cardContent">
-                                            <FriendCard />
-                                        </div>
-                                        <div className="cardContent">
-                                            <FriendCard />
-                                        </div>
-                                        <div className="cardContent">
-                                            <FriendCard />
-                                        </div>
-                                        <div className="cardContent">
-                                            <FriendCard />
-                                        </div>
+                                        <div className="cardContentBefore" />
+                                        <FriendCard />
+                                        <FriendCard />
+                                        <FriendCard />
+                                        <FriendCard />
+                                        <FriendCard />
                                     </div>
                                 </FlexboxGrid.Item>
                                 <FlexboxGrid.Item colspan={18}>
@@ -141,15 +139,15 @@ const dashboard = () => {
                                 </FlexboxGrid.Item>
                                 <FlexboxGrid.Item colspan={17}>
                                     <Panel header="" shaded>
-                                        <Paragraph />
+                                        <Paragraph rows={5} active />
                                     </Panel>
                                     <br />
                                     <Panel header="" shaded>
-                                        <Paragraph />
+                                        <Paragraph rows={5} active />
                                     </Panel>
                                     <br />
                                     <Panel header="" shaded>
-                                        <Paragraph />
+                                        <Paragraph rows={5} active />
                                     </Panel>
                                     <br />
                                 </FlexboxGrid.Item>
@@ -184,17 +182,13 @@ const dashboard = () => {
                 .card::-webkit-scrollbar {
                     display: none;
                 }
+                .cardContentBefore{
+                    min-width: 15vw;
+                }
                 .card {
-                    background-color: #fff;
-                    min-width: 100%;
-                    min-height: 200px;
+                    min-height: 14vh;
                     display: flex;
                     overflow-x: auto;
-                }
-                .cardContent{
-                    min-width: 150px;
-                    margin-left: 1em;
-                    margin-right: 1em;
                 }
                 .sectionTitle {
                     color: rgba(35,31,32,0.25);
