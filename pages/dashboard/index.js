@@ -84,14 +84,14 @@ const dashboard = () => {
                 <Container>
                     <div className="stickyHeader">
                         <Header>
-                            <Navbar>
+                            <Navbar appearance="subtle">
                                 <Navbar.Body>
                                     <Nav>
                                         <Nav.Item
                                             onClick={dashboardProfile}
                                             icon={
                                                 <Avatar circle size="xs">JS</Avatar>
-                                            }> Jonathan
+                                            }> Username
                                         </Nav.Item>
                                         <Nav.Item onClick={dashboardHome}>Home</Nav.Item>
                                     </Nav>
@@ -107,7 +107,7 @@ const dashboard = () => {
                             </Navbar>
                         </Header>
                     </div>
-                    <SwipeableViews disabled={true} enableMouseEvents={false} index={currentDashboardState}>
+                    <SwipeableViews index={currentDashboardState}>
                         <Content> <br /><br /><br />Profile</Content>
                         <Content>
                             <FlexboxGrid justify="center">
@@ -139,12 +139,13 @@ const dashboard = () => {
                                 </FlexboxGrid.Item>
                                 <FlexboxGrid.Item colspan={24}>
                                     <div className="card">
-                                        <div className="cardContentBefore" />
+                                        <div className="cardContentEnds" />
                                         <FriendCard />
                                         <FriendCard />
                                         <FriendCard />
                                         <FriendCard />
                                         <FriendCard />
+                                        <div className="cardContentEnds" />
                                     </div>
                                 </FlexboxGrid.Item>
                                 <FlexboxGrid.Item colspan={18}>
@@ -195,7 +196,7 @@ const dashboard = () => {
                 .card::-webkit-scrollbar {
                     display: none;
                 }
-                .cardContentBefore{
+                .cardContentEnds{
                     min-width: 15vw;
                 }
                 .card {

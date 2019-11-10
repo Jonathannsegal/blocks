@@ -17,8 +17,8 @@ const MapOverlay = () => (
     <React.Fragment>
         <div className="overlay">
             <div className="animationMargin">
-                <Link>
-                    <a href="/dashboard">
+                <Link href="/dashboard">
+                    <a>
                         <Lottie
                             height={60}
                             width={60}

@@ -2,13 +2,27 @@ import { Component } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import { geolocated } from 'react-geolocated';
 import Lottie from 'react-lottie'
+import {
+	Content,
+	FlexboxGrid
+} from 'rsuite';
 import * as locationdot from '../../db/locationdot.json'
+import * as nolocation from '../../db/nolocation.json'
 import MapOverlay from './MapOverlay';
 
 const locationdotOptions = {
 	loop: true,
 	autoplay: true,
 	animationData: locationdot.default,
+	rendererSettings: {
+		preserveAspectRatio: 'xMidYMid slice'
+	}
+};
+
+const nolocationOptions = {
+	loop: true,
+	autoplay: true,
+	animationData: nolocation.default,
 	rendererSettings: {
 		preserveAspectRatio: 'xMidYMid slice'
 	}
@@ -29,7 +43,34 @@ class Map extends Component {
 		return !this.props.isGeolocationAvailable ? (
 			<div>Your browser does not support Geolocation</div>
 		) : !this.props.isGeolocationEnabled ? (
-			<div>Geolocation is not enabled</div>
+			<React.Fragment>
+				<Content>
+					<FlexboxGrid justify="center">
+						<FlexboxGrid.Item colspan={18}>
+							<br /><br /><br />
+							<Lottie
+								options={nolocationOptions}
+								isClickToPauseDisabled={true}
+							/>
+						</FlexboxGrid.Item>
+						<FlexboxGrid.Item colspan={17}>
+							<br /><br />
+							<FlexboxGrid justify="center">
+								<FlexboxGrid.Item>
+									<h2 className="center">Geolocation <br /> is not <br />enabled <br /><br />Big Sad</h2>
+								</FlexboxGrid.Item>
+							</FlexboxGrid>
+							<br />
+						</FlexboxGrid.Item>
+					</FlexboxGrid>
+				</Content>
+				<style jsx>{`
+				.center{
+					text-align: center;
+				}
+		`}</style>
+			</React.Fragment>
+
 		) : this.props.coords ? (
 			<React.Fragment>
 				<MapOverlay />

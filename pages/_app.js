@@ -16,7 +16,7 @@ class MyApp extends App {
 					<meta charSet="utf-8" />
 					<meta content="IE=edge" httpEquiv="X-UA-Compatible" />
 					<meta content="width=device-width, initial-scale=1" name="viewport" />
-					<meta name="theme-color" content="#6FC8B9" />
+					<meta name="theme-color" content="#FFFFFF" />
 					<link rel="manifest" href="static/manifest.json" />
 					<link rel="icon" href="static/img/favicon.ico" />
 					<link rel="apple-touch-icon" href="static/img/android-chrome-144x144.png" />

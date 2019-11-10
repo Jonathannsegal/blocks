@@ -43,8 +43,8 @@ const FriendCard = () => {
                 <FlexboxGrid justify="center">
                     <FlexboxGrid.Item colspan={6}>
                         <Lottie
-                            height={20}
-                            width={20}
+                            height={18}
+                            width={18}
                             options={trophyOptions}
                             isClickToPauseDisabled={true}
                         />
