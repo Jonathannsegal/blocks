@@ -25,6 +25,7 @@ import {
     Grid
 } from 'rsuite';
 import * as ratings from '../../src/db/ratings.json'
+import * as trophy from '../../src/db/trophy.json'
 import FriendCard from '../../src/components/Dashboard/friendCard'
 require('rsuite/lib/styles/index.less');
 
@@ -32,6 +33,15 @@ const ratingsOptions = {
     loop: true,
     autoplay: true,
     animationData: ratings.default,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
+
+const trophyOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: trophy.default,
     rendererSettings: {
         preserveAspectRatio: 'xMidYMid slice'
     }
@@ -88,7 +98,12 @@ const dashboard = () => {
                                         <Nav.Item onClick={dashboardHome}>Home</Nav.Item>
                                     </Nav>
                                     <Nav pullRight>
-                                        <Nav.Item onClick={dashboardLeaderboard} icon={<Icon icon="bars" size="lg" />}></Nav.Item>
+                                        <Nav.Item onClick={dashboardLeaderboard} icon={<Lottie
+                                            height={18}
+                                            width={18}
+                                            options={trophyOptions}
+                                            isClickToPauseDisabled={true}
+                                        />}></Nav.Item>
                                     </Nav>
                                 </Navbar.Body>
                             </Navbar>
@@ -113,7 +128,7 @@ const dashboard = () => {
                                 <FlexboxGrid.Item colspan={17}>
                                     <FlexboxGrid justify="space-around">
                                         <FlexboxGrid.Item colspan={11}>
-                                            <Button size="lg" color="cyan" block href="/game">Play Game</Button>
+                                            <Button size="lg" color="cyan" block href="/create">Create</Button>
                                         </FlexboxGrid.Item>
                                         <FlexboxGrid.Item colspan={11}>
                                             <Button size="lg" color="cyan" block href="/search">Search</Button>

@@ -1,25 +1,48 @@
 import React from 'react';
-// import Lottie from 'react-lottie'
-// import * as searching from '../../src/db/searching.json'
+import Lottie from 'react-lottie'
+import * as articulation from '../../src/db/articulation.json'
+import {
+    Content,
+    FlexboxGrid,
+    Button
+} from 'rsuite';
 require('rsuite/lib/styles/index.less');
 
-// const searchingOptions = {
-//     loop: true,
-//     autoplay: true,
-//     animationData: searching.default,
-//     rendererSettings: {
-//         preserveAspectRatio: 'xMidYMid slice'
-//     }
-// };
+const articulationOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: articulation.default,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
 
-const search = () => (
-    <h2>Create</h2>
-    // <React.Fragment>
-    //     <Lottie
-    //         options={searchingOptions}
-    //         isClickToPauseDisabled={true}
-    //     />
-    // </React.Fragment >
+const create = () => (
+    <React.Fragment>
+        <Content>
+            <FlexboxGrid justify="center">
+                <FlexboxGrid.Item colspan={18}>
+                    <br /><br /><br />
+                    <Lottie
+                        options={articulationOptions}
+                        isClickToPauseDisabled={true}
+                    />
+                </FlexboxGrid.Item>
+                <FlexboxGrid.Item colspan={17}>
+                    <br /><br />
+                    <FlexboxGrid justify="space-around">
+                        <FlexboxGrid.Item colspan={11}>
+                            <Button size="lg" color="cyan" block href="/dashboard">Back</Button>
+                        </FlexboxGrid.Item>
+                        <FlexboxGrid.Item colspan={11}>
+                            <Button size="lg" color="cyan" block href="/game">Game</Button>
+                        </FlexboxGrid.Item>
+                    </FlexboxGrid>
+                    <br />
+                </FlexboxGrid.Item>
+            </FlexboxGrid>
+        </Content>
+    </React.Fragment >
 );
 
-export default search;
+export default create;
