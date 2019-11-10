@@ -755,6 +755,13 @@
     core-js "^2.6.5"
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.0.0.tgz#adeb78fedfc855aa05bc041640f3f6f98e85424c"
+  integrity sha512-7hGhzlcmg01CvH1EHdSPVXYX1aJ8KCEyz6I9xYIi/asDtzBPMyMhVibhM/K6g/5qnKBwjZtp10bNZIEFTRW1MA==
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
 "@babel/runtime@7.6.3", "@babel/runtime@^7.3.4":
   version "7.6.3"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.3.tgz#935122c74c73d2240cafd32ddb5fc2a6cd35cf1f"
@@ -776,7 +783,7 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.5.5":
+"@babel/runtime@^7.2.0", "@babel/runtime@^7.5.5":
   version "7.7.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.2.tgz#111a78002a5c25fc8e3361bedc9529c696b85a6a"
   integrity sha512-JONRbXbTXc9WQE2mAZd1p0Z3DZ/6vaQIkgYMSTP3KjRCyd7rCZCcfhCyX+YjwcKxcZ82UrxbRD358bpExNgrjw==
@@ -2842,7 +2849,7 @@ dir-glob@^2.0.0:
   dependencies:
     path-type "^3.0.0"
 
-"dom-helpers@^2.4.0 || ^3.0.0":
+"dom-helpers@^2.4.0 || ^3.0.0", dom-helpers@^3.2.1:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.4.0.tgz#e9b369700f959f62ecde5a6babde4bccd9169af8"
   integrity sha512-LnuPJ+dwqKDIyotW1VzmOZ5TONUN7CwkCR5hrgawTUbkBGYdeoNLZo6nNfGkCrjtE1nXXaj7iMMpDa8/d9WoIA==
@@ -3164,7 +3171,7 @@ faye-websocket@0.11.3:
   dependencies:
     websocket-driver ">=0.5.1"
 
-fbjs@^0.8.1, fbjs@^0.8.5:
+fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.5:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
@@ -4201,6 +4208,11 @@ kdbush@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/kdbush/-/kdbush-3.0.0.tgz#f8484794d47004cc2d85ed3a79353dbe0abc2bf0"
   integrity sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew==
+
+keycode@^2.1.7:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/keycode/-/keycode-2.2.0.tgz#3d0af56dc7b8b8e5cba8d0a97f107204eec22b04"
+  integrity sha1-PQr1bce4uOXLqNCpfxByBO7CKwQ=
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
@@ -6117,6 +6129,15 @@ react-error-overlay@5.1.6:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.6.tgz#0cd73407c5d141f9638ae1e0c63e7b2bf7e9929d"
   integrity sha512-X1Y+0jR47ImDVr54Ab6V9eGk0Hnu7fVWGeHQSOXHf/C2pF9c6uy3gef8QUeuUiWlNb0i08InPSE5a/KJzNzw1Q==
 
+react-event-listener@^0.6.0:
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/react-event-listener/-/react-event-listener-0.6.6.tgz#758f7b991cad9086dd39fd29fad72127e1d8962a"
+  integrity sha512-+hCNqfy7o9wvO6UgjqFmBzARJS7qrNoda0VqzvOuioEpoEXKutiKuv92dSz6kP7rYLmyHPyYNLesi5t/aH1gfw==
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    prop-types "^15.6.0"
+    warning "^4.0.1"
+
 react-geolocated@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/react-geolocated/-/react-geolocated-3.0.1.tgz#2ca5c6320127e08fb9d9e7c27d26199435c799a1"
@@ -6175,6 +6196,38 @@ react-redux@^7.1.3:
     loose-envify "^1.4.0"
     prop-types "^15.7.2"
     react-is "^16.9.0"
+
+react-swipeable-views-core@^0.13.1:
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/react-swipeable-views-core/-/react-swipeable-views-core-0.13.1.tgz#8829a922462a8bdd701709cd1b385393d38f1527"
+  integrity sha512-EP8sCvvD7VDiZLglPt9icMuMNu8qLRLk0ab/fB1HXv7lX8ClnwF3UMCM0ZrN3sguSY7CsX3LevducGGsT1VcDg==
+  dependencies:
+    "@babel/runtime" "7.0.0"
+    warning "^4.0.1"
+
+react-swipeable-views-utils@^0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/react-swipeable-views-utils/-/react-swipeable-views-utils-0.13.3.tgz#c234d8d836bb085803631a9fef0adb2f9597221f"
+  integrity sha512-CZkJwiNQPISkyTsPMUPiJgwJBrUVd7NC3WSUvx30uwvPb0Sy2w2+tpU51qeYc6YwIhex0s5Eu5YPjK3PDBh+gA==
+  dependencies:
+    "@babel/runtime" "7.0.0"
+    fbjs "^0.8.4"
+    keycode "^2.1.7"
+    prop-types "^15.6.0"
+    react-event-listener "^0.6.0"
+    react-swipeable-views-core "^0.13.1"
+
+react-swipeable-views@^0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/react-swipeable-views/-/react-swipeable-views-0.13.3.tgz#2ad886767c6b2de88000606a14bedde12156e6d0"
+  integrity sha512-LBHRA5ZouipmoLLwi0cqB8qc7NHLskbXmT1I+ZztC9JfmgKrfichw5R+7q4igQ+5VbaP6jL1vn8BtHW96WYNFQ==
+  dependencies:
+    "@babel/runtime" "7.0.0"
+    dom-helpers "^3.2.1"
+    prop-types "^15.5.4"
+    react-swipeable-views-core "^0.13.1"
+    react-swipeable-views-utils "^0.13.3"
+    warning "^4.0.1"
 
 react-virtualized-auto-sizer@^1.0.2:
   version "1.0.2"
@@ -6501,10 +6554,10 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rsuite-table@^3.5.9:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/rsuite-table/-/rsuite-table-3.6.1.tgz#fa2f5c5e73ddd19c709d4598fe68f3334a283ce5"
-  integrity sha512-2wrMDTTaVFWWqxEcaCr8baYiLayfzquWrTLlx4QVZ5rQMZ2l4NwfV4WrTFwcga7o/zUOd1SJeB9/YPzeJWjvOA==
+rsuite-table@^3.6.1:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/rsuite-table/-/rsuite-table-3.7.0.tgz#fece42397bdce93081a12cdd3ceb8ee42a16b2c8"
+  integrity sha512-+xWr6w6spjMQ+p+b2zcZAcDG5ACY5qhYfdWANVuRR1nDPmJcOQaQzNE8lgvMb8V30199Whuls92clwtPj8nzqw==
   dependencies:
     classnames "^2.2.5"
     dom-lib "^1.2.1"
@@ -6512,7 +6565,7 @@ rsuite-table@^3.5.9:
     lodash "^4.17.5"
     react-lifecycles-compat "^3.0.4"
 
-rsuite-utils@^2.1.0:
+rsuite-utils@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/rsuite-utils/-/rsuite-utils-2.2.1.tgz#dbedd36f1e404b1a5befecd41d7aaea5b55c90f5"
   integrity sha512-viDaUWDb6UtrV2YcncrJmJqinf4VmhMr73rU7xfympIBMZ3frfbnWbhxro8zrlLocMDKWbu0MgYF5SGBBIwsYA==
@@ -6521,10 +6574,10 @@ rsuite-utils@^2.1.0:
     lodash "^4.17.5"
     react-lifecycles-compat "^3.0.4"
 
-rsuite@^4.0.5:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/rsuite/-/rsuite-4.0.5.tgz#dbeb8494af9d30bb3807b58c4b56cb3a95db6e57"
-  integrity sha512-v0qJe89/kuKqICwpc6x+hjnLG4X2a3EMiu2ZGFPC4dZ7+UwrFfOAeKVAuGCLih0kDxQxK4BHHgA3c40ALfcGKg==
+rsuite@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/rsuite/-/rsuite-4.1.0.tgz#01b7a5e4b51ad470efd376aad5e622340b69f613"
+  integrity sha512-MUOYVAeLG3EVJ/4fHKDKR4W0iaC7IS14vgW1LQGCKTer88E5QCQ7GTNJDV8jkC/t2VP1XT11ix+8yX6j86ENFw==
   dependencies:
     "@babel/runtime" "^7.0.0"
     classnames ">=2.0.0"
@@ -6536,8 +6589,8 @@ rsuite@^4.0.5:
     react-lifecycles-compat "^3.0.4"
     react-virtualized "^9.21.0"
     recompose "^0.26.0"
-    rsuite-table "^3.5.9"
-    rsuite-utils "^2.1.0"
+    rsuite-table "^3.6.1"
+    rsuite-utils "^2.2.1"
     schema-typed "^1.3.1"
 
 run-queue@^1.0.0, run-queue@^1.0.3:
@@ -7511,6 +7564,13 @@ vt-pbf@^3.1.1:
     "@mapbox/point-geometry" "0.1.0"
     "@mapbox/vector-tile" "^1.3.1"
     pbf "^3.0.5"
+
+warning@^4.0.1:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
+  integrity sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==
+  dependencies:
+    loose-envify "^1.0.0"
 
 watchpack@2.0.0-beta.5:
   version "2.0.0-beta.5"

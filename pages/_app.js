@@ -9,8 +9,9 @@ class MyApp extends App {
 		const title = `Blocks`;
 
 		return (
-			<div>
+			<React.Fragment>
 				<Head>
+					<link href="https://fonts.googleapis.com/css?family=Lexend+Deca&display=swap" rel="stylesheet" key="google-font-lexenddeca" />
 					<title>{title}</title>
 					<meta charSet="utf-8" />
 					<meta content="IE=edge" httpEquiv="X-UA-Compatible" />
@@ -28,7 +29,12 @@ class MyApp extends App {
 					<meta content="https://next-mapbox-demo.now.sh" property="og:url" />
 				</Head>
 				<Component {...pageProps} />
-			</div>
+				<style global jsx>{`
+					body {
+						font-family: 'Lexend Deca', sans-serif;
+					}
+				`}</style>
+			</React.Fragment>
 		);
 	}
 }

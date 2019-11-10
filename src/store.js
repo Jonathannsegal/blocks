@@ -2,6 +2,7 @@ import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import SignUpState from './constants/signUpState';
 import HomeState from './constants/homeState';
+import DashboardState from './constants/dashboardState';
 
 const initialState = {
     authUser: null,
@@ -17,7 +18,8 @@ const initialState = {
     signInFormValue: {
         email: '',
         password: ''
-    }
+    },
+    dashboardState: DashboardState.home
 }
 
 const applySetUsers = (state, action) => ({
@@ -32,6 +34,21 @@ const applySetAuthUser = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'dashboardProfile':
+            return {
+                ...state,
+                dashboardState: DashboardState.profile
+            }
+        case 'dashboardHome':
+            return {
+                ...state,
+                dashboardState: DashboardState.home
+            }
+        case 'dashboardLeaderboard':
+            return {
+                ...state,
+                dashboardState: DashboardState.leaderboard
+            }
         case 'USERS_SET': {
             return applySetUsers(state, action);
         }
@@ -54,7 +71,6 @@ const reducer = (state = { initialState, input: {} }, action) => {
                     password: action.payload.txt
                 }
             }
-
         case ('UPDATE_SIGNUP_USERNAME'):
             return {
                 ...state,

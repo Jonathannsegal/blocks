@@ -1,23 +1,213 @@
 import React from 'react';
-import { withRedux } from '../../lib/redux'
-import { useSelector } from 'react-redux'
+import Lottie from 'react-lottie'
+import { withRedux } from '../../src/lib/redux'
+import SwipeableViews from 'react-swipeable-views';
+import { useSelector, useDispatch } from 'react-redux'
+import DashboardState from '../../src/constants/dashboardState';
 import {
-    Button
+    Container,
+    Header,
+    Content,
+    Footer,
+    Navbar,
+    FlexboxGrid,
+    ButtonToolbar,
+    Nav,
+    Icon,
+    Dropdown,
+    Panel,
+    Placeholder,
+    PanelGroup,
+    Button,
+    Row,
+    Col,
+    Grid
 } from 'rsuite';
-import { AppWithAuthorization } from "../../components/App";
+import * as ratings from '../../src/db/ratings.json'
+import FriendCard from '../../src/components/Dashboard/friendCard'
+require('rsuite/lib/styles/index.less');
+
+const ratingsOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: ratings.default,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
+
+// import { AppWithAuthorization } from "../../src/components/App";
 
 const useDashboard = () => {
-    const authUser = useSelector(state => state.authUser)
-    return { authUser }
+    // const authUser = useSelector(state => state.authUser)
+    // return { authUser }
+    const currentDashboardState = useSelector(state => state.dashboardState)
+    const dispatch = useDispatch()
+    const dashboardProfile = () =>
+        dispatch({
+            type: 'dashboardProfile',
+            dashboardState: DashboardState.profile
+        })
+    const dashboardHome = () =>
+        dispatch({
+            type: 'dashboardHome',
+            dashboardState: DashboardState.home
+        })
+    const dashboardLeaderboard = () =>
+        dispatch({
+            type: 'dashboardLeaderboard',
+            dashboardState: DashboardState.leaderboard
+        })
+    return { currentDashboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
 }
 
 const dashboard = () => {
-    const { authUser } = useDashboard()
+    // const { authUser } = useDashboard()
+    const { currentDashboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
+    const { Paragraph } = Placeholder;
     return (
-        < AppWithAuthorization >
-            <h1>Account: {authUser.email}</h1>
-            <Button appearance="primary" href="/game">Play Game</Button>
-        </AppWithAuthorization >
+        // < AppWithAuthorization >
+        // <h1>Account: {authUser.email}</h1>
+        <div>
+            <React.Fragment>
+                <Container>
+                    <div className="stickyHeader">
+                        <Header>
+                            <Navbar>
+                                <Navbar.Body>
+                                    <Nav>
+                                        <Nav.Item onClick={dashboardProfile}>Profile</Nav.Item>
+                                        <Nav.Item onClick={dashboardHome}>Home</Nav.Item>
+                                        <Nav.Item onClick={dashboardLeaderboard}>Leaderboard</Nav.Item>
+                                    </Nav>
+                                    {/* <Nav pullRight>
+                                    <Nav.Item icon={<Icon icon="cog" />} >Settings</Nav.Item>
+                                </Nav> */}
+                                </Navbar.Body>
+                            </Navbar>
+                        </Header>
+                    </div>
+                    <SwipeableViews disabled={true} enableMouseEvents={false} index={currentDashboardState}>
+                        <Content> <br /><br /><br />Profile</Content>
+                        <Content>
+                            <FlexboxGrid justify="center">
+                                <FlexboxGrid.Item colspan={18}>
+                                    <br /><br /><br />
+                                    <div className="animationBox">
+                                        <Lottie
+                                            options={ratingsOptions}
+                                            isClickToPauseDisabled={true}
+                                        />
+                                    </div>
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item colspan={18}>
+                                    <h2 className="sectionTitle" >Play</h2>
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item colspan={17}>
+                                    <FlexboxGrid justify="space-around">
+                                        <FlexboxGrid.Item colspan={11}>
+                                            <Button size="lg" color="cyan" block href="/game">Play Game</Button>
+                                        </FlexboxGrid.Item>
+                                        <FlexboxGrid.Item colspan={11}>
+                                            <Button size="lg" color="cyan" block href="/search">Search</Button>
+                                        </FlexboxGrid.Item>
+                                    </FlexboxGrid>
+                                    <br />
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item colspan={18}>
+                                    <h2 className="sectionTitle">Friends</h2>
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item colspan={24}>
+                                    <div className="card">
+                                        <div className="cardContent">
+                                            <FriendCard />
+                                        </div>
+                                        <div className="cardContent">
+                                            <FriendCard />
+                                        </div>
+                                        <div className="cardContent">
+                                            <FriendCard />
+                                        </div>
+                                        <div className="cardContent">
+                                            <FriendCard />
+                                        </div>
+                                        <div className="cardContent">
+                                            <FriendCard />
+                                        </div>
+                                    </div>
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item colspan={18}>
+                                    <h2 className="sectionTitle">Past Games</h2>
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item colspan={17}>
+                                    <Panel header="" shaded>
+                                        <Paragraph />
+                                    </Panel>
+                                    <br />
+                                    <Panel header="" shaded>
+                                        <Paragraph />
+                                    </Panel>
+                                    <br />
+                                    <Panel header="" shaded>
+                                        <Paragraph />
+                                    </Panel>
+                                    <br />
+                                </FlexboxGrid.Item>
+                            </FlexboxGrid>
+                        </Content>
+                        <Content>
+                            <br /><br /><br />
+                            Leaderboard
+                            <SwipeableViews >
+                                <div className="test1">Friends</div>
+                                <div className="test2">Global</div>
+                            </SwipeableViews>
+                        </Content>
+                    </SwipeableViews>
+                </Container>
+            </React.Fragment >
+            {/* </AppWithAuthorization > */}
+            <style jsx>{`
+                .test1{
+                    background-color: green;
+                    min-height: 200px;
+                }
+                .test2{
+                    background-color: blue;
+                    min-height: 200px;
+                }
+                .stickyHeader {
+                    z-index: 1;
+                    position: fixed;
+                    width: 100vw;
+                }
+                .card::-webkit-scrollbar {
+                    display: none;
+                }
+                .card {
+                    background-color: #fff;
+                    min-width: 100%;
+                    min-height: 200px;
+                    display: flex;
+                    overflow-x: auto;
+                }
+                .cardContent{
+                    min-width: 150px;
+                    margin-left: 1em;
+                    margin-right: 1em;
+                }
+                .sectionTitle {
+                    color: rgba(35,31,32,0.25);
+                    line-height: 1.5em;
+                }
+                .friendsCardsContainer {
+                    overflow: none;
+                }
+                .animationBox {
+                    height: 25vh;
+                }
+		`}</style>
+        </div >
     )
 }
 
