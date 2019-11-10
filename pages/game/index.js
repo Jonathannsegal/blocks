@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import Map from '../../src/components/Map/MapExport';
 import {
 	Content,
-	FlexboxGrid
+	FlexboxGrid,
+	Button
 } from 'rsuite';
 import GameState from '../../src/constants/gameState';
 import * as chat from '../../src/db/chat.json';
@@ -38,26 +39,35 @@ const useGame = () => {
 	const gameChat = () =>
 		dispatch({
 			type: 'gameChat',
-			dashboardState: GameState.chat
+			gameState: GameState.chat
 		})
 	const gameMain = () =>
 		dispatch({
 			type: 'gameMain',
-			dashboardState: GameState.main
+			gameState: GameState.main
 		})
 	const gameStatus = () =>
 		dispatch({
 			type: 'gameStatus',
-			dashboardState: GameState.status
+			gameState: GameState.status
 		})
 	return { currentGameState, gameChat, gameMain, gameStatus }
 }
 
 const Game = () => {
 	const { currentGameState, gameChat, gameMain, gameStatus } = useGame()
+	const handleChangeIndex = index => {
+		if (index === GameState.chat) {
+			gameChat();
+		} else if (index === GameState.main) {
+			gameMain();
+		} else {
+			gameStatus();
+		}
+	};
 	return (
 		<React.Fragment>
-			<SwipeableViews index={currentGameState}>
+			<SwipeableViews index={currentGameState} onChangeIndex={handleChangeIndex}>
 				<React.Fragment>
 					<Content>
 						<FlexboxGrid justify="center">
@@ -74,7 +84,8 @@ const Game = () => {
 								<br /><br />
 								<FlexboxGrid justify="space-around">
 									<FlexboxGrid.Item colspan={11}>
-										<h2>Chat</h2>
+										<h2 className="center">Chat</h2>
+										<Button size="lg" color="cyan" block onClick={gameMain}>Back</Button>
 									</FlexboxGrid.Item>
 								</FlexboxGrid>
 								<br />
@@ -99,7 +110,8 @@ const Game = () => {
 								<br /><br />
 								<FlexboxGrid justify="space-around">
 									<FlexboxGrid.Item colspan={11}>
-										<h2>Status</h2>
+										<h2 className="center">Status</h2>
+										<Button size="lg" color="cyan" block onClick={gameMain}>Back</Button>
 									</FlexboxGrid.Item>
 								</FlexboxGrid>
 								<br />
@@ -109,9 +121,12 @@ const Game = () => {
 				</React.Fragment>
 			</SwipeableViews>
 			<style jsx>{`
-			.animationBox {
-				height: 50vh;
-			}
+				.animationBox {
+					height: 50vh;
+				}
+				.center{
+					text-align: center;
+				}
 		`}</style>
 		</React.Fragment >
 	)

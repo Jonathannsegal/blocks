@@ -40,19 +40,18 @@ const reducer = (state = { initialState, input: {} }, action) => {
         case 'gameChat':
             return {
                 ...state,
-                dashboardState: GameState.chat
+                gameState: GameState.chat
             }
         case 'gameMain':
             return {
                 ...state,
-                dashboardState: GameState.main
+                gameState: GameState.main
             }
         case 'gameStatus':
             return {
                 ...state,
-                dashboardState: GameState.status
+                gameState: GameState.status
             }
-
         case 'dashboardProfile':
             return {
                 ...state,
