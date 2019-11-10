@@ -110,24 +110,28 @@ const SignUpBase = () => {
             passwordVerifyRef.current.setFocus()
         }
     }
+    const handleChangeIndex = signUp => {
+        if (signUp == SignUpState.userName) {
+            if (userNameRef.current) {
+                userNameRef.current.setFocus();
+            }
+        } else if (signUp == SignUpState.email) {
+            if (emailRef.current) {
+                emailRef.current.setFocus();
+            }
+        } else if (signUp == SignUpState.password) {
+            if (passwordRef.current) {
+                passwordRef.current.setFocus()
+            }
+        } else if (signUp == SignUpState.passwordVerify) {
+            if (passwordVerifyRef.current) {
+                passwordVerifyRef.current.setFocus()
+            }
+        }
+    };
 
     return (
         <Content>
-            {
-                signUpFormErrorMessage != "" ? (
-                    <div className="stickyHeader">
-                        < Message
-                            showIcon
-                            type="error"
-                            title="Error"
-                            description={signUpFormErrorMessage}
-                        />
-                    </div>
-                ) : (
-                        null
-                    )
-            }
-            <br />
             <FlexboxGrid justify="center">
                 <FlexboxGrid.Item colspan={24}>
                     <FlexboxGrid justify="center">
@@ -174,7 +178,7 @@ const SignUpBase = () => {
                                 }
                             default:
                                 {
-                                    return <SwipeableViews resistance disabled={true} index={signUp}>
+                                    return <SwipeableViews onSwitching={handleChangeIndex} resistance index={signUp}>
                                         <div className="margins">
                                             <GetUsername ref={userNameRef} />
                                         </div>
@@ -196,12 +200,6 @@ const SignUpBase = () => {
             <style jsx>{`
                 .margins{
                     margin: 0 6em;
-                }
-                .stickyHeader {
-                    z-index: 1;
-                    top:0;
-                    position: fixed;
-                    width: 100vw;
                 }
 		`}</style>
         </Content >

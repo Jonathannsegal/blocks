@@ -8,8 +8,10 @@ import {
 	FlexboxGrid,
 	Container,
 	Header,
-	Button
+	Button,
+	Message
 } from 'rsuite';
+import SwipeableViews from 'react-swipeable-views';
 import SignIn from '../src/components/onBoarding/SignIn'
 import SignUp from '../src/components/onBoarding/SignUp'
 import HomeState from '../src/constants/homeState'
@@ -42,6 +44,7 @@ const worldspinOptions = {
 const useHome = () => {
 	const homeState = useSelector(state => state.homeState)
 	const dispatch = useDispatch()
+	const signUpFormErrorMessage = useSelector(state => state.signUpFormError)
 	const homeSignIn = () =>
 		dispatch({
 			type: 'homeSignIn',
@@ -52,14 +55,35 @@ const useHome = () => {
 			type: 'homeSignUp',
 			signUp: SignUpState.userName
 		})
-	return { homeState, homeSignIn, homeSignUp }
+	return { homeState, homeSignIn, homeSignUp, signUpFormErrorMessage }
 }
 
 const Home = () => {
-	const { homeState, homeSignIn, homeSignUp } = useHome()
+	const { homeState, homeSignIn, homeSignUp, signUpFormErrorMessage } = useHome()
+	const handleChangeIndex = index => {
+		if (index === HomeState.signIn) {
+			homeSignIn();
+		} else if (index === HomeState.signUp) {
+			homeSignUp();
+		}
+	};
 	return (
 		< div >
 			<Container>
+				{
+					signUpFormErrorMessage != "" ? (
+						<div className="stickyHeader">
+							< Message
+								showIcon
+								type="error"
+								title="Error"
+								description={signUpFormErrorMessage}
+							/>
+						</div>
+					) : (
+							null
+						)
+				}
 				<Header>
 					<FlexboxGrid justify="center">
 						<FlexboxGrid.Item colspan={12}>
@@ -100,16 +124,10 @@ const Home = () => {
 					</FlexboxGrid.Item>
 				</FlexboxGrid>
 				<br />
-				{(function () {
-					switch (homeState) {
-						case HomeState.signIn:
-							return <SignIn />;
-						case HomeState.signUp:
-							return <SignUp />;
-						default:
-							return null;
-					}
-				})()}
+				<SwipeableViews index={homeState} onSwitching={handleChangeIndex} resistance>
+					<SignIn />
+					<SignUp />
+				</SwipeableViews>
 			</Container>
 			<style jsx>{`
 			:global(body) {
@@ -124,6 +142,12 @@ const Home = () => {
 			}
 			.animationBox {
 				height: 30vh;
+			}
+			.stickyHeader {
+				z-index: 1;
+				top: 0;
+				position: fixed;
+				width: 100vw;
 			}
 		`}</style>
 		</div >
