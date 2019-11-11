@@ -2,10 +2,6 @@ import { Component } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import { geolocated } from 'react-geolocated';
 import Lottie from 'react-lottie'
-import {
-	Content,
-	FlexboxGrid
-} from 'rsuite';
 import * as locationdot from '../../db/locationdot.json'
 import ErrorScreen from '../../errors/ErrorScreen';
 import MapOverlay from './MapOverlay';

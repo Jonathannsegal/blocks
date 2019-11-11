@@ -27,6 +27,7 @@ import {
 import * as ratings from '../../src/db/ratings.json'
 import * as trophy from '../../src/db/trophy.json'
 import FriendCard from '../../src/components/Dashboard/friendCard'
+import LeaderBoardCard from '../../src/components/Dashboard/leaderBoardCard'
 require('rsuite/lib/styles/index.less');
 
 const ratingsOptions = {
@@ -179,8 +180,30 @@ const dashboard = () => {
                             <br /><br /><br />
                             Leaderboard
                             <SwipeableViews >
-                                <div className="test1">Friends</div>
-                                <div className="test2">Global</div>
+                                <React.Fragment>
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <div className="leaderBoardend" />
+                                </React.Fragment>
+                                <React.Fragment>
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <LeaderBoardCard />
+                                    <div className="leaderBoardend" />
+                                </React.Fragment>
                             </SwipeableViews>
                         </Content>
                     </SwipeableViews>
@@ -188,13 +211,8 @@ const dashboard = () => {
             </React.Fragment >
             {/* </AppWithAuthorization > */}
             <style jsx>{`
-                .test1{
-                    background-color: green;
-                    min-height: 200px;
-                }
-                .test2{
-                    background-color: blue;
-                    min-height: 200px;
+                .leaderBoardend{
+                    height: 2em;
                 }
                 .stickyHeader {
                     z-index: 1;
