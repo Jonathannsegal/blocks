@@ -179,31 +179,43 @@ const dashboard = () => {
                         <Content>
                             <br /><br /><br />
                             Leaderboard
-                            <SwipeableViews >
-                                <React.Fragment>
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <div className="leaderBoardend" />
-                                </React.Fragment>
-                                <React.Fragment>
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <LeaderBoardCard />
-                                    <div className="leaderBoardend" />
-                                </React.Fragment>
+                            <SwipeableViews animateHeight>
+                                <div className="leaderBoardHeight">
+                                    <React.Fragment>
+                                        <FlexboxGrid justify="center">
+                                            <FlexboxGrid.Item colspan={20}>
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <div className="leaderBoardend" />
+                                            </FlexboxGrid.Item>
+                                        </FlexboxGrid>
+                                    </React.Fragment>
+                                </div>
+                                <div className="leaderBoardHeight">
+                                    <React.Fragment>
+                                        <FlexboxGrid justify="center">
+                                            <FlexboxGrid.Item colspan={20}>
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <LeaderBoardCard />
+                                                <div className="leaderBoardend" />
+                                            </FlexboxGrid.Item>
+                                        </FlexboxGrid>
+                                    </React.Fragment>
+                                </div>
                             </SwipeableViews>
                         </Content>
                     </SwipeableViews>
@@ -211,6 +223,9 @@ const dashboard = () => {
             </React.Fragment >
             {/* </AppWithAuthorization > */}
             <style jsx>{`
+                .leaderBoardHeight{
+                    height: fit-content;
+                }
                 .leaderBoardend{
                     height: 2em;
                 }
