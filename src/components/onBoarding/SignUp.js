@@ -118,6 +118,8 @@ const SignUpBase = () => {
             blurAllElements();
             passwordVerifyRef.current.setFocus()
         }
+    } else if (signUp == SignUpState.passwordVerify) {
+        blurAllElements();
     }
     const handleChangeIndex = signUp => {
         blurAllElements();
