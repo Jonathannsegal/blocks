@@ -1,6 +1,7 @@
 import React from 'react';
 import Lottie from 'react-lottie'
 import { withRedux } from '../../src/lib/redux'
+import { useRouter } from 'next/router'
 import SwipeableViews from 'react-swipeable-views';
 import { useSelector, useDispatch } from 'react-redux'
 import { DashboardState, LeaderBoardState } from '../../src/constants';
@@ -28,6 +29,7 @@ import * as ratings from '../../src/db/ratings.json'
 import * as trophy from '../../src/db/trophy.json'
 import FriendCard from '../../src/components/Dashboard/friendCard'
 import LeaderBoardCard from '../../src/components/Dashboard/leaderBoardCard'
+import { AppWithAuthorization } from "../../src/components/App";
 require('rsuite/lib/styles/index.less');
 
 const ratingsOptions = {
@@ -48,11 +50,9 @@ const trophyOptions = {
     }
 };
 
-// import { AppWithAuthorization } from "../../src/components/App";
-
 const useDashboard = () => {
-    // const authUser = useSelector(state => state.authUser)
-    // return { authUser }
+    const authUser = useSelector(state => state.authUser)
+    const router = useRouter()
     const currentDashboardState = useSelector(state => state.dashboardState)
     const currentLeaderboardState = useSelector(state => state.leaderBoardState)
     const dispatch = useDispatch()
@@ -79,12 +79,22 @@ const useDashboard = () => {
             type: 'dashboardLeaderboard',
             dashboardState: DashboardState.leaderboard
         })
-    return { leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
+    const goHome = () => {
+        if (typeof window !== 'undefined') {
+            router.push('/')
+        }
+    }
+    return { goHome, authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
 }
 
-const dashboard = () => {
-    // const { authUser } = useDashboard()
-    const { leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
+const dashboard = () => (
+    <AppWithAuthorization>
+        <DashboardBase />
+    </AppWithAuthorization>
+);
+
+const DashboardBase = () => {
+    const { authUser, goHome, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
     const { Paragraph } = Placeholder;
     const handleChangeIndexDashboard = index => {
         if (index === DashboardState.profile) {
@@ -102,161 +112,164 @@ const dashboard = () => {
             leaderBoardStateGlobal();
         }
     };
-    return (
-        // < AppWithAuthorization >
-        // <h1>Account: {authUser.email}</h1>
-        <div>
-            <React.Fragment>
-                <Container>
-                    <div className="fixedHeader">
-                        <Header>
-                            <Navbar appearance="subtle">
-                                <Navbar.Body>
-                                    <Nav>
-                                        <Nav.Item
-                                            onClick={dashboardProfile}
-                                            icon={
-                                                <Avatar circle size="xs">JS</Avatar>
-                                            }> Username
-                                        </Nav.Item>
-                                    </Nav>
-                                    <Nav pullRight>
-                                        <Nav.Item onClick={dashboardLeaderboard} icon={<Lottie
-                                            height={18}
-                                            width={18}
-                                            options={trophyOptions}
-                                            isClickToPauseDisabled={true}
-                                        />}></Nav.Item>
-                                    </Nav>
-                                </Navbar.Body>
-                            </Navbar>
-                            {
-                                currentDashboardState === DashboardState.leaderboard ? (
-                                    <div className="stickyHeader">
-                                        <Navbar appearance="inverse">
-                                            <Navbar.Body>
-                                                <Nav>
-                                                    <Nav.Item icon={<Icon icon="chevron-left" />} onClick={dashboardHome}>Back</Nav.Item>
-                                                </Nav>
-                                                <Nav pullRight>
-                                                    <Nav.Item onClick={leaderBoardStateFriends}>Friends</Nav.Item>
-                                                    <Nav.Item onClick={leaderBoardStateGlobal}>Global</Nav.Item>
-                                                </Nav>
-                                            </Navbar.Body>
-                                        </Navbar>
-                                    </div>
-                                ) : (
-                                        null
-                                    )
-                            }
+    return authUser === null ? (
+        <React.Fragment>
+            {
+                goHome()
+            }
+        </React.Fragment>
+    ) : (
+            <div>
+                <React.Fragment>
+                    <Container>
+                        <div className="fixedHeader">
+                            <Header>
+                                <Navbar appearance="subtle">
+                                    <Navbar.Body>
+                                        <Nav>
+                                            <Nav.Item
+                                                onClick={dashboardProfile}
+                                                icon={
+                                                    <Avatar circle size="xs">JS</Avatar>
+                                                }> {authUser.email}
+                                            </Nav.Item >
+                                        </Nav >
+                                        <Nav pullRight>
+                                            <Nav.Item onClick={dashboardLeaderboard} icon={<Lottie
+                                                height={18}
+                                                width={18}
+                                                options={trophyOptions}
+                                                isClickToPauseDisabled={true}
+                                            />}></Nav.Item>
+                                        </Nav>
+                                    </Navbar.Body >
+                                </Navbar >
+                                {
+                                    currentDashboardState === DashboardState.leaderboard ? (
+                                        <div className="stickyHeader">
+                                            <Navbar appearance="inverse">
+                                                <Navbar.Body>
+                                                    <Nav>
+                                                        <Nav.Item icon={<Icon icon="chevron-left" />} onClick={dashboardHome}>Back</Nav.Item>
+                                                    </Nav>
+                                                    <Nav pullRight>
+                                                        <Nav.Item onClick={leaderBoardStateFriends}>Friends</Nav.Item>
+                                                        <Nav.Item onClick={leaderBoardStateGlobal}>Global</Nav.Item>
+                                                    </Nav>
+                                                </Navbar.Body>
+                                            </Navbar>
+                                        </div>
+                                    ) : (
+                                            null
+                                        )
+                                }
 
-                        </Header>
-                    </div>
-                    <SwipeableViews index={currentDashboardState} onChangeIndex={handleChangeIndexDashboard}>
-                        <Content> <br /><br /><br />Profile</Content>
-                        <Content>
-                            <FlexboxGrid justify="center">
-                                <FlexboxGrid.Item colspan={18}>
-                                    <br /><br /><br />
-                                    <div className="animationBox">
-                                        <Lottie
-                                            options={ratingsOptions}
-                                            isClickToPauseDisabled={true}
-                                        />
-                                    </div>
-                                </FlexboxGrid.Item>
-                                <FlexboxGrid.Item colspan={18}>
-                                    <h2 className="sectionTitle" >Play</h2>
-                                </FlexboxGrid.Item>
-                                <FlexboxGrid.Item colspan={17}>
-                                    <FlexboxGrid justify="space-around">
-                                        <FlexboxGrid.Item colspan={11}>
-                                            <Button size="lg" color="cyan" block href="/create">Create</Button>
-                                        </FlexboxGrid.Item>
-                                        <FlexboxGrid.Item colspan={11}>
-                                            <Button size="lg" color="cyan" block href="/search">Search</Button>
-                                        </FlexboxGrid.Item>
-                                    </FlexboxGrid>
-                                    <br />
-                                </FlexboxGrid.Item>
-                                <FlexboxGrid.Item colspan={18}>
-                                    <h2 className="sectionTitle">Friends</h2>
-                                </FlexboxGrid.Item>
-                                <FlexboxGrid.Item colspan={24}>
-                                    <div className="card">
-                                        <div className="cardContentEnds" />
-                                        <FriendCard />
-                                        <FriendCard />
-                                        <FriendCard />
-                                        <FriendCard />
-                                        <FriendCard />
-                                        <div className="cardContentEnds" />
-                                    </div>
-                                </FlexboxGrid.Item>
-                                <FlexboxGrid.Item colspan={18}>
-                                    <h2 className="sectionTitle">Past Games</h2>
-                                </FlexboxGrid.Item>
-                                <FlexboxGrid.Item colspan={17}>
-                                    <Panel header="" shaded>
-                                        <Paragraph rows={5} active />
-                                    </Panel>
-                                    <br />
-                                    <Panel header="" shaded>
-                                        <Paragraph rows={5} active />
-                                    </Panel>
-                                    <br />
-                                    <Panel header="" shaded>
-                                        <Paragraph rows={5} active />
-                                    </Panel>
-                                    <br />
-                                </FlexboxGrid.Item>
-                            </FlexboxGrid>
-                        </Content>
-                        <Content>
-                            <SwipeableViews index={currentLeaderboardState} onChangeIndex={handleChangeIndexLeaderboard} animateHeight>
-                                <div className="leaderBoardHeight">
-                                    <React.Fragment>
-                                        <FlexboxGrid justify="center">
-                                            <FlexboxGrid.Item colspan={20}>
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <div className="leaderBoardend" />
+                            </Header >
+                        </div >
+                        <SwipeableViews index={currentDashboardState} onChangeIndex={handleChangeIndexDashboard}>
+                            <Content> <br /><br /><br />Profile</Content>
+                            <Content>
+                                <FlexboxGrid justify="center">
+                                    <FlexboxGrid.Item colspan={18}>
+                                        <br /><br /><br />
+                                        <div className="animationBox">
+                                            <Lottie
+                                                options={ratingsOptions}
+                                                isClickToPauseDisabled={true}
+                                            />
+                                        </div>
+                                    </FlexboxGrid.Item>
+                                    <FlexboxGrid.Item colspan={18}>
+                                        <h2 className="sectionTitle" >Play</h2>
+                                    </FlexboxGrid.Item>
+                                    <FlexboxGrid.Item colspan={17}>
+                                        <FlexboxGrid justify="space-around">
+                                            <FlexboxGrid.Item colspan={11}>
+                                                <Button size="lg" color="cyan" block href="/create">Create</Button>
+                                            </FlexboxGrid.Item>
+                                            <FlexboxGrid.Item colspan={11}>
+                                                <Button size="lg" color="cyan" block href="/search">Search</Button>
                                             </FlexboxGrid.Item>
                                         </FlexboxGrid>
-                                    </React.Fragment>
-                                </div>
-                                <div className="leaderBoardHeight">
-                                    <React.Fragment>
-                                        <FlexboxGrid justify="center">
-                                            <FlexboxGrid.Item colspan={20}>
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <div className="leaderBoardend" />
-                                            </FlexboxGrid.Item>
-                                        </FlexboxGrid>
-                                    </React.Fragment>
-                                </div>
-                            </SwipeableViews>
-                        </Content>
-                    </SwipeableViews>
-                </Container>
-            </React.Fragment >
-            {/* </AppWithAuthorization > */}
-            <style jsx>{`
+                                        <br />
+                                    </FlexboxGrid.Item>
+                                    <FlexboxGrid.Item colspan={18}>
+                                        <h2 className="sectionTitle">Friends</h2>
+                                    </FlexboxGrid.Item>
+                                    <FlexboxGrid.Item colspan={24}>
+                                        <div className="card">
+                                            <div className="cardContentEnds" />
+                                            <FriendCard />
+                                            <FriendCard />
+                                            <FriendCard />
+                                            <FriendCard />
+                                            <FriendCard />
+                                            <div className="cardContentEnds" />
+                                        </div>
+                                    </FlexboxGrid.Item>
+                                    <FlexboxGrid.Item colspan={18}>
+                                        <h2 className="sectionTitle">Past Games</h2>
+                                    </FlexboxGrid.Item>
+                                    <FlexboxGrid.Item colspan={17}>
+                                        <Panel header="" shaded>
+                                            <Paragraph rows={5} active />
+                                        </Panel>
+                                        <br />
+                                        <Panel header="" shaded>
+                                            <Paragraph rows={5} active />
+                                        </Panel>
+                                        <br />
+                                        <Panel header="" shaded>
+                                            <Paragraph rows={5} active />
+                                        </Panel>
+                                        <br />
+                                    </FlexboxGrid.Item>
+                                </FlexboxGrid>
+                            </Content>
+                            <Content>
+                                <SwipeableViews index={currentLeaderboardState} onChangeIndex={handleChangeIndexLeaderboard} animateHeight>
+                                    <div className="leaderBoardHeight">
+                                        <React.Fragment>
+                                            <FlexboxGrid justify="center">
+                                                <FlexboxGrid.Item colspan={20}>
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <div className="leaderBoardend" />
+                                                </FlexboxGrid.Item>
+                                            </FlexboxGrid>
+                                        </React.Fragment>
+                                    </div>
+                                    <div className="leaderBoardHeight">
+                                        <React.Fragment>
+                                            <FlexboxGrid justify="center">
+                                                <FlexboxGrid.Item colspan={20}>
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <LeaderBoardCard />
+                                                    <div className="leaderBoardend" />
+                                                </FlexboxGrid.Item>
+                                            </FlexboxGrid>
+                                        </React.Fragment>
+                                    </div>
+                                </SwipeableViews>
+                            </Content>
+                        </SwipeableViews>
+                    </Container >
+                </React.Fragment >
+                <style jsx>{`
                 .leaderBoardHeight{
                     padding-top: 9em;
                     height: fit-content;
@@ -291,8 +304,8 @@ const dashboard = () => {
                     height: 25vh;
                 }
 		`}</style>
-        </div >
-    )
+            </div >
+        )
 }
 
 export default withRedux(dashboard);
