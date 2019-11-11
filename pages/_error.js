@@ -25,7 +25,7 @@ function Error({ statusCode }) {
                     <FlexboxGrid.Item colspan={18}>
                         <br /> <br />
                         <h2 className="center display-linebreak">{statusCode
-                            ? `An error ${statusCode} occurred on server`
+                            ? `A ${statusCode} error occurred on server`
                             : 'An error occurred on client'}</h2>
                         <br /><br />
                         <Lottie
