@@ -31,6 +31,9 @@ const GetUsername = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         setFocus() {
             document.getElementById("textBoxUsername").focus();
+        },
+        setBlur() {
+            document.getElementById("textBoxUsername").blur();
         }
     }));
     return (

@@ -35,6 +35,9 @@ const GetPassword = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         setFocus() {
             document.getElementById("textBoxPassword").focus();
+        },
+        setBlur() {
+            document.getElementById("textBoxPassword").blur();
         }
     }));
     return (

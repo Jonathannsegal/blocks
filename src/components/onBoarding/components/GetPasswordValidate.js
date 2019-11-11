@@ -35,6 +35,9 @@ const GetPasswordValidate = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         setFocus() {
             document.getElementById("textBoxPasswordVerify").focus();
+        },
+        setBlur() {
+            document.getElementById("textBoxPasswordVerify").blur();
         }
     }));
     return (

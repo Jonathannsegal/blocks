@@ -35,6 +35,9 @@ const GetEmail = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         setFocus() {
             document.getElementById("textBoxEmail").focus();
+        },
+        setBlur() {
+            document.getElementById("textBoxEmail").blur();
         }
     }));
     return (

@@ -11,8 +11,7 @@ import SwipeableViews from 'react-swipeable-views';
 import {
     Content,
     FlexboxGrid,
-    Progress,
-    Message
+    Progress
 } from 'rsuite';
 import SignUpState from '../../constants/signUpState'
 import GetUsername from './components/GetUsername';
@@ -93,24 +92,35 @@ const SignUpBase = () => {
             signUpFormError("");
         }, 10000);
     }
+    const blurAllElements = () => {
+        userNameRef.current.setBlur();
+        emailRef.current.setBlur();
+        passwordRef.current.setBlur()
+        passwordVerifyRef.current.setBlur()
+    }
     if (signUp == SignUpState.userName) {
         if (userNameRef.current) {
+            blurAllElements();
             userNameRef.current.setFocus();
         }
     } else if (signUp == SignUpState.email) {
         if (emailRef.current) {
+            blurAllElements();
             emailRef.current.setFocus();
         }
     } else if (signUp == SignUpState.password) {
         if (passwordRef.current) {
+            blurAllElements();
             passwordRef.current.setFocus()
         }
     } else if (signUp == SignUpState.passwordVerify) {
         if (passwordVerifyRef.current) {
+            blurAllElements();
             passwordVerifyRef.current.setFocus()
         }
     }
     const handleChangeIndex = signUp => {
+        blurAllElements();
         if (signUp == SignUpState.userName) {
             if (userNameRef.current) {
                 userNameRef.current.setFocus();
