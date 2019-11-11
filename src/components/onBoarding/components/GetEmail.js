@@ -47,7 +47,7 @@ const GetEmail = forwardRef((props, ref) => {
             }}>
             <FormGroup>
                 <ControlLabel>Email</ControlLabel>
-                <FormControl id={"textBoxEmail"} value={emailValue} name="email" />
+                <FormControl id={"textBoxEmail"} value={emailValue} name="email" placeholder="Email" />
             </FormGroup>
             <FormGroup>
                 <ButtonToolbar>

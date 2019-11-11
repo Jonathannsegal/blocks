@@ -4,6 +4,7 @@ import SignUpState from './constants/signUpState';
 import HomeState from './constants/homeState';
 import DashboardState from './constants/dashboardState';
 import GameState from './constants/gameState';
+import PasswordForgotFormState from './constants/passwordForgotFormState';
 
 const initialState = {
     authUser: null,
@@ -21,6 +22,11 @@ const initialState = {
         email: '',
         password: ''
     },
+    forgotPasswordFormValue: {
+        email: ''
+    },
+    passwordForgotFormState: PasswordForgotFormState.unsubmitted,
+    passwordForgotFormMessage: '',
     dashboardState: DashboardState.home,
     gameState: GameState.main
 
@@ -38,6 +44,29 @@ const applySetAuthUser = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'passwordForgotStateUnsubmit':
+            return {
+                ...state,
+                passwordForgotFormState: PasswordForgotFormState.unsubmitted
+            }
+        case 'passwordForgotStateSent':
+            return {
+                ...state,
+                passwordForgotFormState: PasswordForgotFormState.sent
+            }
+        case 'passwordForgotStateError':
+            return {
+                ...state,
+                passwordForgotFormState: PasswordForgotFormState.error
+            }
+        case ('UPDATE_FORGOTPASSWORD_EMAIL'):
+            return {
+                ...state,
+                forgotPasswordFormValue: {
+                    ...state.forgotPasswordFormValue,
+                    email: action.payload.txt
+                }
+            }
         case ('SIGNUP_FORM_ERROR'):
             return {
                 ...state,
@@ -161,6 +190,11 @@ const reducer = (state = { initialState, input: {} }, action) => {
             return {
                 ...state,
                 signUpState: SignUpState.done
+            }
+        case 'homeForgotPassword':
+            return {
+                ...state,
+                homeState: HomeState.forgotPassword
             }
         case 'homeSignIn':
             return {

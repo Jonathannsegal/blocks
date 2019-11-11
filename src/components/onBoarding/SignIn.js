@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppWithAuthentication } from "../App";
 import { auth, db } from "../../firebase";
 import Router from "next/router"
+import HomeState from '../../constants/homeState'
 import {
     Button,
     ButtonToolbar,
@@ -17,9 +18,16 @@ import {
 const useSignIn = () => {
     const dispatch = useDispatch()
     const values = useSelector(state => state.signInFormValue)
+    const signUpFormErrorMessage = useSelector(state => state.signUpFormError)
     const updateInputEmail = (input) => (
         dispatch({
             type: 'UPDATE_SIGNIN_EMAIL',
+            payload: { txt: input }
+        })
+    )
+    const signUpFormError = (input) => (
+        dispatch({
+            type: 'SIGNUP_FORM_ERROR',
             payload: { txt: input }
         })
     )
@@ -29,6 +37,11 @@ const useSignIn = () => {
             payload: { txt: input }
         })
     )
+    const homeForgotPassword = () =>
+        dispatch({
+            type: 'homeForgotPassword',
+            signUp: HomeState.forgotPassword
+        })
     const onSubmit = event => {
         auth
             .doSignInWithEmailAndPassword(values.email, values.password)
@@ -36,10 +49,10 @@ const useSignIn = () => {
                 Router.push('/dashboard');
             })
             .catch(error => {
-                console.log("error", error);
+                signUpFormError(error.message);
             });
     }
-    return { updateInputEmail, updateInputPassword, values, onSubmit }
+    return { updateInputEmail, signUpFormError, signUpFormErrorMessage, updateInputPassword, values, homeForgotPassword, onSubmit }
 }
 
 const SignIn = () => (
@@ -49,7 +62,12 @@ const SignIn = () => (
 );
 
 const SignInBase = () => {
-    const { updateInputEmail, updateInputPassword, values, onSubmit } = useSignIn()
+    const { updateInputEmail, signUpFormError, signUpFormErrorMessage, updateInputPassword, values, homeForgotPassword, onSubmit } = useSignIn()
+    if (signUpFormErrorMessage != "") {
+        setTimeout(() => {
+            signUpFormError("");
+        }, 5000);
+    }
     return (
         <Content>
             <FlexboxGrid justify="center">
@@ -70,7 +88,7 @@ const SignInBase = () => {
                         <FormGroup>
                             <ButtonToolbar>
                                 <Button appearance="primary" type="submit" onClick={onSubmit}>Sign in</Button>
-                                <Button appearance="link">Forgot password?</Button>
+                                <Button appearance="link" onClick={homeForgotPassword}>Forgot password?</Button>
                             </ButtonToolbar>
                         </FormGroup>
                     </Form>

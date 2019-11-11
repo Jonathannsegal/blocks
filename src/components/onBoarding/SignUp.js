@@ -90,7 +90,7 @@ const SignUpBase = () => {
     if (signUpFormErrorMessage != "") {
         setTimeout(() => {
             signUpFormError("");
-        }, 10000);
+        }, 5000);
     }
     const blurAllElements = () => {
         userNameRef.current.setBlur();

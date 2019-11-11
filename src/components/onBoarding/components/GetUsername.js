@@ -43,7 +43,7 @@ const GetUsername = forwardRef((props, ref) => {
             }}>
             <FormGroup>
                 <ControlLabel>Username</ControlLabel>
-                <FormControl id={"textBoxUsername"} value={userNameValue} name="userName" autoFocus={true} />
+                <FormControl id={"textBoxUsername"} value={userNameValue} name="userName" autoFocus={true} placeholder="Username" />
             </FormGroup>
             <FormGroup>
                 <ButtonToolbar>
