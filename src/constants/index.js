@@ -4,6 +4,8 @@ import HomeState from './homeState';
 import PasswordForgotFormState from './passwordForgotFormState';
 import RefreshTime from './refreshTime';
 import SignUpState from './signUpState';
+import LeaderBoardState from './leaderBoardState';
+
 
 export {
     DashboardState,
@@ -11,5 +13,6 @@ export {
     HomeState,
     PasswordForgotFormState,
     RefreshTime,
-    SignUpState
+    SignUpState,
+    LeaderBoardState
 }

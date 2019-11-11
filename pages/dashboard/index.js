@@ -3,7 +3,7 @@ import Lottie from 'react-lottie'
 import { withRedux } from '../../src/lib/redux'
 import SwipeableViews from 'react-swipeable-views';
 import { useSelector, useDispatch } from 'react-redux'
-import { DashboardState } from '../../src/constants';
+import { DashboardState, LeaderBoardState } from '../../src/constants';
 import {
     Avatar,
     Container,
@@ -54,7 +54,16 @@ const useDashboard = () => {
     // const authUser = useSelector(state => state.authUser)
     // return { authUser }
     const currentDashboardState = useSelector(state => state.dashboardState)
+    const currentLeaderboardState = useSelector(state => state.leaderBoardState)
     const dispatch = useDispatch()
+    const leaderBoardStateFriends = () =>
+        dispatch({
+            type: 'leaderBoardStateFriends'
+        })
+    const leaderBoardStateGlobal = () =>
+        dispatch({
+            type: 'leaderBoardStateGlobal'
+        })
     const dashboardProfile = () =>
         dispatch({
             type: 'dashboardProfile',
@@ -70,14 +79,14 @@ const useDashboard = () => {
             type: 'dashboardLeaderboard',
             dashboardState: DashboardState.leaderboard
         })
-    return { currentDashboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
+    return { leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
 }
 
 const dashboard = () => {
     // const { authUser } = useDashboard()
-    const { currentDashboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
+    const { leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
     const { Paragraph } = Placeholder;
-    const handleChangeIndex = index => {
+    const handleChangeIndexDashboard = index => {
         if (index === DashboardState.profile) {
             dashboardProfile();
         } else if (index === DashboardState.home) {
@@ -86,13 +95,20 @@ const dashboard = () => {
             dashboardLeaderboard();
         }
     };
+    const handleChangeIndexLeaderboard = index => {
+        if (index === LeaderBoardState.friends) {
+            leaderBoardStateFriends();
+        } else if (index === LeaderBoardState.global) {
+            leaderBoardStateGlobal();
+        }
+    };
     return (
         // < AppWithAuthorization >
         // <h1>Account: {authUser.email}</h1>
         <div>
             <React.Fragment>
                 <Container>
-                    <div className="stickyHeader">
+                    <div className="fixedHeader">
                         <Header>
                             <Navbar appearance="subtle">
                                 <Navbar.Body>
@@ -114,9 +130,29 @@ const dashboard = () => {
                                     </Nav>
                                 </Navbar.Body>
                             </Navbar>
+                            {
+                                currentDashboardState === DashboardState.leaderboard ? (
+                                    <div className="stickyHeader">
+                                        <Navbar appearance="inverse">
+                                            <Navbar.Body>
+                                                <Nav>
+                                                    <Nav.Item icon={<Icon icon="chevron-left" />} onClick={dashboardHome}>Back</Nav.Item>
+                                                </Nav>
+                                                <Nav pullRight>
+                                                    <Nav.Item onClick={leaderBoardStateFriends}>Friends</Nav.Item>
+                                                    <Nav.Item onClick={leaderBoardStateGlobal}>Global</Nav.Item>
+                                                </Nav>
+                                            </Navbar.Body>
+                                        </Navbar>
+                                    </div>
+                                ) : (
+                                        null
+                                    )
+                            }
+
                         </Header>
                     </div>
-                    <SwipeableViews index={currentDashboardState} onChangeIndex={handleChangeIndex}>
+                    <SwipeableViews index={currentDashboardState} onChangeIndex={handleChangeIndexDashboard}>
                         <Content> <br /><br /><br />Profile</Content>
                         <Content>
                             <FlexboxGrid justify="center">
@@ -177,9 +213,7 @@ const dashboard = () => {
                             </FlexboxGrid>
                         </Content>
                         <Content>
-                            <br /><br /><br />
-                            Leaderboard
-                            <SwipeableViews animateHeight>
+                            <SwipeableViews index={currentLeaderboardState} onChangeIndex={handleChangeIndexLeaderboard} animateHeight>
                                 <div className="leaderBoardHeight">
                                     <React.Fragment>
                                         <FlexboxGrid justify="center">
@@ -224,12 +258,13 @@ const dashboard = () => {
             {/* </AppWithAuthorization > */}
             <style jsx>{`
                 .leaderBoardHeight{
+                    padding-top: 9em;
                     height: fit-content;
                 }
                 .leaderBoardend{
                     height: 2em;
                 }
-                .stickyHeader {
+                .fixedHeader {
                     z-index: 1;
                     position: fixed;
                     width: 100vw;

@@ -1,10 +1,13 @@
 import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import SignUpState from './constants/signUpState';
-import HomeState from './constants/homeState';
-import DashboardState from './constants/dashboardState';
-import GameState from './constants/gameState';
-import PasswordForgotFormState from './constants/passwordForgotFormState';
+import {
+    SignUpState,
+    HomeState,
+    DashboardState,
+    GameState,
+    PasswordForgotFormState,
+    LeaderBoardState
+} from './constants';
 
 const initialState = {
     authUser: null,
@@ -28,6 +31,7 @@ const initialState = {
     passwordForgotFormState: PasswordForgotFormState.unsubmitted,
     passwordForgotFormMessage: '',
     dashboardState: DashboardState.home,
+    leaderBoardState: LeaderBoardState.friends,
     gameState: GameState.main
 
 }
@@ -44,6 +48,16 @@ const applySetAuthUser = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'leaderBoardStateFriends':
+            return {
+                ...state,
+                leaderBoardState: LeaderBoardState.friends
+            }
+        case 'leaderBoardStateGlobal':
+            return {
+                ...state,
+                leaderBoardState: LeaderBoardState.global
+            }
         case 'passwordForgotStateUnsubmit':
             return {
                 ...state,
