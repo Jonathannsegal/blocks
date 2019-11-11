@@ -3,7 +3,7 @@ import Lottie from 'react-lottie'
 import { withRedux } from '../../src/lib/redux'
 import SwipeableViews from 'react-swipeable-views';
 import { useSelector, useDispatch } from 'react-redux'
-import DashboardState from '../../src/constants/dashboardState';
+import { DashboardState } from '../../src/constants';
 import {
     Avatar,
     Container,

@@ -18,9 +18,12 @@ import SwipeableViews from 'react-swipeable-views';
 import ForgotPassword from '../src/components/onBoarding/ForgotPassword'
 import SignIn from '../src/components/onBoarding/SignIn'
 import SignUp from '../src/components/onBoarding/SignUp'
-import HomeState from '../src/constants/homeState'
-import SignUpState from '../src/constants/signUpState'
-import PasswordForgotFormState from '../src/constants/passwordForgotFormState'
+import {
+	HomeState,
+	RefreshTime,
+	SignUpState,
+	PasswordForgotFormState
+} from '../src/constants'
 require('rsuite/lib/styles/index.less');
 
 const pinjumpOptions = {
@@ -109,13 +112,13 @@ const Home = () => {
 		updateForgotPasswordEmail("");
 		setTimeout(() => {
 			passwordForgotStateUnsubmit();
-		}, 5000);
+		}, RefreshTime.fiveSeconds);
 	}
 	if (passwordForgotFormState === PasswordForgotFormState.error) {
 		updateForgotPasswordEmail("");
 		setTimeout(() => {
 			passwordForgotStateUnsubmit();
-		}, 5000);
+		}, RefreshTime.fiveSeconds);
 	}
 	return (
 		< div >

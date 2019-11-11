@@ -9,7 +9,7 @@ import {
 	FlexboxGrid,
 	Button
 } from 'rsuite';
-import GameState from '../../src/constants/gameState';
+import { GameState } from '../../src/constants';
 import * as chat from '../../src/db/chat.json';
 import * as status from '../../src/db/status.json';
 

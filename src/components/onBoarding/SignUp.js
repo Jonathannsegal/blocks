@@ -13,7 +13,7 @@ import {
     FlexboxGrid,
     Progress
 } from 'rsuite';
-import SignUpState from '../../constants/signUpState'
+import { RefreshTime, SignUpState } from '../../constants'
 import GetUsername from './components/GetUsername';
 import GetEmail from './components/GetEmail';
 import GetPassword from './components/GetPassword';
@@ -90,7 +90,7 @@ const SignUpBase = () => {
     if (signUpFormErrorMessage != "") {
         setTimeout(() => {
             signUpFormError("");
-        }, 5000);
+        }, RefreshTime.fiveSeconds);
     }
     const blurAllElements = () => {
         userNameRef.current.setBlur();

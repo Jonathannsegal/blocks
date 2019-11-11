@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppWithAuthentication } from "../App";
 import { auth, db } from "../../firebase";
 import Router from "next/router"
-import HomeState from '../../constants/homeState'
+import { HomeState, RefreshTime } from '../../constants'
+
 import {
     Button,
     ButtonToolbar,
@@ -66,7 +67,7 @@ const SignInBase = () => {
     if (signUpFormErrorMessage != "") {
         setTimeout(() => {
             signUpFormError("");
-        }, 5000);
+        }, RefreshTime.fiveSeconds);
     }
     return (
         <Content>

@@ -1,5 +1,6 @@
 import React from 'react';
-import {geolocated} from 'react-geolocated';
+import { geolocated } from 'react-geolocated';
+import { RefreshTime } from '../../src/constants'
 
 class Location extends React.Component {
 	render() {
@@ -33,8 +34,8 @@ class Location extends React.Component {
 				</tbody>
 			</table>
 		) : (
-			<div>Getting the location data&hellip; </div>
-		);
+						<div>Getting the location data&hellip; </div>
+					);
 	}
 }
 
@@ -42,6 +43,6 @@ export default geolocated({
 	positionOptions: {
 		enableHighAccuracy: false
 	},
-	userDecisionTimeout: 5000,
+	userDecisionTimeout: RefreshTime.fiveSeconds,
 	watchPosition: true
 })(Location);

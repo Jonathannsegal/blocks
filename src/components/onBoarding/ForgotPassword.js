@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppWithAuthentication } from "../App";
 import { auth, db } from "../../firebase";
 import Router from "next/router"
+import { RefreshTime } from '../../constants'
+
 import {
     Button,
     ButtonToolbar,
@@ -70,7 +72,7 @@ const ForgotPasswordBase = () => {
     if (signUpFormErrorMessage != "") {
         setTimeout(() => {
             signUpFormError("");
-        }, 5000);
+        }, RefreshTime.fiveSeconds);
     }
     return (
         <Content>

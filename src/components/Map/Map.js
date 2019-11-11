@@ -5,6 +5,7 @@ import Lottie from 'react-lottie'
 import * as locationdot from '../../db/locationdot.json'
 import ErrorScreen from '../../errors/ErrorScreen';
 import MapOverlay from './MapOverlay';
+import { RefreshTime } from '../../src/constants'
 
 const locationdotOptions = {
 	loop: true,
@@ -73,6 +74,6 @@ export default geolocated({
 	positionOptions: {
 		enableHighAccuracy: true
 	},
-	userDecisionTimeout: 5000,
+	userDecisionTimeout: RefreshTime.fiveSeconds,
 	watchPosition: true
 })(Map);
