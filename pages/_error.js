@@ -1,6 +1,6 @@
 import React from 'react';
 import Lottie from 'react-lottie'
-import * as fourzerofour from '../../src/db/fourzerofour.json'
+import * as fourzerofour from '../src/db/fourzerofour.json'
 import {
     Content,
     FlexboxGrid,
