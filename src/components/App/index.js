@@ -2,6 +2,7 @@ import React from "react";
 import { compose } from "recompose";
 import withAuthentication from "../Session/withAuthentication";
 import withAuthorization from "../Session/withAuthorization";
+import ifAuthorized from "../Session/ifAuthorized";
 
 const App = ({ children }) => (
   <React.Fragment>
@@ -19,4 +20,9 @@ const AppWithAuthorization = compose(
   withAuthorization(true)
 )(App);
 
-export { AppWithAuthentication, AppWithAuthorization };
+const AppIfAuthorized = compose(
+  withAuthentication,
+  ifAuthorized(true)
+)(App);
+
+export { AppWithAuthentication, AppWithAuthorization, AppIfAuthorized };

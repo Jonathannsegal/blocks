@@ -190,7 +190,7 @@ const SignUpBase = () => {
                                 }
                             default:
                                 {
-                                    return <SwipeableViews onSwitching={handleChangeIndex} resistance index={signUp}>
+                                    return <SwipeableViews onSwitching={handleChangeIndex} index={signUp}>
                                         <div className="margins">
                                             <GetUsername ref={userNameRef} />
                                         </div>

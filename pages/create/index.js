@@ -1,5 +1,6 @@
 import React from 'react';
 import Lottie from 'react-lottie'
+import { withRedux } from '../../src/lib/redux'
 import * as articulation from '../../src/db/articulation.json'
 import {
     Content,
@@ -45,4 +46,4 @@ const create = () => (
     </React.Fragment >
 );
 
-export default create;
+export default withRedux(create);

@@ -79,12 +79,7 @@ const useDashboard = () => {
             type: 'dashboardLeaderboard',
             dashboardState: DashboardState.leaderboard
         })
-    const goHome = () => {
-        if (typeof window !== 'undefined') {
-            router.push('/')
-        }
-    }
-    return { goHome, authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
+    return { authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
 }
 
 const dashboard = () => (
@@ -94,7 +89,7 @@ const dashboard = () => (
 );
 
 const DashboardBase = () => {
-    const { authUser, goHome, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
+    const { authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
     const { Paragraph } = Placeholder;
     const handleChangeIndexDashboard = index => {
         if (index === DashboardState.profile) {
@@ -112,11 +107,10 @@ const DashboardBase = () => {
             leaderBoardStateGlobal();
         }
     };
+
     return authUser === null ? (
         <React.Fragment>
-            {
-                goHome()
-            }
+            <p>Not Logged in, Redirecting to sign in screen</p>
         </React.Fragment>
     ) : (
             <div>
@@ -271,7 +265,7 @@ const DashboardBase = () => {
                 </React.Fragment >
                 <style jsx>{`
                 .leaderBoardHeight{
-                    padding-top: 9em;
+                    padding-top: 10em;
                     height: fit-content;
                 }
                 .leaderBoardend{

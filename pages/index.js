@@ -24,6 +24,8 @@ import {
 	SignUpState,
 	PasswordForgotFormState
 } from '../src/constants'
+import { AppIfAuthorized } from "../src/components/App";
+
 require('rsuite/lib/styles/index.less');
 
 const pinjumpOptions = {
@@ -99,7 +101,13 @@ const useHome = () => {
 	return { homeState, passwordForgotFormState, homeSignIn, homeSignUp, signUpFormErrorMessage, updateForgotPasswordEmail, passwordForgotStateUnsubmit }
 }
 
-const Home = () => {
+const Home = () => (
+	<AppIfAuthorized>
+		<HomeBase />
+	</AppIfAuthorized>
+);
+
+const HomeBase = () => {
 	const { homeState, passwordForgotFormState, homeSignIn, homeSignUp, signUpFormErrorMessage, updateForgotPasswordEmail, passwordForgotStateUnsubmit } = useHome()
 	const handleChangeIndex = index => {
 		if (index === HomeState.signIn) {
@@ -222,7 +230,7 @@ const Home = () => {
 							);
 						default:
 							return (
-								<SwipeableViews index={homeState} onSwitching={handleChangeIndex} resistance>
+								<SwipeableViews index={homeState} onSwitching={handleChangeIndex}>
 									<SignIn />
 									<SignUp />
 								</SwipeableViews>);
@@ -241,7 +249,7 @@ const Home = () => {
 				font-size: 48px;
 			}
 			.animationBox {
-				height: 30vh;
+				height: 16em;
 			}
 			.stickyHeader {
 				z-index: 1;
