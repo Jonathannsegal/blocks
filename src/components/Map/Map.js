@@ -1,11 +1,12 @@
 import { Component } from 'react';
-import ReactMapGL, { Marker } from 'react-map-gl';
+import ReactMapGL, { Marker, Layer, Source } from 'react-map-gl';
 import { geolocated } from 'react-geolocated';
 import Lottie from 'react-lottie'
 import * as locationdot from '../../db/locationdot.json'
 import ErrorScreen from '../../errors/ErrorScreen';
 import MapOverlay from './MapOverlay';
 import { RefreshTime } from '../../../src/constants'
+import * as mapAreaSource from '../../db/map.geojson'
 
 const locationdotOptions = {
 	loop: true,
@@ -16,6 +17,17 @@ const locationdotOptions = {
 	}
 };
 
+const mapAreaLayer = {
+	id: 'map-area',
+	type: 'fill',
+	source: mapAreaSource,
+	paint: {
+		'fill-color': '#ff0000',
+		'fill-opacity': 0.2,
+		'fill-outline-color': '#8b0000'
+	}
+}
+
 class Map extends Component {
 	state = {
 		viewport: {
@@ -23,7 +35,7 @@ class Map extends Component {
 			height: '100vh',
 			latitude: 42.03,
 			longitude: -93.645,
-			zoom: 15
+			zoom: 16
 		}
 	};
 
@@ -43,6 +55,9 @@ class Map extends Component {
 					longitude={this.props.coords.longitude}
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
+					<Source type="geojson" data={mapAreaSource}>
+						<Layer {...mapAreaLayer} />
+					</Source>
 					<Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>
 						<div className="locationContainer">
 							<Lottie

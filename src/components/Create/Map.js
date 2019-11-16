@@ -49,6 +49,10 @@ class Map extends Component {
         mode: EditorModes.READ_ONLY
     };
 
+    _updateViewport = viewport => {
+        this.setState({ viewport });
+    };
+
     _onSelect = options => {
         this.setState({ selectedFeatureIndex: options && options.selectedFeatureIndex });
     };
@@ -96,7 +100,10 @@ class Map extends Component {
                     </div>
                 </div>
                 <div className="mapboxgl-ctrl-top-right">
-                    <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
+                    <div className="fullscreen">
+                        <FullscreenControl />
+                    </div>
+                    {/* <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
                         <button
                             className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"
                             title="Polygon tool (p)"
@@ -107,7 +114,7 @@ class Map extends Component {
                                 options={resizeOptions}
                                 isClickToPauseDisabled={true}
                             /> </button>
-                    </div>
+                    </div> */}
                 </div>
             </React.Fragment>
         );
@@ -125,6 +132,8 @@ class Map extends Component {
                     mapStyle="mapbox://styles/mapbox/streets-v9"
                     mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"
                     {...this.state.viewport}
+                    width="100%"
+                    height="100%"
                     onViewportChange={(viewport) => this.setState({ viewport })}
                 >
                     <Editor

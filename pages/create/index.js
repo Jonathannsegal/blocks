@@ -62,7 +62,7 @@ const create = () => (
                         <FormGroup>
                             <FlexboxGrid justify="space-around">
                                 <FlexboxGrid.Item colspan={11}>
-                                    <Button size="lg" appearance="primary" color="cyan" type="submit">Make Game</Button>
+                                    <Button size="lg" appearance="primary" color="cyan" href="/join" type="submit">Make Game</Button>
                                 </FlexboxGrid.Item>
                             </FlexboxGrid>
                         </FormGroup>

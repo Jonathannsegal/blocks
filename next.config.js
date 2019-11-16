@@ -5,12 +5,12 @@ const withLess = require('@zeit/next-less');
 module.exports = withOffline(
 	withLess({
 		target: process.env.NEXT_TARGET || 'serverless',
-		webpack: {
-			resolve: {
-				alias: {
-					rsuite: path.resolve(__dirname, '../rsuite')
-				}
-			}
+		webpack: (config, options) => {
+			config.module.rules.push({
+				test: /\.geojson/,
+				use: 'url-loader'
+			})
+			return config
 		},
 		lessLoaderOptions: {
 			javascriptEnabled: true
