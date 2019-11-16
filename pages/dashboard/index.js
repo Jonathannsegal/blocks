@@ -147,8 +147,8 @@ const DashboardBase = () => {
                                                         <Nav.Item icon={<Icon icon="chevron-left" />} onClick={dashboardHome}>Back</Nav.Item>
                                                     </Nav>
                                                     <Nav pullRight>
-                                                        <Nav.Item onClick={leaderBoardStateFriends}>Friends</Nav.Item>
-                                                        <Nav.Item onClick={leaderBoardStateGlobal}>Global</Nav.Item>
+                                                        <Nav.Item onClick={leaderBoardStateFriends} active={currentLeaderboardState == LeaderBoardState.friends} >Friends</Nav.Item>
+                                                        <Nav.Item onClick={leaderBoardStateGlobal} active={currentLeaderboardState == LeaderBoardState.global} >Global</Nav.Item>
                                                     </Nav>
                                                 </Navbar.Body>
                                             </Navbar>
