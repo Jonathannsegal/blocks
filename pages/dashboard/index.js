@@ -15,7 +15,16 @@ import {
     Icon,
     Panel,
     Placeholder,
-    Button
+    Button,
+    Form,
+    FormGroup,
+    ControlLabel,
+    Input,
+    FormControl,
+    HelpBlock,
+    ButtonToolbar,
+    ButtonGroup,
+    InputGroup
 } from 'rsuite';
 import * as ratings from '../../src/db/ratings.json'
 import * as trophy from '../../src/db/trophy.json'
@@ -48,6 +57,9 @@ const useDashboard = () => {
     const authUser = useSelector(state => state.authUser)
     const currentDashboardState = useSelector(state => state.dashboardState)
     const currentLeaderboardState = useSelector(state => state.leaderBoardState)
+    const newPasswordValue = useSelector(state => state.changePassword)
+    const newUsernameValue = useSelector(state => state.changeUsername)
+
     const dispatch = useDispatch()
     const leaderBoardStateFriends = () =>
         dispatch({
@@ -82,7 +94,45 @@ const useDashboard = () => {
                 console.log("sign out error: " + error)
             });
     }
-    return { onSignOut, authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
+    const updateNewUsernameValue = (input) => (
+        dispatch({
+            type: 'UPDATE_NEWUSERNAME',
+            payload: { txt: input }
+        })
+    )
+    const updateNewPasswordValue = (input) => (
+        dispatch({
+            type: 'UPDATE_NEWPASSWORD',
+            payload: { txt: input }
+        })
+    )
+    const changeUsername = () => {
+        if (newUsernameValue.length > 3) {
+            auth
+                .doDisplayNameUpdate(newUsernameValue)
+                .then(() => {
+                    dashboardHome();
+                    dashboardProfile();
+                })
+                .catch(error => {
+                    console.log("error: " + error)
+                });
+        }
+    }
+    const changePassword = () => {
+        if (newPasswordValue.length > 5) {
+            auth
+                .doPasswordUpdate(newPasswordValue)
+                .then(() => {
+                    dashboardHome();
+                    dashboardProfile();
+                })
+                .catch(error => {
+                    console.log("error: " + error)
+                });
+        }
+    }
+    return { updateNewUsernameValue, updateNewPasswordValue, changePassword, changeUsername, onSignOut, authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
 }
 
 const dashboard = () => (
@@ -92,7 +142,7 @@ const dashboard = () => (
 );
 
 const DashboardBase = () => {
-    const { onSignOut, authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
+    const { updateNewUsernameValue, updateNewPasswordValue, changePassword, changeUsername, onSignOut, authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
     const { Paragraph } = Placeholder;
     const handleChangeIndexDashboard = index => {
         if (index === DashboardState.profile) {
@@ -180,8 +230,26 @@ const DashboardBase = () => {
                                             </FlexboxGrid>
                                             <br />
                                             <FlexboxGrid justify="space-around">
-                                                <FlexboxGrid.Item colspan={15}>
-                                                    <Button size="lg" color="cyan" block>Change Password</Button>
+                                                <FlexboxGrid.Item colspan={18}>
+                                                    <ControlLabel>Change Password</ControlLabel>
+                                                    <InputGroup onClick={changePassword}>
+                                                        <Input onChange={value => { updateNewPasswordValue(value) }} name="password" placeholder="new password" />
+                                                        <InputGroup.Button color="cyan" >
+                                                            <Icon icon="send" />
+                                                        </InputGroup.Button>
+                                                    </InputGroup>
+                                                </FlexboxGrid.Item>
+                                            </FlexboxGrid>
+                                            <br />
+                                            <FlexboxGrid justify="space-around">
+                                                <FlexboxGrid.Item colspan={18}>
+                                                    <ControlLabel>Change Username</ControlLabel>
+                                                    <InputGroup onClick={changeUsername}>
+                                                        <Input onChange={value => { updateNewUsernameValue(value) }} placeholder={authUser.displayName} />
+                                                        <InputGroup.Button color="cyan" type="submit" >
+                                                            <Icon icon="send" />
+                                                        </InputGroup.Button>
+                                                    </InputGroup>
                                                 </FlexboxGrid.Item>
                                             </FlexboxGrid>
                                         </FlexboxGrid.Item>
@@ -289,6 +357,12 @@ const DashboardBase = () => {
                 <style jsx>{`
                 .minFullHeight{
                     min-height: 100vh;
+                }
+                .textInputTop{
+                    border-top-left-radius: 6px;
+                    border-top-right-radius: 6px;
+                    border-bottom-right-radius: 0px;
+                    border-bottom-left-radius: 0px;
                 }
                 .leaderBoardHeight{
                     padding-top: 10em;

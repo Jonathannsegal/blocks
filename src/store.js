@@ -14,6 +14,8 @@ const initialState = {
     users: {},
     homeState: HomeState.signIn,
     signUpState: SignUpState.userName,
+    changePassword: '',
+    changeUsername: '',
     signUpFormValue: {
         userName: '',
         email: '',
@@ -48,6 +50,16 @@ const applySetAuthUser = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case ('UPDATE_NEWPASSWORD'):
+            return {
+                ...state,
+                changePassword: action.payload.txt
+            }
+        case ('UPDATE_NEWUSERNAME'):
+            return {
+                ...state,
+                changeUsername: action.payload.txt
+            }
         case 'leaderBoardStateFriends':
             return {
                 ...state,
