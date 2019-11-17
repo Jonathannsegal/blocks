@@ -127,8 +127,8 @@ const DashboardBase = () => {
                                             <Nav.Item
                                                 onClick={dashboardProfile}
                                                 icon={
-                                                    <Avatar circle size="xs">JS</Avatar>
-                                                }> {authUser.email}
+                                                    <Avatar circle size="xs">{authUser.displayName.substring(0, 1)}</Avatar>
+                                                }> {authUser.displayName}
                                             </Nav.Item >
                                         </Nav >
                                         <Nav pullRight>
@@ -310,6 +310,8 @@ const DashboardBase = () => {
                     min-width: 15vw;
                 }
                 .card {
+                    margin-top: -1em;
+                    padding-top: 1em;
                     min-height: 14vh;
                     display: flex;
                     overflow-x: auto;

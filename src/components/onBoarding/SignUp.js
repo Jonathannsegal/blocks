@@ -38,6 +38,8 @@ const useSignUp = () => {
         auth
             .doCreateUserWithEmailAndPassword(event.email, event.password)
             .then(authUser => {
+                auth.
+                    doDisplayNameUpdate(event.userName);
                 db.doCreateUser(authUser.user.uid, event.userName, event.email)
                     .then(() => {
                         Router.push('/dashboard');
@@ -93,16 +95,16 @@ const SignUpBase = () => {
         }, RefreshTime.fiveSeconds);
     }
     const blurAllElements = () => {
-        if (userNameRef) {
+        if (userNameRef.current) {
             userNameRef.current.setBlur();
         }
-        if (emailRef) {
+        if (emailRef.current) {
             emailRef.current.setBlur();
         }
-        if (passwordRef) {
+        if (passwordRef.current) {
             passwordRef.current.setBlur()
         }
-        if (passwordVerifyRef) {
+        if (passwordVerifyRef.current) {
             passwordVerifyRef.current.setBlur()
         }
     }

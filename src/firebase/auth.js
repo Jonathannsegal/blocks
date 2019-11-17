@@ -1,4 +1,5 @@
 import { auth } from './firebase';
+import GetUsername from '../components/onBoarding/components/GetUsername';
 
 // Sign Up
 export const doCreateUserWithEmailAndPassword = (email, password) =>
@@ -19,3 +20,9 @@ export const doPasswordReset = (email) =>
 // Password Change
 export const doPasswordUpdate = (password) =>
   auth.currentUser.updatePassword(password);
+
+// Update DisplayName
+export const doDisplayNameUpdate = (username) =>
+  auth.currentUser.updateProfile({
+    displayName: username
+  })

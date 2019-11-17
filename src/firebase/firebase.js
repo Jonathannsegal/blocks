@@ -31,4 +31,33 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-export { db, auth };
+// Merge Auth and DB User API
+const onAuthUserListener = (next, fallback) =>
+  this.auth.onAuthStateChanged(authUser => {
+    if (authUser) {
+      this.user(authUser.uid)
+        .get()
+        .then(snapshot => {
+          const dbUser = snapshot.data();
+
+          // default empty roles
+          if (!dbUser.roles) {
+            dbUser.roles = {};
+          }
+
+          // merge auth and db user
+          authUser = {
+            uid: authUser.uid,
+            email: authUser.email,
+            providerData: authUser.providerData,
+            ...dbUser,
+          };
+
+          next(authUser);
+        });
+    } else {
+      fallback();
+    }
+  });
+
+export { db, auth, onAuthUserListener };
