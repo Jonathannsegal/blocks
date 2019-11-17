@@ -22,6 +22,7 @@ class NotLoggedIn extends Component {
                         <FlexboxGrid.Item colspan={18}>
                             <div className="fullHeight">
                                 <Lottie
+                                    speed={2}
                                     height={300}
                                     width={300}
                                     options={liquidspinnerOptions}

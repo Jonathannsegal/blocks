@@ -162,31 +162,32 @@ const DashboardBase = () => {
                             </Header >
                         </div >
                         <SwipeableViews animateHeight index={currentDashboardState} onChangeIndex={handleChangeIndexDashboard}>
-                            <Content>
-                                <br /><br /><br />
-                                <FlexboxGrid justify="center">
-                                    <FlexboxGrid.Item colspan={18}>
-                                        <FlexboxGrid justify="space-around">
-                                            <h2 className="sectionTitle">Profile</h2>
-                                        </FlexboxGrid>
-                                        <br />
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item colspan={17}>
-                                        <FlexboxGrid justify="space-around">
-                                            <FlexboxGrid.Item colspan={11}>
-                                                <Button size="lg" color="cyan" block onClick={onSignOut}>Sign Out</Button>
-                                            </FlexboxGrid.Item>
-                                        </FlexboxGrid>
-                                        <br />
-                                        <FlexboxGrid justify="space-around">
-                                            <FlexboxGrid.Item colspan={15}>
-                                                <Button size="lg" color="cyan" block>Change Password</Button>
-                                            </FlexboxGrid.Item>
-                                        </FlexboxGrid>
-                                    </FlexboxGrid.Item>
-                                </FlexboxGrid>
-                            </Content>
-
+                            <div className="minFullHeight">
+                                <Content>
+                                    <br /><br /><br />
+                                    <FlexboxGrid justify="center">
+                                        <FlexboxGrid.Item colspan={18}>
+                                            <FlexboxGrid justify="space-around">
+                                                <h2 className="sectionTitle">Profile</h2>
+                                            </FlexboxGrid>
+                                            <br />
+                                        </FlexboxGrid.Item>
+                                        <FlexboxGrid.Item colspan={17}>
+                                            <FlexboxGrid justify="space-around">
+                                                <FlexboxGrid.Item colspan={11}>
+                                                    <Button size="lg" color="cyan" block onClick={onSignOut}>Sign Out</Button>
+                                                </FlexboxGrid.Item>
+                                            </FlexboxGrid>
+                                            <br />
+                                            <FlexboxGrid justify="space-around">
+                                                <FlexboxGrid.Item colspan={15}>
+                                                    <Button size="lg" color="cyan" block>Change Password</Button>
+                                                </FlexboxGrid.Item>
+                                            </FlexboxGrid>
+                                        </FlexboxGrid.Item>
+                                    </FlexboxGrid>
+                                </Content>
+                            </div>
 
                             <Content>
                                 <FlexboxGrid justify="center">
@@ -286,6 +287,9 @@ const DashboardBase = () => {
                     </Container >
                 </React.Fragment >
                 <style jsx>{`
+                .minFullHeight{
+                    min-height: 100vh;
+                }
                 .leaderBoardHeight{
                     padding-top: 10em;
                     height: 100vh;

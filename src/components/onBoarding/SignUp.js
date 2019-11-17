@@ -93,10 +93,18 @@ const SignUpBase = () => {
         }, RefreshTime.fiveSeconds);
     }
     const blurAllElements = () => {
-        userNameRef.current.setBlur();
-        emailRef.current.setBlur();
-        passwordRef.current.setBlur()
-        passwordVerifyRef.current.setBlur()
+        if (userNameRef) {
+            userNameRef.current.setBlur();
+        }
+        if (emailRef) {
+            emailRef.current.setBlur();
+        }
+        if (passwordRef) {
+            passwordRef.current.setBlur()
+        }
+        if (passwordVerifyRef) {
+            passwordVerifyRef.current.setBlur()
+        }
     }
     if (signUp == SignUpState.userName) {
         if (userNameRef.current) {
