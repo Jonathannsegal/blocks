@@ -7,6 +7,9 @@ import ErrorScreen from '../../errors/ErrorScreen';
 import MapOverlay from './MapOverlay';
 import { RefreshTime } from '../../../src/constants'
 import * as mapAreaSource from '../../db/map.geojson'
+import {
+	Avatar
+} from 'rsuite';
 
 const locationdotOptions = {
 	loop: true,
@@ -59,10 +62,17 @@ class Map extends Component {
 						<Layer {...mapAreaLayer} />
 					</Source>
 					<Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>
+						{/* <div className="avatarContainer">
+							<Avatar
+								circle
+								size="sm"
+								src="https://avatars2.githubusercontent.com/u/12592949?s=460&v=4"
+							/>
+						</div> */}
 						<div className="locationContainer">
 							<Lottie
-								height={80}
-								width={80}
+								height={100}
+								width={100}
 								options={locationdotOptions}
 								isClickToPauseDisabled={true}
 							/>
@@ -72,9 +82,16 @@ class Map extends Component {
 					:global(body) {
 						margin: 0;
 					}
+					.avatarContainer {
+						z-index: 10;
+						position: absolute;
+						margin-left: -14px;
+						margin-top: -16.5px;
+					}
 					.locationContainer {
-						margin-left: -40px;
-						margin-top: -40px;
+						z-index: 9;
+						margin-left: -50px;
+						margin-top: -50px;
 					}
 				`}</style>
 				</ReactMapGL>
