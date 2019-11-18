@@ -38,23 +38,23 @@ const resizeOptions = {
 };
 
 class Map extends Component {
-    state = {
-        viewport: {
-            width: '100%',
-            height: '100%',
-            latitude: 42.03,
-            longitude: -93.645,
-            zoom: 14
-        },
-        mode: EditorModes.READ_ONLY
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            viewport: {
+                width: '100%',
+                height: '100%',
+                latitude: 42.03,
+                longitude: -93.645,
+                zoom: 14
+            },
+            mode: EditorModes.READ_ONLY,
+            geometry: {},
+        };
+    }
 
     _updateViewport = viewport => {
         this.setState({ viewport });
-    };
-
-    _onSelect = options => {
-        this.setState({ selectedFeatureIndex: options && options.selectedFeatureIndex });
     };
 
     _onUpdate = ({ editType }) => {
@@ -63,6 +63,10 @@ class Map extends Component {
                 mode: EditorModes.EDITING
             });
         }
+        this.props.parentCallback(this._editorRef && this._editorRef.getFeatures());
+        this.setState({
+            geometry: this._editorRef && this._editorRef.getFeatures()
+        });
     };
 
     _onDelete = () => {

@@ -22,6 +22,10 @@ const initialState = {
         password: '',
         verifyPassword: ''
     },
+    createGameFormValue: {
+        name: '',
+        geometry: []
+    },
     signUpFormError: '',
     signInFormValue: {
         email: '',
@@ -50,6 +54,25 @@ const applySetAuthUser = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case ('UPDATE_GAMECREATE_NAME'):
+            return {
+                ...state,
+                createGameFormValue: {
+                    ...state.createGameFormValue,
+                    name: action.payload.txt
+                }
+            }
+        case ('UPDATE_GAMECREATE_GEO'):
+            return {
+                ...state,
+                createGameFormValue: {
+                    ...state.createGameFormValue,
+                    geometry: action.geometry
+                }
+            }
+
+
+
         case ('UPDATE_NEWPASSWORD'):
             return {
                 ...state,
