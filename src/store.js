@@ -70,9 +70,6 @@ const reducer = (state = { initialState, input: {} }, action) => {
                     geometry: action.geometry
                 }
             }
-
-
-
         case ('UPDATE_NEWPASSWORD'):
             return {
                 ...state,

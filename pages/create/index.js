@@ -1,7 +1,8 @@
 import React from 'react';
 import Lottie from 'react-lottie'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { withRedux } from '../../src/lib/redux'
+import { db } from "../../src/firebase";
 import * as articulation from '../../src/db/articulation.json'
 import * as createheader from '../../src/db/createheader.json'
 import {
@@ -41,6 +42,7 @@ const createheaderOptions = {
 
 const useCreate = () => {
     const dispatch = useDispatch()
+    const createGameValues = useSelector(state => state.createGameFormValue)
     const updateGameName = (input) => (
         dispatch({
             type: 'UPDATE_GAMECREATE_NAME',
@@ -56,11 +58,21 @@ const useCreate = () => {
     const callbackFunction = (childData) => (
         updateGameGeometry(childData)
     )
-    return { callbackFunction, updateGameName }
+    const onGameCreate = (event) => {
+        // console.log(authUser.user.uid);
+        db.doCreateGame("authUser.user.uid + event.name", createGameValues.name, createGameValues.geometry)
+            // .then(() => {
+            //     Router.push('/join');
+            // })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+    return { onGameCreate, callbackFunction, updateGameName }
 }
 
 const create = () => {
-    const { callbackFunction, updateGameName } = useCreate()
+    const { onGameCreate, callbackFunction, updateGameName } = useCreate()
     return (
         <React.Fragment >
             <Container>
@@ -97,7 +109,7 @@ const create = () => {
                                 <FormGroup>
                                     <FlexboxGrid justify="space-around">
                                         <FlexboxGrid.Item colspan={18}>
-                                            <Button block size="lg" appearance="primary" color="cyan" href="/join" type="submit">Make Game</Button>
+                                            <Button block size="lg" appearance="primary" color="cyan" onClick={onGameCreate} type="submit">Make Game</Button>
                                         </FlexboxGrid.Item>
                                     </FlexboxGrid>
                                 </FormGroup>
