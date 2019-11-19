@@ -3,6 +3,7 @@ import Lottie from 'react-lottie'
 import { useDispatch, useSelector } from 'react-redux'
 import { withRedux } from '../../src/lib/redux'
 import { db } from "../../src/firebase";
+import Router from "next/router"
 import * as articulation from '../../src/db/articulation.json'
 import * as createheader from '../../src/db/createheader.json'
 import {
@@ -20,6 +21,7 @@ import {
     Container
 } from 'rsuite';
 import Map from '../../src/components/Create/Map';
+import { AppWithAuthorization } from "../../src/components/App";
 require('rsuite/lib/styles/index.less');
 
 const articulationOptions = {
@@ -42,6 +44,7 @@ const createheaderOptions = {
 
 const useCreate = () => {
     const dispatch = useDispatch()
+    const authUserUid = useSelector(state => state.authUser)
     const createGameValues = useSelector(state => state.createGameFormValue)
     const updateGameName = (input) => (
         dispatch({
@@ -58,20 +61,26 @@ const useCreate = () => {
     const callbackFunction = (childData) => (
         updateGameGeometry(childData)
     )
-    const onGameCreate = (event) => {
-        // console.log(authUser.user.uid);
-        db.doCreateGame("authUser.user.uid + event.name", createGameValues.name, createGameValues.geometry)
-            // .then(() => {
-            //     Router.push('/join');
-            // })
-            .catch(error => {
-                console.log(error);
-            });
+    const onGameCreate = () => {
+        db
+            .doCreateGame(authUserUid.uid + Date.now(), createGameValues.name, createGameValues.geometry[0].geometry.coordinates[0], Date.now())
+        // .then(() => {
+        Router.push('/join');
+        // })
+        // .catch(error => {
+        //     console.log(error);
+        // });
     }
     return { onGameCreate, callbackFunction, updateGameName }
 }
 
-const create = () => {
+const create = () => (
+    <AppWithAuthorization>
+        <CreateBase />
+    </AppWithAuthorization>
+);
+
+const CreateBase = () => {
     const { onGameCreate, callbackFunction, updateGameName } = useCreate()
     return (
         <React.Fragment >

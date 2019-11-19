@@ -47,9 +47,6 @@ const search = () => (
                         <br /><br />
                         <FlexboxGrid justify="space-around">
                             <FlexboxGrid.Item colspan={11}>
-                                <Button size="lg" color="cyan" block href="/dashboard">Back</Button>
-                            </FlexboxGrid.Item>
-                            <FlexboxGrid.Item colspan={11}>
                                 <Button size="lg" color="cyan" block href="/game">Game</Button>
                             </FlexboxGrid.Item>
                         </FlexboxGrid>
