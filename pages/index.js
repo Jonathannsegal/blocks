@@ -160,6 +160,9 @@ const HomeBase = () => {
 						)
 				}
 				<Header>
+					<noscript>
+						<a href="http://devhumor.com/tags/javascript">You dont have javascript enabled, Big Sad</a>
+					</noscript>
 					<FlexboxGrid justify="center">
 						<FlexboxGrid.Item colspan={12}>
 							<h1 className="title">Blocks</h1>
