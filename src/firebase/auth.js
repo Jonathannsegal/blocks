@@ -1,5 +1,4 @@
 import { auth } from './firebase';
-import GetUsername from '../components/onBoarding/components/GetUsername';
 
 // Sign Up
 export const doCreateUserWithEmailAndPassword = (email, password) =>

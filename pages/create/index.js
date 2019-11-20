@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { withRedux } from '../../src/lib/redux'
 import { db } from "../../src/firebase";
 import Router from "next/router"
+import firebase from "firebase/app";
 import * as articulation from '../../src/db/articulation.json'
 import * as createheader from '../../src/db/createheader.json'
 import {
@@ -62,14 +63,26 @@ const useCreate = () => {
         updateGameGeometry(childData)
     )
     const onGameCreate = () => {
+        let shape = [];
+        for (let i = 0; i < createGameValues.geometry[0].geometry.coordinates[0].length; i++) {
+            shape.push(new firebase.firestore.GeoPoint(
+                createGameValues.geometry[0].geometry.coordinates[0][i][1],
+                createGameValues.geometry[0].geometry.coordinates[0][i][0])
+            );
+        }
         db
-            .doCreateGame(authUserUid.uid + Date.now(), createGameValues.name, createGameValues.geometry[0].geometry.coordinates[0], Date.now())
-        // .then(() => {
-        Router.push('/join');
-        // })
-        // .catch(error => {
-        //     console.log(error);
-        // });
+            .doCreateGame(
+                authUserUid.uid + Date.now(),
+                createGameValues.name,
+                shape,
+                Date.now()
+            )
+            .then(() => {
+                Router.push('/join');
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
     return { onGameCreate, callbackFunction, updateGameName }
 }
@@ -112,7 +125,7 @@ const CreateBase = () => {
                                     <FormControl onChange={value => updateGameName(value)} name="test" placeholder="Campus Challange" />
                                 </FormGroup>
                                 <div className="content2">
-                                    <Map value={"helloboiz"} parentCallback={callbackFunction} />
+                                    <Map parentCallback={callbackFunction} />
                                 </div>
                                 <br />
                                 <FormGroup>

@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import ReactMapGL, { FullscreenControl } from 'react-map-gl';
+import ReactMapGL, { FullscreenControl, GeolocateControl } from 'react-map-gl';
 import { geolocated } from 'react-geolocated';
 import Lottie from 'react-lottie'
 import * as pencil from '../../db/pencil.json'
@@ -107,6 +107,17 @@ class Map extends Component {
                     <div className="fullscreen">
                         <FullscreenControl />
                     </div>
+                    <GeolocateControl
+                        positionOptions={{ enableHighAccuracy: true }}
+                        trackUserLocation={true}
+                        showUserLocation={false}
+                    />
+                    {/* <div className="fullscreen">
+                        <GeolocateControl
+                            positionOptions={{ enableHighAccuracy: true }}
+                            trackUserLocation={true}
+                        />
+                    </div> */}
                     {/* <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
                         <button
                             className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"
@@ -153,7 +164,7 @@ class Map extends Component {
                     />
                     {this._renderDrawTools()}
                 </ReactMapGL>
-            </React.Fragment>
+            </React.Fragment >
         ) : (
                         <div>Getting the location data&hellip; </div>
                     );
