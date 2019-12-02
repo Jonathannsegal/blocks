@@ -4,16 +4,47 @@ import { db } from './firebase';
 export const doCreateUser = (id, username, email) =>
   db.doc(`users/${id}`).set({
     username,
-    email
+    email,
+    score: 0
+  });
+
+export const updateUserName = (id, username) =>
+  db.doc(`users/${id}`).update({
+    username
   });
 
 export const onceGetUsers = () =>
   db.collection('users');
 
-// Other db APIs
-export const doCreateGame = (id, name, shape, timeStamp) =>
+// Game API'S
+// export const doUserJoinGame = (id) =>
+//   db.doc(`games/${id}`).set({
+//     {},
+
+//   });
+
+export const doCreateGame = (gameCreator, id, name, shape, timeStamp) =>
   db.doc(`games/${id}`).set({
+    gameCreator,
+    id,
     name,
     timeStamp,
+    players: [],
     shape
   });
+
+export const onceGetGames = (gameName) => {
+  var docRef = db.collection('games').doc(gameName);
+  return docRef.get().then(function (doc) {
+    if (doc.exists) {
+      return (doc.data());
+    } else {
+      return ("No such document!");
+    }
+  }).catch(function (error) {
+    return ("Error getting document:", error);
+  });
+}
+
+export const onceGetGamesReadyToJoin = () =>
+  db.collection('games').get();

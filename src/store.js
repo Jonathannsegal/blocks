@@ -12,6 +12,9 @@ import {
 const initialState = {
     authUser: null,
     users: {},
+    currentGame: null,
+    currentGameValues: null,
+    searchGameList: [],
     homeState: HomeState.signIn,
     signUpState: SignUpState.userName,
     changePassword: '',
@@ -52,8 +55,29 @@ const applySetAuthUser = (state, action) => ({
     authUser: action.authUser
 });
 
+const applyGameValueSet = (state, action) => ({
+    ...state,
+    currentGameValues: action.values
+});
+
+const getGameList = (state, action) => ({
+    ...state,
+    searchGameList: action.list
+});
+
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'GET_GAMELIST': {
+            return getGameList(state, action);
+        }
+        case 'CURRENT_GAMEVALUE_SET': {
+            return applyGameValueSet(state, action);
+        }
+        case ('SET_CURRENTGAME'):
+            return {
+                ...state,
+                currentGame: action.input
+            }
         case ('UPDATE_GAMECREATE_NAME'):
             return {
                 ...state,

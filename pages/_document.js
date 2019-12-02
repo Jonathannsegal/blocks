@@ -15,6 +15,9 @@ export default class MyDocument extends Document {
 			<html lang="en">
 				<Head>{this.props.styleTags}</Head>
 				<body>
+					<noscript>
+						<a href="http://devhumor.com/tags/javascript">You dont have javascript enabled, Big Sad</a>
+					</noscript>
 					<GlobalStyle />
 					<Main />
 					<NextScript />

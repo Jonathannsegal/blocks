@@ -31,7 +31,7 @@ import * as trophy from '../../src/db/trophy.json'
 import FriendCard from '../../src/components/Dashboard/friendCard'
 import LeaderBoardCard from '../../src/components/Dashboard/leaderBoardCard'
 import { AppWithAuthorization } from "../../src/components/App";
-import { auth } from "../../src/firebase";
+import { db, auth } from "../../src/firebase";
 import NotLoggedIn from '../../src/extraScreens/notLoggedIn'
 require('rsuite/lib/styles/index.less');
 
@@ -108,6 +108,7 @@ const useDashboard = () => {
     )
     const changeUsername = () => {
         if (newUsernameValue.length > 3) {
+            db.updateUserName(authUser.uid, newUsernameValue);
             auth
                 .doDisplayNameUpdate(newUsernameValue)
                 .then(() => {

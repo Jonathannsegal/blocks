@@ -47,6 +47,12 @@ const useCreate = () => {
     const dispatch = useDispatch()
     const authUserUid = useSelector(state => state.authUser)
     const createGameValues = useSelector(state => state.createGameFormValue)
+    const setCurrentGame = (input) => (
+        dispatch({
+            type: 'SET_CURRENTGAME',
+            input
+        })
+    )
     const updateGameName = (input) => (
         dispatch({
             type: 'UPDATE_GAMECREATE_NAME',
@@ -64,6 +70,8 @@ const useCreate = () => {
     )
     const onGameCreate = () => {
         let shape = [];
+        let gameName = authUserUid.uid + Date.now();
+        let gameCreator = authUserUid.uid;
         for (let i = 0; i < createGameValues.geometry[0].geometry.coordinates[0].length; i++) {
             shape.push(new firebase.firestore.GeoPoint(
                 createGameValues.geometry[0].geometry.coordinates[0][i][1],
@@ -72,12 +80,14 @@ const useCreate = () => {
         }
         db
             .doCreateGame(
-                authUserUid.uid + Date.now(),
+                gameCreator,
+                gameName,
                 createGameValues.name,
                 shape,
                 Date.now()
             )
             .then(() => {
+                setCurrentGame(gameName);
                 Router.push('/join');
             })
             .catch(error => {
