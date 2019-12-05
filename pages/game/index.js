@@ -3,7 +3,7 @@ import Lottie from 'react-lottie'
 import { withRedux } from '../../src/lib/redux'
 import SwipeableViews from 'react-swipeable-views';
 import { useSelector, useDispatch } from 'react-redux'
-import Map from '../../src/components/Map/MapExport';
+import Map from '../../src/components/Map/Map';
 import {
 	Content,
 	FlexboxGrid,
@@ -63,7 +63,7 @@ const useGame = () => {
 		console.log(db.getGameId(AuthUser.uid));
 	}
 
-	return { currentGameState, gameChat, gameMain, gameStatus, getCurrentGame }
+	return { currentGameState, gameValues, gameChat, gameMain, gameStatus, getCurrentGame }
 }
 
 const Game = () => (
@@ -73,7 +73,7 @@ const Game = () => (
 );
 
 const GameBase = () => {
-	const { currentGameState, gameChat, gameMain, gameStatus, getCurrentGame } = useGame()
+	const { currentGameState, gameValues, gameChat, gameMain, gameStatus, getCurrentGame } = useGame()
 	const handleChangeIndex = index => {
 		if (index === GameState.chat) {
 			gameChat();
@@ -112,7 +112,7 @@ const GameBase = () => {
 						</FlexboxGrid>
 					</Content>
 				</React.Fragment>
-				<Map />
+				<Map gameValues={gameValues} />
 				<React.Fragment>
 					<Content>
 						<FlexboxGrid justify="center">

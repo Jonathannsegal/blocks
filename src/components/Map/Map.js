@@ -76,14 +76,14 @@ class Map extends Component {
 			return geojson;
 	};
 
-	/*_createObjectives = () => {
-		var minLat = 42.0227732629691;
-		var maxLat = 42.030615480628065;
-		var minLong = -93.65424156188965;
-		var maxLong = -93.63643169403076;
+	_createObjectives = () => {
+		var minLat = gameValues.shape[i].latitude;
+		var maxLat = gameValues.shape[i].latitude;;
+		var minLong = gameValues.shape[i].longitude;;
+		var maxLong = gameValues.shape[i].longitude;;
 		objectiveArray.push([(Math.random() * (maxLat - minLat) + minLat),(Math.random() * (maxLong - minLong) + minLong)]);
 		console.log(objectiveArray);
-	}*/
+	}
 
 
 	render() {
@@ -102,7 +102,7 @@ class Map extends Component {
 					longitude={this.props.coords.longitude}
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
-					<Source type="geojson" data={this.getValues}>
+					<Source type="geojson" data={this.getValues()}>
 						<Layer {...mapAreaLayer} />
 					</Source>
 					<Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>
