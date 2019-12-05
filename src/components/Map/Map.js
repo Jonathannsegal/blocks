@@ -19,6 +19,10 @@ const locationdotOptions = {
 		preserveAspectRatio: 'xMidYMid slice'
 	}
 };
+var objectiveArray = new Array()
+var temp = 0;
+
+
 
 const mapAreaLayer = {
 	id: 'map-area',
@@ -42,6 +46,47 @@ class Map extends Component {
 		}
 	};
 
+	getValues = () => {
+			let geojson = {
+					type: 'FeatureCollection',
+					features: [
+							{
+									type: 'Feature',
+									properties: {},
+									geometry: {
+											type: 'Polygon',
+											coordinates: [
+													[
+															[0, 0],
+															[1, 1]
+													]
+											]
+									}
+							}
+					]
+			};
+			if (this.props.gameValues != null) {
+					if (this.props.gameValues.shape != null) {
+							let shape = [];
+							for (var i = 0; i < this.props.gameValues.shape.length; i++) {
+									shape.push(new Array(this.props.gameValues.shape[i].longitude, this.props.gameValues.shape[i].latitude));
+							}
+							geojson.features[0].geometry.coordinates.push(shape);
+					}
+			}
+			return geojson;
+	};
+
+	_createObjectives = () => {
+		var minLat = 42.0227732629691;
+		var maxLat = 42.030615480628065;
+		var minLong = -93.65424156188965;
+		var maxLong = -93.63643169403076;
+		objectiveArray.push([(Math.random() * (maxLat - minLat) + minLat),(Math.random() * (maxLong - minLong) + minLong)]);
+		console.log(objectiveArray);
+	}
+
+
 	render() {
 		return !this.props.isGeolocationAvailable ? (
 			<ErrorScreen message={`Your browser \n does not support \n Geolocation`} />
@@ -58,7 +103,7 @@ class Map extends Component {
 					longitude={this.props.coords.longitude}
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
-					<Source type="geojson" data={mapAreaSource}>
+					<Source type="geojson" data={this.getValues}>
 						<Layer {...mapAreaLayer} />
 					</Source>
 					<Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>
