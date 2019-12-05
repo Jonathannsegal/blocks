@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { db } from "../../src/firebase";
 import { withRedux } from '../../src/lib/redux'
 import Router from "next/router"
+import { AppWithAuthorization } from "../../src/components/App";
 import {
     Content,
     FlexboxGrid,
@@ -13,7 +14,8 @@ import {
     Header,
     Footer,
     Button,
-    Container
+    Container,
+    List
 } from 'rsuite';
 require('rsuite/lib/styles/index.less');
 
@@ -21,6 +23,7 @@ const useJoin = () => {
     const dispatch = useDispatch()
     const CurrentGame = useSelector(state => state.currentGame)
     const gameValues = useSelector(state => state.currentGameValues)
+    const AuthUser = useSelector(state => state.authUser)
     let functionGameValues = function (gameId) {
         if (gameId == null) {
             gameId = "none";
@@ -41,13 +44,19 @@ const useJoin = () => {
         })
     });
     const joinGame = () => {
-        console.log("Joingame")
+        db.doAddPlayerToGame(CurrentGame, AuthUser.uid, "data");
     }
 
     return { joinGame, gameValues, CurrentGame }
 }
 
-const join = () => {
+const join = () => (
+    <AppWithAuthorization>
+        <JoinBase />
+    </AppWithAuthorization>
+);
+
+const JoinBase = () => {
     const { joinGame, gameValues, CurrentGame } = useJoin()
     return (
         <React.Fragment>
@@ -66,23 +75,28 @@ const join = () => {
                                 <h2 className="sectionTitle">Choose a team</h2>
                             </FlexboxGrid>
                         </FlexboxGrid.Item>
-                        <FlexboxGrid.Item colspan={18}>
+                        {/* <FlexboxGrid.Item colspan={18}>
                             <FlexboxGrid justify="space-around">
                                 <h6 className="sectionTitle">{CurrentGame}</h6>
                             </FlexboxGrid>
-                        </FlexboxGrid.Item>
+                        </FlexboxGrid.Item> */}
                         <FlexboxGrid.Item colspan={18}>
                             <br />
-                            <br />
-                            <br />
                             <FlexboxGrid justify="space-around">
+                                <Button onClick={() => joinGame()} color="cyan" size="lg" appearance="primary">Make a Team</Button>
+                            </FlexboxGrid>
+                            <br />
+                            {/* <FlexboxGrid justify="space-around">
                                 <Button onClick={() => joinGame()} color="cyan" size="lg" appearance="primary">Join Game</Button>
                             </FlexboxGrid>
+                            <br /> */}
                         </FlexboxGrid.Item>
                     </FlexboxGrid>
                 </Header>
                 <Content>
-                    {/* TODO */}
+                    <FlexboxGrid>
+                        <Button onClick={() => joinGame()} color="cyan" size="lg" appearance="primary">Join Game</Button>
+                    </FlexboxGrid>
                 </Content>
                 <div className="bottomFooter">
                     <Footer>

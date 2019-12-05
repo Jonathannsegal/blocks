@@ -23,13 +23,17 @@ export const onceGetUsers = () =>
 
 //   });
 
+export const doAddPlayerToGame = (id, userId, data) =>
+  db.doc(`games/${id}`).collection('players').doc(userId).set({
+    data
+  });
+
 export const doCreateGame = (gameCreator, id, name, shape, timeStamp) =>
   db.doc(`games/${id}`).set({
     gameCreator,
     id,
     name,
     timeStamp,
-    players: [],
     shape
   });
 
