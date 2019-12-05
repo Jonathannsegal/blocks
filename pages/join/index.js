@@ -47,9 +47,9 @@ const useJoin = () => {
         db.doAddPlayerToGame(CurrentGame, AuthUser.uid, "data");
     }
 
-    // const setCurrentGame = () => {
-    //     db.doSetGame(AuthUser.uid, CurrentGame);
-    // }
+    const setUserCurrentGame = () => {
+        db.doSetGame(AuthUser.uid, CurrentGame);
+    }
     const setCurrentGame = (input) => (
         dispatch({
             type: 'SET_CURRENTGAME',
@@ -61,7 +61,7 @@ const useJoin = () => {
         Router.push('/game');
     }
 
-    return { joinGame, gameValues, CurrentGame, setCurrentGame, goToGameFunction }
+    return { joinGame, gameValues, CurrentGame, setUserCurrentGame, goToGameFunction, setCurrentGame }
 }
 
 
@@ -73,7 +73,7 @@ const join = () => (
 );
 
 const JoinBase = () => {
-    const { joinGame, gameValues, CurrentGame,setCurrentGame, goToGameFunction } = useJoin()
+    const { joinGame, gameValues, CurrentGame,setUserCurrentGame, goToGameFunction, setCurrentGame } = useJoin()
     return (
         <React.Fragment>
             <Container>
@@ -115,7 +115,7 @@ const JoinBase = () => {
                     </FlexboxGrid>
                     <br/>
                     <FlexboxGrid>
-                        <Button onClick={() => setCurrentGame()} color="cyan" size="lg" appearance="primary">Set Game</Button>
+                        <Button onClick={() => setUserCurrentGame()} color="cyan" size="lg" appearance="primary">Set Game</Button>
                     </FlexboxGrid>
                     <br/>
                     <FlexboxGrid>

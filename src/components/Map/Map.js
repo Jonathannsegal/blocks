@@ -76,14 +76,14 @@ class Map extends Component {
 			return geojson;
 	};
 
-	_createObjectives = () => {
+	/*_createObjectives = () => {
 		var minLat = gameValues.shape[i].latitude;
 		var maxLat = gameValues.shape[i].latitude;;
 		var minLong = gameValues.shape[i].longitude;;
 		var maxLong = gameValues.shape[i].longitude;;
 		objectiveArray.push([(Math.random() * (maxLat - minLat) + minLat),(Math.random() * (maxLong - minLong) + minLong)]);
 		console.log(objectiveArray);
-	}
+	}*/
 
 
 	render() {
