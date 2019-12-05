@@ -19,7 +19,7 @@ const locationdotOptions = {
 		preserveAspectRatio: 'xMidYMid slice'
 	}
 };
-var objectiveArray = new Array()
+//var objectiveArray = new Array()
 
 
 
@@ -76,14 +76,14 @@ class Map extends Component {
 			return geojson;
 	};
 
-	_createObjectives = () => {
+	/*_createObjectives = () => {
 		var minLat = 42.0227732629691;
 		var maxLat = 42.030615480628065;
 		var minLong = -93.65424156188965;
 		var maxLong = -93.63643169403076;
 		objectiveArray.push([(Math.random() * (maxLat - minLat) + minLat),(Math.random() * (maxLong - minLong) + minLong)]);
 		console.log(objectiveArray);
-	}
+	}*/
 
 
 	render() {
