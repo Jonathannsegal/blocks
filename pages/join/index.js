@@ -47,8 +47,24 @@ const useJoin = () => {
         db.doAddPlayerToGame(CurrentGame, AuthUser.uid, "data");
     }
 
-    return { joinGame, gameValues, CurrentGame }
+    // const setCurrentGame = () => {
+    //     db.doSetGame(AuthUser.uid, CurrentGame);
+    // }
+    const setCurrentGame = (input) => (
+        dispatch({
+            type: 'SET_CURRENTGAME',
+            input
+        })
+    )
+    const goToGameFunction = () => {
+        setCurrentGame(CurrentGame);
+        Router.push('/game');
+    }
+
+    return { joinGame, gameValues, CurrentGame, setCurrentGame, goToGameFunction }
 }
+
+
 
 const join = () => (
     <AppWithAuthorization>
@@ -57,7 +73,7 @@ const join = () => (
 );
 
 const JoinBase = () => {
-    const { joinGame, gameValues, CurrentGame } = useJoin()
+    const { joinGame, gameValues, CurrentGame,setCurrentGame, goToGameFunction } = useJoin()
     return (
         <React.Fragment>
             <Container>
@@ -97,6 +113,14 @@ const JoinBase = () => {
                     <FlexboxGrid>
                         <Button onClick={() => joinGame()} color="cyan" size="lg" appearance="primary">Join Game</Button>
                     </FlexboxGrid>
+                    <br/>
+                    <FlexboxGrid>
+                        <Button onClick={() => setCurrentGame()} color="cyan" size="lg" appearance="primary">Set Game</Button>
+                    </FlexboxGrid>
+                    <br/>
+                    <FlexboxGrid>
+                        <Button onClick={() => goToGameFunction()} color="cyan" size="lg" appearance="primary">Game</Button>
+                    </FlexboxGrid>
                 </Content>
                 <div className="bottomFooter">
                     <Footer>
@@ -118,4 +142,3 @@ const JoinBase = () => {
 }
 
 export default withRedux(join);
-

@@ -20,7 +20,6 @@ const locationdotOptions = {
 	}
 };
 var objectiveArray = new Array()
-var temp = 0;
 
 
 

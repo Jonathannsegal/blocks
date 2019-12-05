@@ -12,6 +12,9 @@ import {
 import { GameState } from '../../src/constants';
 import * as chat from '../../src/db/chat.json';
 import * as status from '../../src/db/status.json';
+import { AppWithAuthorization } from "../../src/components/App";
+import { db } from "../../src/firebase";
+import Router from "next/router"
 
 require('rsuite/lib/styles/index.less');
 
@@ -36,6 +39,11 @@ const statusOptions = {
 const useGame = () => {
 	const currentGameState = useSelector(state => state.gameState)
 	const dispatch = useDispatch()
+	const CurrentGame = useSelector(state => state.currentGame)
+	const gameValues = useSelector(state => state.currentGameValues)
+	const userValues = useSelector(state => state.userValues)
+	const AuthUser = useSelector(state => state.authUser)
+
 	const gameChat = () =>
 		dispatch({
 			type: 'gameChat',
@@ -51,11 +59,21 @@ const useGame = () => {
 			type: 'gameStatus',
 			gameState: GameState.status
 		})
-	return { currentGameState, gameChat, gameMain, gameStatus }
+	const getCurrentGame = () =>{
+		console.log(db.getGameId(AuthUser.uid));
+	}
+
+	return { currentGameState, gameChat, gameMain, gameStatus, getCurrentGame }
 }
 
-const Game = () => {
-	const { currentGameState, gameChat, gameMain, gameStatus } = useGame()
+const Game = () => (
+    <AppWithAuthorization>
+        <GameBase />
+    </AppWithAuthorization>
+);
+
+const GameBase = () => {
+	const { currentGameState, gameChat, gameMain, gameStatus, getCurrentGame } = useGame()
 	const handleChangeIndex = index => {
 		if (index === GameState.chat) {
 			gameChat();
@@ -86,6 +104,7 @@ const Game = () => {
 									<FlexboxGrid.Item colspan={11}>
 										<h2 className="center">Chat</h2>
 										<Button size="lg" color="cyan" block onClick={gameMain}>Back</Button>
+										<Button size="lg" color="cyan" block onClick={() => getCurrentGame()}>Back</Button>
 									</FlexboxGrid.Item>
 								</FlexboxGrid>
 								<br />

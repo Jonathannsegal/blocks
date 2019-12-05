@@ -12,6 +12,7 @@ import {
 const initialState = {
     authUser: null,
     users: {},
+    userValues: null,
     currentGame: null,
     currentGameValues: null,
     searchGameList: [],
@@ -60,6 +61,11 @@ const applyGameValueSet = (state, action) => ({
     currentGameValues: action.values
 });
 
+const applyUserValueSet = (state, action) => ({
+    ...state,
+    userValues: action.values
+});
+
 const getGameList = (state, action) => ({
     ...state,
     searchGameList: action.list
@@ -72,6 +78,9 @@ const reducer = (state = { initialState, input: {} }, action) => {
         }
         case 'CURRENT_GAMEVALUE_SET': {
             return applyGameValueSet(state, action);
+        }
+        case 'CURRENT_USERVALUE_SET': {
+            return applyUserValueSet(state, action);
         }
         case ('SET_CURRENTGAME'):
             return {

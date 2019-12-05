@@ -5,8 +5,16 @@ export const doCreateUser = (id, username, email) =>
   db.doc(`users/${id}`).set({
     username,
     email,
-    score: 0
+    score: 0,
+    currentGame: ''
   });
+
+  export const doSetGame = (id, currentGame) =>
+    db.doc(`users/${id}`).update({
+      currentGame
+    });
+
+
 
 export const updateUserName = (id, username) =>
   db.doc(`users/${id}`).update({
@@ -39,6 +47,19 @@ export const doCreateGame = (gameCreator, id, name, shape, timeStamp) =>
 
 export const onceGetGames = (gameName) => {
   var docRef = db.collection('games').doc(gameName);
+  return docRef.get().then(function (doc) {
+    if (doc.exists) {
+      return (doc.data());
+    } else {
+      return ("No such document!");
+    }
+  }).catch(function (error) {
+    return ("Error getting document:", error);
+  });
+}
+
+export const getGameId = (userId) => {
+  var docRef = db.collection('users').doc(userId);
   return docRef.get().then(function (doc) {
     if (doc.exists) {
       return (doc.data());
