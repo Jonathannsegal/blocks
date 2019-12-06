@@ -19,9 +19,8 @@ const locationdotOptions = {
 		preserveAspectRatio: 'xMidYMid slice'
 	}
 };
-//var objectiveArray = new Array()
 
-
+var objectiveArray = new Array()
 
 const mapAreaLayer = {
 	id: 'map-area',
@@ -76,15 +75,26 @@ class Map extends Component {
 			return geojson;
 	};
 
-	/*_createObjectives = () => {
-		var minLat = gameValues.shape[i].latitude;
-		var maxLat = gameValues.shape[i].latitude;;
-		var minLong = gameValues.shape[i].longitude;;
-		var maxLong = gameValues.shape[i].longitude;;
-		objectiveArray.push([(Math.random() * (maxLat - minLat) + minLat),(Math.random() * (maxLong - minLong) + minLong)]);
+	_createObjectives = () => {
+		var minLat = this.props.gameValues.shape[0].latitude;
+		var maxLat = this.props.gameValues.shape[0].latitude;
+		var minLong = this.props.gameValues.shape[0].longitude;
+		var maxLong = this.props.gameValues.shape[0].longitude;
+		for(var i = 1; i < this.props.gameValues.shape.length; i++){
+			minLat = Math.min(minLat, this.props.gameValues.shape[i].latitude);
+			maxLat = Math.max(maxLat, this.props.gameValues.shape[i].latitude);
+			minLong = Math.min(minLong, this.props.gameValues.shape[i].longitude);
+			maxLong = Math.max(maxLong, this.props.gameValues.shape[i].longitude);
+		}
+		for(var i = 0; i < 5; i ++){
+			objectiveArray.push([(Math.random() * (maxLong - minLong) + minLong),(Math.random() * (maxLat - minLat) + minLat) ])
+		}
 		console.log(objectiveArray);
-	}*/
+	}
 
+	componentDidMount(){
+		this._createObjectives();
+	}
 
 	render() {
 		return !this.props.isGeolocationAvailable ? (
