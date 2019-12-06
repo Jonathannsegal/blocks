@@ -7,6 +7,7 @@ import ErrorScreen from '../../errors/ErrorScreen';
 import MapOverlay from './MapOverlay';
 import { RefreshTime } from '../../../src/constants'
 import * as mapAreaSource from '../../db/map.geojson'
+import * as turf from '@turf/turf'
 import {
 	Avatar
 } from 'rsuite';
@@ -20,7 +21,7 @@ const locationdotOptions = {
 	}
 };
 
-var objectiveArray = new Array()
+var objectiveArray = [];
 
 const mapAreaLayer = {
 	id: 'map-area',
@@ -87,9 +88,38 @@ class Map extends Component {
 			maxLong = Math.max(maxLong, this.props.gameValues.shape[i].longitude);
 		}
 		for(var i = 0; i < 5; i ++){
-			objectiveArray.push([(Math.random() * (maxLong - minLong) + minLong),(Math.random() * (maxLat - minLat) + minLat) ])
+			objectiveArray.push([(Math.random() * (maxLong - minLong) + minLong),(Math.random() * (maxLat - minLat) + minLat) ]);
 		}
-		console.log(objectiveArray);
+		let shape1 = [];
+		let shape2 = [];
+		for (var i = 0; i < this.props.gameValues.shape.length; i++) {
+				shape1.push(new Array(this.props.gameValues.shape[i].longitude, this.props.gameValues.shape[i].latitude));
+		}
+		shape2.push(shape1);
+		var polygon = turf.polygon(shape2);
+		//console.log(objectiveArray);
+		//console.log(turf.pointsWithinPolygon(turfPoints, polygon));
+		for(var i = 0; i < objectiveArray.length; i++){
+			var point = turf.point([objectiveArray[i][0], objectiveArray[i][1]]);
+			if(turf.inside(point,polygon)){
+				continue;
+			}
+			else{
+				var inside = false;
+				var count = 0;
+				while(inside == false){
+					if(count == 50){
+						inside = true;
+						break;
+					}
+					objectiveArray[i][0] = (Math.random() * (maxLong - minLong) + minLong);
+					objectiveArray[i][1] = (Math.random() * (maxLat - minLat) + minLat);
+					point = turf.point([objectiveArray[i][0], objectiveArray[i][1]]);
+					count++;
+					inside = turf.inside(point,polygon);
+				}
+			}
+		}
 	}
 
 	componentDidMount(){

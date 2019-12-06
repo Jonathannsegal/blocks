@@ -17,6 +17,8 @@
     },
     "dependencies": {
         "@turf/area": "^6.0.1",
+        "@turf/points-within-polygon": "^5.1.5",
+        "@turf/turf": "^5.1.6",
         "@zeit/next-less": "^1.0.1",
         "file-loader": "^4.2.0",
         "firebase": "^7.3.0",
