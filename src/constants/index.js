@@ -5,6 +5,7 @@ import PasswordForgotFormState from './passwordForgotFormState';
 import RefreshTime from './refreshTime';
 import SignUpState from './signUpState';
 import LeaderBoardState from './leaderBoardState';
+import JoinState from './joinState';
 
 
 export {
@@ -14,5 +15,6 @@ export {
     PasswordForgotFormState,
     RefreshTime,
     SignUpState,
-    LeaderBoardState
+    LeaderBoardState,
+    JoinState
 }

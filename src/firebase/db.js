@@ -9,10 +9,10 @@ export const doCreateUser = (id, username, email) =>
     currentGame: ''
   });
 
-  export const doSetGame = (id, currentGame) =>
-    db.doc(`users/${id}`).update({
-      currentGame
-    });
+export const doSetGame = (id, currentGame) =>
+  db.doc(`users/${id}`).update({
+    currentGame
+  });
 
 
 
@@ -34,6 +34,13 @@ export const onceGetUsers = () =>
 export const doAddPlayerToGame = (id, userId, data) =>
   db.doc(`games/${id}`).collection('players').doc(userId).set({
     data
+  });
+
+export const doAddTeamToGame = (id, name, color) =>
+  db.doc(`games/${id}`).collection('teams').doc(name).set({
+    name,
+    color,
+    score: 0
   });
 
 export const doCreateGame = (gameCreator, id, name, shape, timeStamp) =>

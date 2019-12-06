@@ -6,7 +6,8 @@ import {
     DashboardState,
     GameState,
     PasswordForgotFormState,
-    LeaderBoardState
+    LeaderBoardState,
+    JoinState
 } from './constants';
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
     currentGameValues: null,
     searchGameList: [],
     homeState: HomeState.signIn,
+    joinState: JoinState.main,
     signUpState: SignUpState.userName,
     changePassword: '',
     changeUsername: '',
@@ -29,6 +31,10 @@ const initialState = {
     createGameFormValue: {
         name: '',
         geometry: []
+    },
+    createTeamFormValue: {
+        name: '',
+        color: ''
     },
     signUpFormError: '',
     signInFormValue: {
@@ -73,6 +79,39 @@ const getGameList = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case ('UPDATE_TEAMCREATE_NAME'):
+            return {
+                ...state,
+                createTeamFormValue: {
+                    ...state.createTeamFormValue,
+                    name: action.payload.txt
+                }
+            }
+        case ('UPDATE_TEAMCREATE_COLOR'):
+            return {
+                ...state,
+                createTeamFormValue: {
+                    ...state.createTeamFormValue,
+                    color: action.color
+                }
+            }
+
+
+        case 'joinMain':
+            return {
+                ...state,
+                joinState: JoinState.main
+            }
+        case 'joinTeam':
+            return {
+                ...state,
+                joinState: JoinState.teamCreate
+            }
+        case 'joinWait':
+            return {
+                ...state,
+                joinState: JoinState.waiting
+            }
         case 'GET_GAMELIST': {
             return getGameList(state, action);
         }
