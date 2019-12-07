@@ -54,7 +54,7 @@ class Map extends Component {
 			latitude: 42.03,
 			longitude: -93.645,
 			zoom: 16
-		}
+		},
 	};
 
 	getValues = () => {
@@ -117,11 +117,17 @@ class Map extends Component {
 	}
 
 	updatePlayerGeoPoint = () => {
-		db.doUpdatePlayerPosition( this.props.currentGame, this.props.userId,new firebase.firestore.GeoPoint(
-				this.props.coords.latitude,
-				this.props.coords.longitude)
-		);
-		//console.log(this.props.coords.latitude,this.props.coords.longitude)
+		if(this.props.coords.latitude != null && this.props.coords.longitude != null){
+			db.doUpdatePlayerPosition( this.props.currentGame, this.props.userId,new firebase.firestore.GeoPoint(
+					this.props.coords.latitude,
+					this.props.coords.longitude)
+			);
+			console.log(this.props.coords.latitude,this.props.coords.longitude)
+		}
+	}
+
+	getTeammates = () => {
+		console.log(db.getTeammates(this.props.currentGame));
 	}
 
 	_createObjectives = () => {
@@ -175,12 +181,6 @@ class Map extends Component {
 	}
 
 	componentDidUpdate(){
-		if(!this.props.isGeolocationAvailable || !this.props.isGeolocationEnabled){
-
-		}
-		else{
-			this.updatePlayerGeoPoint();
-		}
 	}
 
 	render() {
