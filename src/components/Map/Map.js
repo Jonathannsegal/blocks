@@ -5,9 +5,10 @@ import Lottie from 'react-lottie'
 import * as locationdot from '../../db/locationdot.json'
 import ErrorScreen from '../../errors/ErrorScreen';
 import MapOverlay from './MapOverlay';
-import { RefreshTime } from '../../../src/constants'
-import * as mapAreaSource from '../../db/map.geojson'
-import * as turf from '@turf/turf'
+import { RefreshTime } from '../../../src/constants';
+import * as mapAreaSource from '../../db/map.geojson';
+import * as turf from '@turf/turf';
+import mapboxgl from 'react-map-gl';
 import {
 	Avatar
 } from 'rsuite';
@@ -22,6 +23,17 @@ const locationdotOptions = {
 };
 
 var objectiveArray = [];
+
+const objectiveLayer = {
+	id: 'objectives',
+	type: 'circle',
+	source: mapAreaSource,
+	paint: {
+		'circle-color': '#0000ff',
+		'circle-opacity': 0.5,
+		'circle-radius': 15,
+	}
+}
 
 const mapAreaLayer = {
 	id: 'map-area',
@@ -76,6 +88,34 @@ class Map extends Component {
 			return geojson;
 	};
 
+	getPoints = (index) => {
+		let geojson = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					properties: {},
+					geometry:{
+							type: 'Point',
+							coordinates: [objectiveArray[index][0], objectiveArray[index][1]]
+					}
+				}
+			]
+		};
+		for(var i = 1; i < objectiveArray.length; i++){
+			let point = {
+					type: 'Feature',
+					properties: {},
+					geometry:{
+							type: 'Point',
+							coordinates: [objectiveArray[i][0], objectiveArray[i][1]]
+					}
+			};
+			geojson.features.push(point);
+		}
+		return geojson;
+	}
+
 	_createObjectives = () => {
 		var minLat = this.props.gameValues.shape[0].latitude;
 		var maxLat = this.props.gameValues.shape[0].latitude;
@@ -120,7 +160,7 @@ class Map extends Component {
 				}
 			}
 		}
-	}
+	};
 
 	componentDidMount(){
 		this._createObjectives();
@@ -145,6 +185,9 @@ class Map extends Component {
 					<Source type="geojson" data={this.getValues()}>
 						<Layer {...mapAreaLayer} />
 					</Source>
+					<Source type="geojson" data={this.getPoints(0)}>
+						<Layer {...objectiveLayer} />
+					</Source>
 					<Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>
 						{/* <div className="avatarContainer">
 							<Avatar
@@ -155,8 +198,8 @@ class Map extends Component {
 						</div> */}
 						<div className="locationContainer">
 							<Lottie
-								height={100}
-								width={100}
+								height={60}
+								width={60}
 								options={locationdotOptions}
 								isClickToPauseDisabled={true}
 							/>
@@ -174,8 +217,8 @@ class Map extends Component {
 					}
 					.locationContainer {
 						z-index: 9;
-						margin-left: -50px;
-						margin-top: -50px;
+						margin-left: -30px;
+						margin-top: -30px;
 					}
 				`}</style>
 				</ReactMapGL>
