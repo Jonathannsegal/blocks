@@ -175,7 +175,12 @@ class Map extends Component {
 	}
 
 	componentDidUpdate(){
-		//this.updatePlayerGeoPoint();
+		if(!this.props.isGeolocationAvailable || !this.props.isGeolocationEnabled){
+
+		}
+		else{
+			this.updatePlayerGeoPoint();
+		}
 	}
 
 	render() {
