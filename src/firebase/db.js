@@ -85,10 +85,6 @@ export const onceGetGamesReadyToJoin = () =>
 export const getTeamList = (currentGame) =>
   db.collection('games').doc(currentGame).collection('teams').get();
 
-export const getTeammates = (currentGame) =>{
-    db.collection('games').doc(currentGame).collection('players').get();
-}
-
 
 
 export const getCurrentGamePlayerValues = (currentGame, userId) => {

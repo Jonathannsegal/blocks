@@ -12,6 +12,7 @@ import mapboxgl from 'react-map-gl';
 import { Avatar } from 'rsuite';
 import firebase from "firebase/app";
 import { db } from "../../firebase";
+import { db as dbSnapshot} from "../../firebase/firebase";
 
 const locationdotOptions = {
 	loop: true,
@@ -47,15 +48,25 @@ const mapAreaLayer = {
 }
 
 class Map extends Component {
-	state = {
-		viewport: {
-			width: '100vw',
-			height: '100vh',
-			latitude: 42.03,
-			longitude: -93.645,
-			zoom: 16
-		},
-	};
+	constructor(props){
+		super(props);
+		this.state = {
+			viewport: {
+				width: '100vw',
+				height: '100vh',
+				latitude: 42.03,
+				longitude: -93.645,
+				zoom: 16
+			},
+			// latitude1: 0,
+			// latitude2: 0,
+			// latitude3: 0,
+			// longitude1:0,
+			// longitude2:0,
+			// longitude3:0,
+		};
+	}
+
 
 	getValues = () => {
 			let geojson = {
@@ -122,13 +133,34 @@ class Map extends Component {
 					this.props.coords.latitude,
 					this.props.coords.longitude)
 			);
-			console.log(this.props.coords.latitude,this.props.coords.longitude)
+			//console.log(this.props.coords.latitude,this.props.coords.longitude)
 		}
 	}
 
-	getTeammates = () => {
-		console.log(db.getTeammates(this.props.currentGame));
-	}
+		getTeammates = () =>{
+		  dbSnapshot.collection('games').doc(this.props.currentGame).collection('players').onSnapshot(function(querySnapshot) {
+		    querySnapshot.forEach(function(doc){
+		      //console.log(doc.id, " => ", doc.data());
+					if(doc.id == "GBrTl2wHqNXsmRWC112x4SuleoA2"){
+						console.log(doc.data().position);
+						//this.setState({latitude1: doc.data().position.latitude});
+						//this.setState({longitude1: doc.data().position.latitude});
+					}
+					if(doc.id == "jdsSFvXOOzOovxhLarHSm70syKo2"){
+						console.log(doc.data().position);
+						//this.setState({latitude2: doc.data().position.latitude});
+						//this.setState({longitude2: doc.data().position.latitude});
+					}
+					if(doc.id == "nIU0RYydGfc0BPO6NymYqaPxyBy2"){
+						console.log(doc.data().position);
+						//this.setState({latitude2: doc.data().position.latitude});
+						//this.setState({longitude2: doc.data().position.latitude});
+					}
+		    })
+		    //return querySnapshot;
+		  });
+		}
+
 
 	_createObjectives = () => {
 		var minLat = this.props.gameValues.shape[0].latitude;
@@ -178,6 +210,7 @@ class Map extends Component {
 
 	componentDidMount(){
 		this._createObjectives();
+		this.getTeammates();
 	}
 
 	componentDidUpdate(){
@@ -224,6 +257,58 @@ class Map extends Component {
 							/>
 						</div>
 					</Marker>
+					<Marker latitude={this.props.latitude1} longitude={this.props.longitude1}>
+						{/* <div className="avatarContainer">
+							<Avatar
+								circle
+								size="sm"
+								src="https://avatars2.githubusercontent.com/u/12592949?s=460&v=4"
+							/>
+						</div> */}
+						<div className="locationContainer">
+							<Lottie
+								height={60}
+								width={60}
+								options={locationdotOptions}
+								isClickToPauseDisabled={true}
+							/>
+						</div>
+					</Marker>
+					<Marker latitude={this.props.latitude2} longitude={this.props.longitude2}>
+						{/* <div className="avatarContainer">
+							<Avatar
+								circle
+								size="sm"
+								src="https://avatars2.githubusercontent.com/u/12592949?s=460&v=4"
+							/>
+						</div> */}
+						<div className="locationContainer">
+							<Lottie
+								height={60}
+								width={60}
+								options={locationdotOptions}
+								isClickToPauseDisabled={true}
+							/>
+						</div>
+					</Marker>
+					<Marker latitude={this.props.latitude3} longitude={this.props.longitude3}>
+						{/* <div className="avatarContainer">
+							<Avatar
+								circle
+								size="sm"
+								src="https://avatars2.githubusercontent.com/u/12592949?s=460&v=4"
+							/>
+						</div> */}
+						<div className="locationContainer">
+							<Lottie
+								height={60}
+								width={60}
+								options={locationdotOptions}
+								isClickToPauseDisabled={true}
+							/>
+						</div>
+					</Marker>
+
 					<style jsx>{`
 					:global(body) {
 						margin: 0;
