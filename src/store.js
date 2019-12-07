@@ -6,7 +6,8 @@ import {
     DashboardState,
     GameState,
     PasswordForgotFormState,
-    LeaderBoardState
+    LeaderBoardState,
+    JoinState
 } from './constants';
 
 const initialState = {
@@ -14,9 +15,11 @@ const initialState = {
     users: {},
     userValues: null,
     currentGame: null,
-    currentGameValues: null,
+    currentGameValues: [],
     searchGameList: [],
+    currentGamePlayerValues: [],
     homeState: HomeState.signIn,
+    joinState: JoinState.main,
     signUpState: SignUpState.userName,
     changePassword: '',
     changeUsername: '',
@@ -30,6 +33,11 @@ const initialState = {
         name: '',
         geometry: []
     },
+    createTeamFormValue: {
+        name: '',
+        color: ''
+    },
+    currentGameTeamList: [],
     signUpFormError: '',
     signInFormValue: {
         email: '',
@@ -66,13 +74,60 @@ const applyUserValueSet = (state, action) => ({
     userValues: action.values
 });
 
+const getCurrentGamePlayerValues = (state, action) => ({
+    ...state,
+    currentGamePlayerValues: action.values
+});
+
 const getGameList = (state, action) => ({
     ...state,
     searchGameList: action.list
 });
 
+const getTeamList = (state, action) => ({
+    ...state,
+    currentGameTeamList: action.list
+});
+
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'GET_CURRENTGAME_PLAYER_VALUES': {
+            return getCurrentGamePlayerValues(state, action);
+        }
+        case ('UPDATE_TEAMCREATE_NAME'):
+            return {
+                ...state,
+                createTeamFormValue: {
+                    ...state.createTeamFormValue,
+                    name: action.payload.txt
+                }
+            }
+        case ('UPDATE_TEAMCREATE_COLOR'):
+            return {
+                ...state,
+                createTeamFormValue: {
+                    ...state.createTeamFormValue,
+                    color: action.color
+                }
+            }
+        case 'GET_TEAMLIST': {
+            return getTeamList(state, action);
+        }
+        case 'joinMain':
+            return {
+                ...state,
+                joinState: JoinState.main
+            }
+        case 'joinTeam':
+            return {
+                ...state,
+                joinState: JoinState.teamCreate
+            }
+        case 'joinWait':
+            return {
+                ...state,
+                joinState: JoinState.waiting
+            }
         case 'GET_GAMELIST': {
             return getGameList(state, action);
         }

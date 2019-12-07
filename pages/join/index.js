@@ -1,9 +1,13 @@
-import React from 'react';
+import React from "react";
+import Lottie from 'react-lottie'
 import Map from '../../src/components/Stats/Map'
 import { useDispatch, useSelector } from 'react-redux'
 import { db } from "../../src/firebase";
 import { withRedux } from '../../src/lib/redux'
 import Router from "next/router"
+import { JoinState } from '../../src/constants';
+import { CirclePicker } from 'react-color';
+import SwipeableViews from 'react-swipeable-views';
 import { AppWithAuthorization } from "../../src/components/App";
 import {
     Content,
@@ -15,15 +19,89 @@ import {
     Footer,
     Button,
     Container,
-    List
+    Modal,
+    List,
+    Form,
+    FormGroup,
+    FormControl,
+    ControlLabel
 } from 'rsuite';
+import * as articulation from '../../src/db/articulation.json'
 require('rsuite/lib/styles/index.less');
+
+const articulationOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: articulation.default,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
 
 const useJoin = () => {
     const dispatch = useDispatch()
     const CurrentGame = useSelector(state => state.currentGame)
     const gameValues = useSelector(state => state.currentGameValues)
     const AuthUser = useSelector(state => state.authUser)
+    const currentState = useSelector(state => state.joinState)
+    const teamCreateValues = useSelector(state => state.createTeamFormValue)
+    const currentPlayerValues = useSelector(state => state.currentGamePlayerValues)
+    const teamList = useSelector(state => state.currentGameTeamList)
+    const createTeam = () => {
+        db.doAddTeamToGame(CurrentGame, AuthUser.uid, teamCreateValues.name, teamCreateValues.color);
+        dispatch({
+            type: 'joinMain'
+        })
+    }
+    const close = () => {
+        dispatch({
+            type: 'joinMain'
+        })
+    }
+    const open = () => {
+        dispatch({
+            type: 'joinTeam'
+        })
+    }
+    const waitingScreen = () => {
+        dispatch({
+            type: 'joinWait'
+        })
+    }
+    const getPlayerValuesFunction = () => {
+        let getcurrentGamePlayerValues = function (gameId, userId) {
+            return db.getCurrentGamePlayerValues(gameId, userId)
+                .then(
+                    value => {
+                        return value;
+                    }
+                );
+        }
+        let currentGamePlayerValues = getcurrentGamePlayerValues(CurrentGame, AuthUser.uid);
+        currentGamePlayerValues.then(function (values) {
+            if (values.length != teamList.length) {
+                dispatch({
+                    type: 'GET_CURRENTGAME_PLAYER_VALUES',
+                    values
+                })
+            }
+        });
+    }
+    let getTeamList = function (gameId) {
+        return db.getTeamList(gameId)
+            .then(list => {
+                return list.docs.map(doc => doc.data());
+            });
+    }
+    let currentTeamList = getTeamList(CurrentGame);
+    currentTeamList.then(function (list) {
+        if (list.length != teamList.length) {
+            dispatch({
+                type: 'GET_TEAMLIST',
+                list
+            })
+        }
+    });
     let functionGameValues = function (gameId) {
         if (gameId == null) {
             gameId = "none";
@@ -38,17 +116,18 @@ const useJoin = () => {
     }
     let currentGameValues = functionGameValues(CurrentGame);
     currentGameValues.then(function (values) {
-        dispatch({
-            type: 'CURRENT_GAMEVALUE_SET',
-            values
-        })
+        if (values.length != gameValues.length) {
+            dispatch({
+                type: 'CURRENT_GAMEVALUE_SET',
+                values
+            })
+        }
     });
-    const joinGame = () => {
-        db.doAddPlayerToGame(CurrentGame, AuthUser.uid, "data");
-    }
-
-    const setUserCurrentGame = () => {
+    const joinGame = (teamName) => {
         db.doSetGame(AuthUser.uid, CurrentGame);
+        db.doAddPlayerToGame(CurrentGame, AuthUser.uid, teamName);
+        getPlayerValuesFunction();
+        waitingScreen();
     }
     const setCurrentGame = (input) => (
         dispatch({
@@ -60,8 +139,19 @@ const useJoin = () => {
         setCurrentGame(CurrentGame);
         Router.push('/game');
     }
-
-    return { joinGame, gameValues, CurrentGame, setUserCurrentGame, goToGameFunction, setCurrentGame }
+    const updateTeamName = (input) => (
+        dispatch({
+            type: 'UPDATE_TEAMCREATE_NAME',
+            payload: { txt: input }
+        })
+    )
+    const updateTeamColor = (color) => (
+        dispatch({
+            type: 'UPDATE_TEAMCREATE_COLOR',
+            color
+        })
+    )
+    return { currentPlayerValues, waitingScreen, teamList, updateTeamName, updateTeamColor, createTeam, currentState, close, open, joinGame, gameValues, CurrentGame, goToGameFunction, setCurrentGame }
 }
 
 
@@ -73,68 +163,171 @@ const join = () => (
 );
 
 const JoinBase = () => {
-    const { joinGame, gameValues, CurrentGame,setUserCurrentGame, goToGameFunction, setCurrentGame } = useJoin()
+    const { currentPlayerValues, waitingScreen, teamList, updateTeamName, updateTeamColor, createTeam, currentState, close, open, joinGame, gameValues, CurrentGame, goToGameFunction, setCurrentGame } = useJoin()
     return (
         <React.Fragment>
-            <Container>
-                <Header>
-                    <Navbar appearance="subtle">
-                        <Navbar.Body>
-                            <Nav>
-                                <Nav.Item icon={<Icon icon="chevron-left" />} href="/dashboard">Back</Nav.Item>
-                            </Nav>
-                        </Navbar.Body>
-                    </Navbar>
-                    <FlexboxGrid justify="center">
-                        <FlexboxGrid.Item colspan={18}>
-                            <FlexboxGrid justify="space-around">
-                                <h2 className="sectionTitle">Choose a team</h2>
-                            </FlexboxGrid>
-                        </FlexboxGrid.Item>
-                        {/* <FlexboxGrid.Item colspan={18}>
-                            <FlexboxGrid justify="space-around">
-                                <h6 className="sectionTitle">{CurrentGame}</h6>
-                            </FlexboxGrid>
-                        </FlexboxGrid.Item> */}
-                        <FlexboxGrid.Item colspan={18}>
+            <SwipeableViews disabled onChangeIndex={index => (index == 1) ? waitingScreen() : close()} index={(currentState == JoinState.waiting) ? 1 : 0}>
+                <div className="fullHeight">
+                    <Modal size='xs' show={currentState == JoinState.teamCreate} onHide={() => close()}>
+                        <Modal.Header>
+                            <Modal.Title>Make a Team</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
                             <br />
-                            <FlexboxGrid justify="space-around">
-                                <Button onClick={() => joinGame()} color="cyan" size="lg" appearance="primary">Make a Team</Button>
+                            <FlexboxGrid justify="center">
+                                <FlexboxGrid.Item colspan={18}>
+                                    <Form fluid>
+                                        <FormGroup>
+                                            <ControlLabel>Name</ControlLabel>
+                                            <FormControl onChange={value => updateTeamName(value)} name="name" placeholder="Team Name" />
+                                        </FormGroup>
+                                        <br />
+                                        <FormGroup>
+                                            <CirclePicker onChange={value => updateTeamColor(value.hex)} />
+                                        </FormGroup>
+                                    </Form>
+                                </FlexboxGrid.Item>
                             </FlexboxGrid>
                             <br />
-                            {/* <FlexboxGrid justify="space-around">
-                                <Button onClick={() => joinGame()} color="cyan" size="lg" appearance="primary">Join Game</Button>
-                            </FlexboxGrid>
-                            <br /> */}
-                        </FlexboxGrid.Item>
-                    </FlexboxGrid>
-                </Header>
-                <Content>
-                    <FlexboxGrid>
-                        <Button onClick={() => joinGame()} color="cyan" size="lg" appearance="primary">Join Game</Button>
-                    </FlexboxGrid>
-                    <br/>
-                    <FlexboxGrid>
-                        <Button onClick={() => setUserCurrentGame()} color="cyan" size="lg" appearance="primary">Set Game</Button>
-                    </FlexboxGrid>
-                    <br/>
-                    <FlexboxGrid>
-                        <Button onClick={() => goToGameFunction()} color="cyan" size="lg" appearance="primary">Game</Button>
-                    </FlexboxGrid>
-                </Content>
-                <div className="bottomFooter">
-                    <Footer>
-                        <Map gameValues={gameValues} />
-                    </Footer>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button onClick={() => createTeam()} appearance="primary">
+                                Create
+                            </Button>
+                            <Button onClick={() => close()} appearance="subtle">
+                                Cancel
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+
+                    <Container>
+                        <Header>
+                            <div className="fixedHeader">
+                                <Navbar appearance="subtle">
+                                    <Navbar.Body>
+                                        <Nav>
+                                            <Nav.Item icon={<Icon icon="chevron-left" />} href="/dashboard">Back</Nav.Item>
+                                        </Nav>
+                                    </Navbar.Body>
+                                </Navbar>
+                                <FlexboxGrid justify="center">
+                                    <FlexboxGrid.Item colspan={18}>
+                                        <FlexboxGrid justify="space-around">
+                                            <h2 className="sectionTitle">Choose a team</h2>
+                                        </FlexboxGrid>
+                                    </FlexboxGrid.Item>
+                                    <FlexboxGrid.Item colspan={18}>
+                                        <br />
+                                        <FlexboxGrid justify="space-around">
+                                            <Button onClick={() => open()} color="cyan" size="lg" appearance="primary">Make a Team</Button>
+                                        </FlexboxGrid>
+                                        <br />
+                                    </FlexboxGrid.Item>
+                                </FlexboxGrid>
+                            </div>
+                        </Header>
+                        <Content>
+                            <div className="teamListHeight">
+                                <FlexboxGrid justify="center">
+                                    <FlexboxGrid.Item colspan={20}>
+                                        <List>
+                                            {teamList.map((item, index) =>
+                                                <a className="listItemsA" onClick={() => joinGame(item.name)}>
+                                                    <List.Item key={index} index={index}>
+                                                        {item.name}
+                                                    </List.Item>
+                                                </a>
+                                            )}
+                                        </List>
+                                    </FlexboxGrid.Item>
+                                </FlexboxGrid>
+                            </div>
+                        </Content>
+                        <div className="bottomFooter">
+                            <Footer>
+                                <Map gameValues={gameValues} />
+                            </Footer>
+                        </div>
+                    </Container>
                 </div>
-            </Container>
+                {(function () {
+                    switch (currentState) {
+                        case JoinState.waiting:
+                            return (
+                                <div>
+                                    <Container>
+                                        <Header>
+                                            <div className="fixedHeader">
+                                                <Navbar appearance="subtle">
+                                                    <Navbar.Body>
+                                                        <Nav>
+                                                            <Nav.Item icon={<Icon icon="gear-circle" />} onClick={() => close()}>Back</Nav.Item>
+                                                        </Nav>
+                                                    </Navbar.Body>
+                                                </Navbar>
+                                                <FlexboxGrid justify="center">
+                                                    <FlexboxGrid.Item colspan={18}>
+                                                        <FlexboxGrid justify="space-around">
+                                                            <h2 className="sectionTitle">{currentPlayerValues.team}</h2>
+                                                        </FlexboxGrid>
+                                                    </FlexboxGrid.Item>
+                                                </FlexboxGrid>
+                                            </div>
+                                        </Header>
+                                        <Content>
+                                            <div className="waitingAnimation">
+                                                <Lottie
+                                                    height={600}
+                                                    width={350}
+                                                    options={articulationOptions}
+                                                    isClickToPauseDisabled={true}
+                                                />
+                                            </div>
+                                        </Content>
+                                        <div className="bottomFooter">
+                                            <Footer>
+                                                <FlexboxGrid justify="center">
+                                                    <FlexboxGrid.Item>
+                                                        <Button onClick={() => goToGameFunction()} color="cyan" size="lg" appearance="primary">Start Game</Button>
+                                                    </FlexboxGrid.Item>
+                                                </FlexboxGrid>
+                                            </Footer>
+                                            <br /><br /><br />
+                                        </div>
+                                    </Container>
+                                </div>);
+                        default:
+                            return null;
+                    }
+                })()}
+            </SwipeableViews>
             <style jsx>{`
+                .listItemsA {
+                    color: #000000;
+                }
+                .waitingAnimation{
+                    margin-top: 8em;
+                }
+                .fullHeight{
+                    height: 100vh;
+                }
+                .fixedHeader {
+                    z-index: 1;
+                    position: fixed;
+                    width: 100vw;
+                }
                 .sectionTitle {
                     line-height: 1.5em;
                 }
                 .bottomFooter{
+                    width: 100vw;
                     position: fixed;
                     bottom: 0;
+                }
+                .teamListHeight{
+                    margin-top: 14em;
+                    height: 40vh;
+                    overflow: scroll;
                 }
 		`}</style>
         </React.Fragment >
