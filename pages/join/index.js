@@ -126,7 +126,7 @@ const useJoin = () => {
     });
     const joinGame = (teamName) => {
         db.doSetGame(AuthUser.uid, CurrentGame);
-        db.doAddPlayerToGame(CurrentGame, new firebase.firestore.GeoPoint(1, 1), AuthUser.uid, teamName);
+        db.doAddPlayerToGame(CurrentGame, AuthUser.uid, AuthUser.displayName, new firebase.firestore.GeoPoint(1, 1), teamName);
         getPlayerValuesFunction();
         waitingScreen();
     }
