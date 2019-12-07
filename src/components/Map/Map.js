@@ -180,6 +180,7 @@ class Map extends Component {
 					{...this.state.viewport}
 					latitude={this.props.coords.latitude}
 					longitude={this.props.coords.longitude}
+					zoom={16}
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
 					<Source type="geojson" data={this.getValues()}>
