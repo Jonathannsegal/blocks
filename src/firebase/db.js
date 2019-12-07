@@ -28,9 +28,9 @@ export const onceGetUsers = () =>
 //     {},
 //   });
 
-export const doAddPlayerToGame = (id, userId, team) =>
+export const doAddPlayerToGame = (id, position, userId, team) =>
   db.doc(`games/${id}`).collection('players').doc(userId).set({
-    position: 0,
+    position,
     team
   });
 

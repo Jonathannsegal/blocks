@@ -8,6 +8,7 @@ import Router from "next/router"
 import { JoinState } from '../../src/constants';
 import { CirclePicker } from 'react-color';
 import SwipeableViews from 'react-swipeable-views';
+import firebase from "firebase/app";
 import { AppWithAuthorization } from "../../src/components/App";
 import {
     Content,
@@ -125,7 +126,7 @@ const useJoin = () => {
     });
     const joinGame = (teamName) => {
         db.doSetGame(AuthUser.uid, CurrentGame);
-        db.doAddPlayerToGame(CurrentGame, AuthUser.uid, teamName);
+        db.doAddPlayerToGame(CurrentGame, new firebase.firestore.GeoPoint(1, 1), AuthUser.uid, teamName);
         getPlayerValuesFunction();
         waitingScreen();
     }
