@@ -15,8 +15,9 @@ const initialState = {
     users: {},
     userValues: null,
     currentGame: null,
-    currentGameValues: null,
+    currentGameValues: [],
     searchGameList: [],
+    currentGamePlayerValues: [],
     homeState: HomeState.signIn,
     joinState: JoinState.main,
     signUpState: SignUpState.userName,
@@ -36,6 +37,7 @@ const initialState = {
         name: '',
         color: ''
     },
+    currentGameTeamList: [],
     signUpFormError: '',
     signInFormValue: {
         email: '',
@@ -72,13 +74,26 @@ const applyUserValueSet = (state, action) => ({
     userValues: action.values
 });
 
+const getCurrentGamePlayerValues = (state, action) => ({
+    ...state,
+    currentGamePlayerValues: action.values
+});
+
 const getGameList = (state, action) => ({
     ...state,
     searchGameList: action.list
 });
 
+const getTeamList = (state, action) => ({
+    ...state,
+    currentGameTeamList: action.list
+});
+
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'GET_CURRENTGAME_PLAYER_VALUES': {
+            return getCurrentGamePlayerValues(state, action);
+        }
         case ('UPDATE_TEAMCREATE_NAME'):
             return {
                 ...state,
@@ -95,8 +110,9 @@ const reducer = (state = { initialState, input: {} }, action) => {
                     color: action.color
                 }
             }
-
-
+        case 'GET_TEAMLIST': {
+            return getTeamList(state, action);
+        }
         case 'joinMain':
             return {
                 ...state,

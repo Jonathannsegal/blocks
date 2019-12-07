@@ -37,10 +37,12 @@ const useSearch = () => {
     }
     let currentGameList = getGameList();
     currentGameList.then(function (list) {
-        dispatch({
-            type: 'GET_GAMELIST',
-            list
-        })
+        if (gameList.length != list.length) {
+            dispatch({
+                type: 'GET_GAMELIST',
+                list
+            })
+        }
     });
     const setCurrentGame = (input) => (
         dispatch({

@@ -14,8 +14,6 @@ export const doSetGame = (id, currentGame) =>
     currentGame
   });
 
-
-
 export const updateUserName = (id, username) =>
   db.doc(`users/${id}`).update({
     username
@@ -28,16 +26,17 @@ export const onceGetUsers = () =>
 // export const doUserJoinGame = (id) =>
 //   db.doc(`games/${id}`).set({
 //     {},
-
 //   });
 
-export const doAddPlayerToGame = (id, userId, data) =>
+export const doAddPlayerToGame = (id, userId, team) =>
   db.doc(`games/${id}`).collection('players').doc(userId).set({
-    data
+    position: 0,
+    team
   });
 
-export const doAddTeamToGame = (id, name, color) =>
+export const doAddTeamToGame = (id, creator, name, color) =>
   db.doc(`games/${id}`).collection('teams').doc(name).set({
+    creator,
     name,
     color,
     score: 0
@@ -49,7 +48,8 @@ export const doCreateGame = (gameCreator, id, name, shape, timeStamp) =>
     id,
     name,
     timeStamp,
-    shape
+    shape,
+    state: 'Created'
   });
 
 export const onceGetGames = (gameName) => {
@@ -80,3 +80,20 @@ export const getGameId = (userId) => {
 
 export const onceGetGamesReadyToJoin = () =>
   db.collection('games').get();
+
+export const getTeamList = (currentGame) =>
+  db.collection('games').doc(currentGame).collection('teams').get();
+
+
+export const getCurrentGamePlayerValues = (currentGame, userId) => {
+  var docRef = db.collection('games').doc(currentGame).collection('players').doc(userId);
+  return docRef.get().then(function (doc) {
+    if (doc.exists) {
+      return (doc.data());
+    } else {
+      return ("No such document!");
+    }
+  }).catch(function (error) {
+    return ("Error getting document:", error);
+  });
+}
