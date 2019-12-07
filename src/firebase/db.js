@@ -14,6 +14,11 @@ export const doSetGame = (id, currentGame) =>
     currentGame
   });
 
+export const doUpdatePlayerPosition = (currentGame, userId, position) =>
+    db.collection('games').doc(currentGame).collection('players').doc(userId).update({
+      position
+    });
+
 export const updateUserName = (id, username) =>
   db.doc(`users/${id}`).update({
     username
@@ -22,11 +27,6 @@ export const updateUserName = (id, username) =>
 export const onceGetUsers = () =>
   db.collection('users');
 
-// Game API'S
-// export const doUserJoinGame = (id) =>
-//   db.doc(`games/${id}`).set({
-//     {},
-//   });
 
 export const doAddPlayerToGame = (id, position, userId, team) =>
   db.doc(`games/${id}`).collection('players').doc(userId).set({

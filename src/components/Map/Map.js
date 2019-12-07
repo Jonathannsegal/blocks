@@ -9,9 +9,9 @@ import { RefreshTime } from '../../../src/constants';
 import * as mapAreaSource from '../../db/map.geojson';
 import * as turf from '@turf/turf';
 import mapboxgl from 'react-map-gl';
-import {
-	Avatar
-} from 'rsuite';
+import { Avatar } from 'rsuite';
+import firebase from "firebase/app";
+import { db } from "../../firebase";
 
 const locationdotOptions = {
 	loop: true,
@@ -116,6 +116,14 @@ class Map extends Component {
 		return geojson;
 	}
 
+	updatePlayerGeoPoint = () => {
+		db.doUpdatePlayerPosition( this.props.currentGame, this.props.userId,new firebase.firestore.GeoPoint(
+				this.props.coords.latitude,
+				this.props.coords.longitude)
+		);
+		//console.log(this.props.coords.latitude,this.props.coords.longitude)
+	}
+
 	_createObjectives = () => {
 		var minLat = this.props.gameValues.shape[0].latitude;
 		var maxLat = this.props.gameValues.shape[0].latitude;
@@ -166,6 +174,10 @@ class Map extends Component {
 		this._createObjectives();
 	}
 
+	componentDidUpdate(){
+		//this.updatePlayerGeoPoint();
+	}
+
 	render() {
 		return !this.props.isGeolocationAvailable ? (
 			<ErrorScreen message={`Your browser \n does not support \n Geolocation`} />
@@ -183,6 +195,7 @@ class Map extends Component {
 					zoom={16}
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
+				{this.updatePlayerGeoPoint()}
 					<Source type="geojson" data={this.getValues()}>
 						<Layer {...mapAreaLayer} />
 					</Source>

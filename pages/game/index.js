@@ -63,7 +63,7 @@ const useGame = () => {
 		console.log(db.getGameId(AuthUser.uid));
 	}
 
-	return { currentGameState, gameValues, gameChat, gameMain, gameStatus, getCurrentGame }
+	return { currentGameState, gameValues, gameChat, gameMain, gameStatus, getCurrentGame, CurrentGame, AuthUser }
 }
 
 const Game = () => (
@@ -73,7 +73,7 @@ const Game = () => (
 );
 
 const GameBase = () => {
-	const { currentGameState, gameValues, gameChat, gameMain, gameStatus, getCurrentGame } = useGame()
+	const { currentGameState, gameValues, gameChat, gameMain, gameStatus, getCurrentGame, CurrentGame, AuthUser } = useGame()
 	const handleChangeIndex = index => {
 		if (index === GameState.chat) {
 			gameChat();
@@ -112,7 +112,11 @@ const GameBase = () => {
 						</FlexboxGrid>
 					</Content>
 				</React.Fragment>
-				<Map gameValues={gameValues} />
+				<Map
+				gameValues={gameValues}
+				currentGame={CurrentGame}
+				userId={AuthUser.uid}
+				 />
 				<React.Fragment>
 					<Content>
 						<FlexboxGrid justify="center">
