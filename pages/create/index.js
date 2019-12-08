@@ -21,7 +21,7 @@ import {
     Header,
     Container
 } from 'rsuite';
-import Map from '../../src/components/Create/Map';
+import Map from '../../src/components/Create/Map1';
 import { AppWithAuthorization } from "../../src/components/App";
 require('rsuite/lib/styles/index.less');
 
