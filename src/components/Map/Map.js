@@ -24,6 +24,14 @@ const locationdotOptions = {
 };
 
 var objectiveArray = [];
+var latitude1= 0;
+var latitude2= 0;
+var latitude3= 0;
+var longitude1=0;
+var longitude2=0;
+var longitude3=0;
+var test1 = 42.03;
+var test2 = -93.645;
 
 const objectiveLayer = {
 	id: 'objectives',
@@ -48,9 +56,7 @@ const mapAreaLayer = {
 }
 
 class Map extends Component {
-	constructor(props){
-		super(props);
-		this.state = {
+		state = {
 			viewport: {
 				width: '100vw',
 				height: '100vh',
@@ -58,14 +64,13 @@ class Map extends Component {
 				longitude: -93.645,
 				zoom: 16
 			},
-			// latitude1: 0,
-			// latitude2: 0,
-			// latitude3: 0,
-			// longitude1:0,
-			// longitude2:0,
-			// longitude3:0,
+			latitude1: 42.03,
+			latitude2: 0,
+			latitude3: 0,
+			longitude1:-93.645,
+			longitude2:0,
+			longitude3:0,
 		};
-	}
 
 
 	getValues = () => {
@@ -137,24 +142,25 @@ class Map extends Component {
 		}
 	}
 
+
 		getTeammates = () =>{
 		  dbSnapshot.collection('games').doc(this.props.currentGame).collection('players').onSnapshot(function(querySnapshot) {
 		    querySnapshot.forEach(function(doc){
 		      //console.log(doc.id, " => ", doc.data());
 					if(doc.id == "GBrTl2wHqNXsmRWC112x4SuleoA2"){
-						console.log(doc.data().position);
-						//this.setState({latitude1: doc.data().position.latitude});
-						//this.setState({longitude1: doc.data().position.latitude});
+						latitude1 = doc.data().position.latitude;
+						longitude1= doc.data().position.longitude;
+						//console.log(latitude1, longitude1);
 					}
 					if(doc.id == "jdsSFvXOOzOovxhLarHSm70syKo2"){
-						console.log(doc.data().position);
-						//this.setState({latitude2: doc.data().position.latitude});
-						//this.setState({longitude2: doc.data().position.latitude});
+						latitude2 = doc.data().position.latitude;
+						longitude2= doc.data().position.longitude;
+						//console.log(latitude2, longitude2);
 					}
 					if(doc.id == "nIU0RYydGfc0BPO6NymYqaPxyBy2"){
-						console.log(doc.data().position);
-						//this.setState({latitude2: doc.data().position.latitude});
-						//this.setState({longitude2: doc.data().position.latitude});
+						latitude3 = doc.data().position.latitude;
+						longitude3 = doc.data().position.longitude;
+						//console.log(latitude3, longitude3);
 					}
 		    })
 		    //return querySnapshot;
@@ -230,7 +236,6 @@ class Map extends Component {
 					{...this.state.viewport}
 					latitude={this.props.coords.latitude}
 					longitude={this.props.coords.longitude}
-					zoom={16}
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
 				{this.updatePlayerGeoPoint()}
@@ -257,7 +262,7 @@ class Map extends Component {
 							/>
 						</div>
 					</Marker>
-					<Marker latitude={this.props.latitude1} longitude={this.props.longitude1}>
+					<Marker latitude={latitude1} longitude={longitude1}>
 						{/* <div className="avatarContainer">
 							<Avatar
 								circle
@@ -274,7 +279,7 @@ class Map extends Component {
 							/>
 						</div>
 					</Marker>
-					<Marker latitude={this.props.latitude2} longitude={this.props.longitude2}>
+					<Marker latitude={latitude2} longitude={longitude2}>
 						{/* <div className="avatarContainer">
 							<Avatar
 								circle
@@ -291,7 +296,7 @@ class Map extends Component {
 							/>
 						</div>
 					</Marker>
-					<Marker latitude={this.props.latitude3} longitude={this.props.longitude3}>
+					<Marker latitude={latitude3} longitude={longitude3}>
 						{/* <div className="avatarContainer">
 							<Avatar
 								circle
@@ -308,6 +313,7 @@ class Map extends Component {
 							/>
 						</div>
 					</Marker>
+
 
 					<style jsx>{`
 					:global(body) {
