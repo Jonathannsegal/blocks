@@ -154,7 +154,7 @@ class Map extends Component {
         );
     };
 
-    _createObjectives = () => {
+    _createObjectives = (objectiveNum) => {
       var minLat = this.state.geometry[0].geometry.coordinates[0][0][1];
       var maxLat = this.state.geometry[0].geometry.coordinates[0][0][1];
       var minLong = this.state.geometry[0].geometry.coordinates[0][0][0];
@@ -165,7 +165,7 @@ class Map extends Component {
         minLong = Math.min(minLong, this.state.geometry[0].geometry.coordinates[0][i][0]);
         maxLong = Math.max(maxLong, this.state.geometry[0].geometry.coordinates[0][i][0]);
       }
-      for(var i = 0; i < 5; i++){
+      for(var i = 0; i < objectiveNum; i++){
         let objectiveArray = [...this.state.OBJECTIVES];
         let marker = { "latitude": (Math.random() * (maxLat - minLat) + minLat), "longitude": (Math.random() * (maxLong - minLong) + minLong) };
         objectiveArray.push(marker);
