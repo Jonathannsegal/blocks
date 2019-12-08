@@ -19,6 +19,8 @@ const pencilOptions = {
     }
 };
 
+var objectiveArray = [];
+
 const trashOptions = {
     loop: true,
     autoplay: true,
@@ -81,6 +83,12 @@ class Map extends Component {
       this.state.viewport.longitude = this.props.coords.longitude;
     }
 
+    testFunc = () => {
+
+        console.log(this.state.geometry[0]);
+
+    }
+
     _renderDrawTools = () => {
         return (
             <React.Fragment>
@@ -106,6 +114,10 @@ class Map extends Component {
                                 options={trashOptions}
                                 isClickToPauseDisabled={true}
                             /></button>
+                          <button
+                            className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"
+                            onClick={this.testFunc()}>
+                            </button>
                     </div>
                 </div>
                 <div className="mapboxgl-ctrl-top-right">
@@ -138,6 +150,52 @@ class Map extends Component {
                 </div>
             </React.Fragment>
         );
+    };
+
+    _createObjectives = () => {
+      var minLat = this.state.geometry[0].geometry[0][0][0];
+      var maxLat = this.state.geometry[0].geometry[0][0][0];
+      var minLong = this.props.gameValues.shape[0].longitude;
+      var maxLong = this.props.gameValues.shape[0].longitude;
+      for(var i = 1; i < this.props.gameValues.shape.length; i++){
+        minLat = Math.min(minLat, this.props.gameValues.shape[i].latitude);
+        maxLat = Math.max(maxLat, this.props.gameValues.shape[i].latitude);
+        minLong = Math.min(minLong, this.props.gameValues.shape[i].longitude);
+        maxLong = Math.max(maxLong, this.props.gameValues.shape[i].longitude);
+      }
+      for(var i = 0; i < 5; i ++){
+        objectiveArray.push([(Math.random() * (maxLong - minLong) + minLong),(Math.random() * (maxLat - minLat) + minLat) ]);
+      }
+      let shape1 = [];
+      let shape2 = [];
+      for (var i = 0; i < this.props.gameValues.shape.length; i++) {
+          shape1.push(new Array(this.props.gameValues.shape[i].longitude, this.props.gameValues.shape[i].latitude));
+      }
+      shape2.push(shape1);
+      var polygon = turf.polygon(shape2);
+      //console.log(objectiveArray);
+      //console.log(turf.pointsWithinPolygon(turfPoints, polygon));
+      for(var i = 0; i < objectiveArray.length; i++){
+        var point = turf.point([objectiveArray[i][0], objectiveArray[i][1]]);
+        if(turf.inside(point,polygon)){
+          continue;
+        }
+        else{
+          var inside = false;
+          var count = 0;
+          while(inside == false){
+            if(count == 50){
+              inside = true;
+              break;
+            }
+            objectiveArray[i][0] = (Math.random() * (maxLong - minLong) + minLong);
+            objectiveArray[i][1] = (Math.random() * (maxLat - minLat) + minLat);
+            point = turf.point([objectiveArray[i][0], objectiveArray[i][1]]);
+            count++;
+            inside = turf.inside(point,polygon);
+          }
+        }
+      }
     };
 
     componentDidMount(){
