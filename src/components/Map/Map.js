@@ -30,8 +30,7 @@ var latitude3= 0;
 var longitude1=0;
 var longitude2=0;
 var longitude3=0;
-var test1 = 42.03;
-var test2 = -93.645;
+
 
 const objectiveLayer = {
 	id: 'objectives',
@@ -51,7 +50,7 @@ const mapAreaLayer = {
 	paint: {
 		'fill-color': '#ff0000',
 		'fill-opacity': 0.2,
-		'fill-outline-color': '#8b0000'
+		'fill-outline-color': '#000000'
 	}
 }
 
