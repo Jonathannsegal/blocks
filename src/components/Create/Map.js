@@ -82,10 +82,6 @@ class Map extends Component {
         }
     };
 
-    updateCoords = () => {
-      this.state.viewport.latitude = this.props.coords.latitude;
-      this.state.viewport.longitude = this.props.coords.longitude;
-    }
 
     _renderDrawTools = () => {
         return (
@@ -206,6 +202,10 @@ class Map extends Component {
           }
         }
       }
+      for(var i=0; i < this.state.objectives.length; i++){
+        var point = turf.point([this.state.OBJECTIVES[i].longitude, this.state.OBJECTIVES[i].latitude]);
+        console.log(turf.inside(point,polygon));
+      }
     };
 
     componentDidMount(){
@@ -214,11 +214,7 @@ class Map extends Component {
 
     render() {
         const { mode } = this.state;
-        return !this.props.isGeolocationAvailable ? (
-            <ErrorScreen message={`Your browser \n does not support \n Geolocation`} />
-        ) : !this.props.isGeolocationEnabled ? (
-            <ErrorScreen message={`Geolocation \n is not \n enabled \n\n Big Sad`} />
-        ) : this.props.coords ? (
+        return (
             <React.Fragment>
                 <ReactMapGL
                     mapStyle="mapbox://styles/mapbox/streets-v9"
@@ -228,7 +224,6 @@ class Map extends Component {
                     height="100%"
                     onViewportChange={(viewport) => this.setState({ viewport })}
                 >
-                {this.updateCoords()}
                 {this.state.OBJECTIVES.map(this._renderCityMarker)}
                     <Editor
                         ref={_ => (this._editorRef = _)}
@@ -244,16 +239,8 @@ class Map extends Component {
                     {this._renderDrawTools()}
                 </ReactMapGL>
             </React.Fragment >
-        ) : (
-                        <div>Getting the location data&hellip; </div>
-                    );
+        );
     }
 }
 
-export default geolocated({
-    positionOptions: {
-        enableHighAccuracy: true
-    },
-    userDecisionTimeout: RefreshTime.fiveSeconds,
-    watchPosition: true
-})(Map);
+export default Map;

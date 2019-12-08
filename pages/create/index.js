@@ -106,7 +106,7 @@ const CreateBase = () => {
     const { useRef } = React;
     let map = useRef();
     const activateMap = () => {
-        map.current.pushToArray(createGameValues.numberOfObjectives);
+        map.current._createObjectives(createGameValues.numberOfObjectives);
     }
     return (
         <React.Fragment >
@@ -140,7 +140,7 @@ const CreateBase = () => {
                                 <FormGroup>
                                     <ControlLabel>How many points?</ControlLabel>
                                     <InputGroup>
-                                        <Input onChange={value => updateObjectivesNumber(value)} placeholder="10" />
+                                        <Input onChange={value => updateObjectivesNumber(value)} />
                                         <InputGroup.Button onClick={() => activateMap()}>
                                             Make Points
                                         </InputGroup.Button>
