@@ -148,6 +148,7 @@ class Map extends Component {
       objectiveArray[index].longitude = position[0];
       this.state.OBJECTIVES = objectiveArray;
       this.setState({ dummy: this.state.dummy++});
+      this.props.anotherCallback(this.state.OBJECTIVES);
     }
 
     _renderCityMarker = (objective, index) => {
@@ -211,6 +212,7 @@ class Map extends Component {
           }
         }
       }
+      this.props.anotherCallback(this.state.OBJECTIVES);
     };
 
     componentDidMount(){

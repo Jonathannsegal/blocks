@@ -66,6 +66,10 @@ const useCreate = () => {
     const callbackFunction = (childData) => (
         updateGameGeometry(childData)
     )
+    let objectiveArray = [];
+    const anotherCallbackFunction = (childData) => (
+        objectiveArray = childData
+    )
     const onGameCreate = () => {
         let shape = [];
         let gameName = authUserUid.uid + Date.now();
@@ -85,6 +89,9 @@ const useCreate = () => {
                 Date.now()
             )
             .then(() => {
+              for(var i = 0; i < objectiveArray.length; i++){
+                db.doUpdateObjectives(gameName, i, new firebase.firestore.GeoPoint(objectiveArray[i].latitude, objectiveArray[i].longitude));
+              }
                 setCurrentGame(gameName);
                 Router.push('/join');
             })
@@ -92,7 +99,7 @@ const useCreate = () => {
                 console.log(error);
             });
     }
-    return { createGameValues, onGameCreate, callbackFunction, updateGameName, updateObjectivesNumber }
+    return { createGameValues, onGameCreate, callbackFunction, updateGameName, updateObjectivesNumber, anotherCallbackFunction }
 }
 
 const create = () => (
@@ -102,7 +109,7 @@ const create = () => (
 );
 
 const CreateBase = () => {
-    const { createGameValues, onGameCreate, callbackFunction, updateGameName, updateObjectivesNumber } = useCreate();
+    const { createGameValues, onGameCreate, callbackFunction, updateGameName, updateObjectivesNumber, anotherCallbackFunction } = useCreate();
     const { useRef } = React;
     let map = useRef();
     const activateMap = () => {
@@ -148,7 +155,7 @@ const CreateBase = () => {
                                 </FormGroup>
                                 <FormGroup>
                                     <div className="content2">
-                                        <Map parentCallback={callbackFunction} ref={map} />
+                                        <Map parentCallback={callbackFunction} anotherCallback={anotherCallbackFunction} ref={map} />
                                     </div>
                                 </FormGroup>
                                 <FormGroup>
