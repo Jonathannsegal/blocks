@@ -142,9 +142,17 @@ class Map extends Component {
         );
     };
 
+    updateObjectiveLocation = (index, position) =>{
+      let objectiveArray = [...this.state.OBJECTIVES];
+      objectiveArray[index].latitude = position[1];
+      objectiveArray[index].longitude = position[0];
+      this.state.OBJECTIVES = objectiveArray;
+      this.setState({ dummy: this.state.dummy++});
+    }
+
     _renderCityMarker = (objective, index) => {
         return (
-            <Marker key={`marker-${index}`} longitude={objective.longitude} latitude={objective.latitude}>
+            <Marker key={`marker-${index}`} longitude={objective.longitude} latitude={objective.latitude} draggable={true} onDragEnd={event => this.updateObjectiveLocation(index, event.lngLat)}>
                 <ObjectiveMarker size={20} />
             </Marker>
         );
@@ -167,7 +175,7 @@ class Map extends Component {
         objectiveArray.push(marker);
         //this.setState({ OBJECTIVES: objectiveArray })
         this.state.OBJECTIVES = objectiveArray;
-        this.setState({ dummy: 1});
+        this.setState({ dummy: this.state.dummy++});
         //objectiveArray.push([(Math.random() * (maxLong - minLong) + minLong),(Math.random() * (maxLat - minLat) + minLat) ]);
       }
       let shape1 = [];
@@ -188,7 +196,7 @@ class Map extends Component {
           var inside = false;
           var count = 0;
           while(inside == false){
-            if(count == 50){
+            if(count == 100){
               inside = true;
               break;
             }
@@ -196,15 +204,12 @@ class Map extends Component {
             objectiveArray[i].longitude = (Math.random() * (maxLong - minLong) + minLong);
             objectiveArray[i].latitude = (Math.random() * (maxLat - minLat) + minLat);
             this.state.OBJECTIVES = objectiveArray
+            this.setState({ dummy: this.state.dummy++});
             point = turf.point([this.state.OBJECTIVES[i].longitude, this.state.OBJECTIVES[i].longitude]);
             count++;
             inside = turf.inside(point,polygon);
           }
         }
-      }
-      for(var i=0; i < this.state.objectives.length; i++){
-        var point = turf.point([this.state.OBJECTIVES[i].longitude, this.state.OBJECTIVES[i].latitude]);
-        console.log(turf.inside(point,polygon));
       }
     };
 
