@@ -61,7 +61,6 @@ const GameBase = () => {
 	return (
 		<React.Fragment>
 			<SwipeableViews
-				animateHeight
 				index={currentGameState}
 				onChangeIndex={handleChangeIndex}>
 				<Chat
