@@ -166,6 +166,18 @@ class Map extends Component {
 		  });
 		}
 
+		checkObjectives = () => {
+			for(var i = 0; i < objectiveArray.length; i++){
+				var center = [objectiveArray[i][0], objectiveArray[i][1]];
+				var circle = turf.circle(center, 0.014);
+				var point = turf.point([this.props.coords.longitude, this.props.coords.latitude]);
+				//console.log(turf.inside(point, circle));
+				if(turf.inside(point, circle)){
+					
+				}
+			}
+		}
+
 
 	_createObjectives = () => {
 		var minLat = this.props.gameValues.shape[0].latitude;
@@ -178,7 +190,7 @@ class Map extends Component {
 			minLong = Math.min(minLong, this.props.gameValues.shape[i].longitude);
 			maxLong = Math.max(maxLong, this.props.gameValues.shape[i].longitude);
 		}
-		for(var i = 0; i < 5; i ++){
+		for(var i = 0; i < 3; i ++){
 			objectiveArray.push([(Math.random() * (maxLong - minLong) + minLong),(Math.random() * (maxLat - minLat) + minLat) ]);
 		}
 		let shape1 = [];
@@ -228,16 +240,17 @@ class Map extends Component {
 			<ErrorScreen message={`Geolocation \n is not \n enabled \n\n Big Sad`} />
 		) : this.props.coords ? (
 			<React.Fragment>
-				<MapOverlay />
 				<ReactMapGL
 					mapStyle="mapbox://styles/mapbox/streets-v9"
 					mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"
 					{...this.state.viewport}
 					latitude={this.props.coords.latitude}
 					longitude={this.props.coords.longitude}
+					zoom={16}
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
 				{this.updatePlayerGeoPoint()}
+				  <button onClick={() => this.checkObjectives()}>push marker</button>
 					<Source type="geojson" data={this.getValues()}>
 						<Layer {...mapAreaLayer} />
 					</Source>
