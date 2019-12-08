@@ -83,12 +83,6 @@ class Map extends Component {
       this.state.viewport.longitude = this.props.coords.longitude;
     }
 
-    testFunc = () => {
-
-        console.log(this.state.geometry[0]);
-
-    }
-
     _renderDrawTools = () => {
         return (
             <React.Fragment>
@@ -114,10 +108,6 @@ class Map extends Component {
                                 options={trashOptions}
                                 isClickToPauseDisabled={true}
                             /></button>
-                          <button
-                            className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"
-                            onClick={this.testFunc()}>
-                            </button>
                     </div>
                 </div>
                 <div className="mapboxgl-ctrl-top-right">
@@ -153,15 +143,15 @@ class Map extends Component {
     };
 
     _createObjectives = () => {
-      var minLat = this.state.geometry[0].geometry[0][0][0];
-      var maxLat = this.state.geometry[0].geometry[0][0][0];
-      var minLong = this.props.gameValues.shape[0].longitude;
-      var maxLong = this.props.gameValues.shape[0].longitude;
+      var minLat = this.state.geometry[0].geometry.coordinates[0][0][1];
+      var maxLat = this.state.geometry[0].geometry.coordinates[0][0][1];
+      var minLong = this.state.geometry[0].geometry.coordinates[0][0][0];
+      var maxLong = this.state.geometry[0].geometry.coordinates[0][0][0];
       for(var i = 1; i < this.props.gameValues.shape.length; i++){
-        minLat = Math.min(minLat, this.props.gameValues.shape[i].latitude);
-        maxLat = Math.max(maxLat, this.props.gameValues.shape[i].latitude);
-        minLong = Math.min(minLong, this.props.gameValues.shape[i].longitude);
-        maxLong = Math.max(maxLong, this.props.gameValues.shape[i].longitude);
+        minLat = Math.min(minLat, this.state.geometry[0].geometry.coordinates[0][i][1]);
+        maxLat = Math.max(maxLat, this.state.geometry[0].geometry.coordinates[0][i][1]);
+        minLong = Math.min(minLong, this.state.geometry[0].geometry.coordinates[0][i][0]);
+        maxLong = Math.max(maxLong, this.state.geometry[0].geometry.coordinates[0][i][0]);
       }
       for(var i = 0; i < 5; i ++){
         objectiveArray.push([(Math.random() * (maxLong - minLong) + minLong),(Math.random() * (maxLat - minLat) + minLat) ]);
@@ -169,7 +159,7 @@ class Map extends Component {
       let shape1 = [];
       let shape2 = [];
       for (var i = 0; i < this.props.gameValues.shape.length; i++) {
-          shape1.push(new Array(this.props.gameValues.shape[i].longitude, this.props.gameValues.shape[i].latitude));
+          shape1.push(new Array(this.state.geometry[0].geometry.coordinates[0][i][0], this.state.geometry[0].geometry.coordinates[0][i][1]));
       }
       shape2.push(shape1);
       var polygon = turf.polygon(shape2);
