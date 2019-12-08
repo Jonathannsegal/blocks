@@ -5,16 +5,6 @@ import ErrorScreen from '../../errors/ErrorScreen';
 import { RefreshTime } from '../../../src/constants'
 import ObjectiveMarker from './objective-marker';
 
-// const OBJECTIVES =
-//     [
-//         // { "latitude": 42.02430352774402, "longitude": -93.65042209625244 },
-//         // { "latitude": 42.02232692880542, "longitude": -93.64265441894531 },
-//         // { "latitude": 42.028670955879136, "longitude": -93.64647388458252 },
-//         // { "latitude": 42.02691764486515, "longitude": -93.64977836608887 },
-//         // { "latitude": 42.02385720432251, "longitude": -93.63823413848877 },
-//         // { "latitude": 42.02624818608508, "longitude": -93.64651679992676 }
-//     ];
-
 class Map extends Component {
     constructor(props) {
         super(props);
