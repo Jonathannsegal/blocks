@@ -5,7 +5,6 @@ import { withRedux } from '../../src/lib/redux'
 import { db } from "../../src/firebase";
 import Router from "next/router"
 import firebase from "firebase/app";
-import * as articulation from '../../src/db/articulation.json'
 import * as createheader from '../../src/db/createheader.json'
 import {
     Content,
@@ -19,20 +18,13 @@ import {
     Nav,
     Icon,
     Header,
-    Container
+    Container,
+    InputGroup,
+    Input
 } from 'rsuite';
 import Map from '../../src/components/Create/Map1';
 import { AppWithAuthorization } from "../../src/components/App";
 require('rsuite/lib/styles/index.less');
-
-const articulationOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: articulation.default,
-    rendererSettings: {
-        preserveAspectRatio: 'xMidYMid slice'
-    }
-};
 
 const createheaderOptions = {
     loop: true,
@@ -50,6 +42,12 @@ const useCreate = () => {
     const setCurrentGame = (input) => (
         dispatch({
             type: 'SET_CURRENTGAME',
+            input
+        })
+    )
+    const updateObjectivesNumber = (input) => (
+        dispatch({
+            type: 'UPDATE_GAMECREATE_NUMBEROFOBJECTIVES',
             input
         })
     )
@@ -94,7 +92,7 @@ const useCreate = () => {
                 console.log(error);
             });
     }
-    return { onGameCreate, callbackFunction, updateGameName }
+    return { createGameValues, onGameCreate, callbackFunction, updateGameName, updateObjectivesNumber }
 }
 
 const create = () => (
@@ -104,7 +102,12 @@ const create = () => (
 );
 
 const CreateBase = () => {
-    const { onGameCreate, callbackFunction, updateGameName } = useCreate()
+    const { createGameValues, onGameCreate, callbackFunction, updateGameName, updateObjectivesNumber } = useCreate();
+    const { useRef } = React;
+    let map = useRef();
+    const activateMap = () => {
+        map.current.pushToArray(createGameValues.numberOfObjectives);
+    }
     return (
         <React.Fragment >
             <Container>
@@ -121,7 +124,7 @@ const CreateBase = () => {
                     <FlexboxGrid justify="center">
                         <FlexboxGrid.Item colspan={24}>
                             <Lottie
-                                height={150}
+                                height={140}
                                 options={createheaderOptions}
                                 isClickToPauseDisabled={true}
                             />
@@ -134,10 +137,20 @@ const CreateBase = () => {
                                     <ControlLabel>Name</ControlLabel>
                                     <FormControl onChange={value => updateGameName(value)} name="test" placeholder="Campus Challange" />
                                 </FormGroup>
-                                <div className="content2">
-                                    <Map parentCallback={callbackFunction} />
-                                </div>
-                                <br />
+                                <FormGroup>
+                                    <ControlLabel>How many points?</ControlLabel>
+                                    <InputGroup>
+                                        <Input onChange={value => updateObjectivesNumber(value)} placeholder="10" />
+                                        <InputGroup.Button onClick={() => activateMap()}>
+                                            Make Points
+                                        </InputGroup.Button>
+                                    </InputGroup>
+                                </FormGroup>
+                                <FormGroup>
+                                    <div className="content2">
+                                        <Map parentCallback={callbackFunction} ref={map} />
+                                    </div>
+                                </FormGroup>
                                 <FormGroup>
                                     <FlexboxGrid justify="space-around">
                                         <FlexboxGrid.Item colspan={18}>

@@ -1,9 +1,6 @@
 import { Component } from 'react';
-import ReactMapGL, { Marker, FullscreenControl, GeolocateControl } from 'react-map-gl';
-import { geolocated } from 'react-geolocated';
-import ErrorScreen from '../../errors/ErrorScreen';
-import { RefreshTime } from '../../../src/constants'
-import ObjectiveMarker from './objective-marker';
+import ReactMapGL, { Marker } from 'react-map-gl';
+import ObjectiveMarker from './objective-marker'
 
 class Map extends Component {
     constructor(props) {
@@ -27,17 +24,13 @@ class Map extends Component {
         );
     };
 
-    pushToArray = () => {
+    pushToArray(numberOfObjectives) {
         let marker = { "latitude": 42.02835217565519, "longitude": -93.64235401153564 };
         this.setState({ OBJECTIVES: this.state.OBJECTIVES.concat(marker) });
     };
 
     render() {
-        return !this.props.isGeolocationAvailable ? (
-            <ErrorScreen message={`Your browser \n does not support \n Geolocation`} />
-        ) : !this.props.isGeolocationEnabled ? (
-            <ErrorScreen message={`Geolocation \n is not \n enabled \n\n Big Sad`} />
-        ) : this.props.coords ? (
+        return (
             <React.Fragment>
                 <ReactMapGL
                     mapStyle="mapbox://styles/mapbox/streets-v9"
@@ -48,20 +41,9 @@ class Map extends Component {
                     onViewportChange={(viewport) => this.setState({ viewport })}
                 >
                     {this.state.OBJECTIVES.map(this._renderCityMarker)}
-                    <button onClick={() => this.pushToArray()}>push marker</button>
-
                 </ReactMapGL>
             </React.Fragment >
-        ) : (
-                        <div>Getting the location data&hellip; </div>
-                    );
+        )
     }
 }
-
-export default geolocated({
-    positionOptions: {
-        enableHighAccuracy: true
-    },
-    userDecisionTimeout: RefreshTime.fiveSeconds,
-    watchPosition: true
-})(Map);
+export default Map

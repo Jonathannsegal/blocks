@@ -31,6 +31,7 @@ const initialState = {
     },
     createGameFormValue: {
         name: '',
+        numberOfObjectives: 0,
         geometry: []
     },
     createTeamFormValue: {
@@ -148,6 +149,14 @@ const reducer = (state = { initialState, input: {} }, action) => {
                 createGameFormValue: {
                     ...state.createGameFormValue,
                     name: action.payload.txt
+                }
+            }
+        case ('UPDATE_GAMECREATE_NUMBEROFOBJECTIVES'):
+            return {
+                ...state,
+                createGameFormValue: {
+                    ...state.createGameFormValue,
+                    numberOfObjectives: action.input
                 }
             }
         case ('UPDATE_GAMECREATE_GEO'):
