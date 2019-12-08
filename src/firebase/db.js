@@ -85,8 +85,6 @@ export const onceGetGamesReadyToJoin = () =>
 export const getTeamList = (currentGame) =>
   db.collection('games').doc(currentGame).collection('teams').get();
 
-
-
 export const getCurrentGamePlayerValues = (currentGame, userId) => {
   var docRef = db.collection('games').doc(currentGame).collection('players').doc(userId);
   return docRef.get().then(function (doc) {
@@ -99,3 +97,12 @@ export const getCurrentGamePlayerValues = (currentGame, userId) => {
     return ("Error getting document:", error);
   });
 }
+
+export const doSendMessage = (currentGame, messageId, timeStamp, text, creator, username, team) =>
+  db.doc(`games/${currentGame}/messages/${messageId}`).set({
+    timeStamp,
+    text,
+    creator,
+    username,
+    team
+  });
