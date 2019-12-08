@@ -22,7 +22,7 @@ import {
     InputGroup,
     Input
 } from 'rsuite';
-import Map from '../../src/components/Create/Map1';
+import Map from '../../src/components/Create/Map';
 import { AppWithAuthorization } from "../../src/components/App";
 require('rsuite/lib/styles/index.less');
 

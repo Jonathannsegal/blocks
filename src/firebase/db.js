@@ -106,3 +106,9 @@ export const doSendMessage = (currentGame, messageId, timeStamp, text, creator, 
     username,
     team
   });
+
+  export const doUpdateObjectives = (currentGame, markerId, team, position) =>
+    db.doc(`games/${currentGame}/objectives/${markerId}`).set({
+      position,
+      team
+    });
