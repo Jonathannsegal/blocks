@@ -76,6 +76,11 @@ class Map extends Component {
         }
     };
 
+    updateCoords = () => {
+      this.state.viewport.latitude = this.props.coords.latitude;
+      this.state.viewport.longitude = this.props.coords.longitude;
+    }
+
     _renderDrawTools = () => {
         return (
             <React.Fragment>
@@ -135,6 +140,10 @@ class Map extends Component {
         );
     };
 
+    componentDidMount(){
+
+    }
+
     render() {
         const { mode } = this.state;
         return !this.props.isGeolocationAvailable ? (
@@ -151,6 +160,7 @@ class Map extends Component {
                     height="100%"
                     onViewportChange={(viewport) => this.setState({ viewport })}
                 >
+                {this.updateCoords()}
                     <Editor
                         ref={_ => (this._editorRef = _)}
                         style={{ width: '100%', height: '100%' }}
