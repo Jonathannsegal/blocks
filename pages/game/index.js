@@ -61,6 +61,7 @@ const GameBase = () => {
 	return (
 		<React.Fragment>
 			<SwipeableViews
+				// animateHeight
 				index={currentGameState}
 				onChangeIndex={handleChangeIndex}>
 				<Chat
@@ -69,11 +70,13 @@ const GameBase = () => {
 					userId={AuthUser}
 					playerValues={playerValues}
 				/>
-				<Map
-					gameValues={gameValues}
-					currentGame={CurrentGame}
-					userId={AuthUser.uid}
-				/>
+				<div className="fullSize">
+					<Map
+						gameValues={gameValues}
+						currentGame={CurrentGame}
+						userId={AuthUser.uid}
+					/>
+				</div>
 				<Status gameMain={gameMain} gameValues={gameValues} />
 			</SwipeableViews>
 			<style jsx>{`
