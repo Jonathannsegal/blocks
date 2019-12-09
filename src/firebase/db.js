@@ -85,6 +85,9 @@ export const onceGetGamesReadyToJoin = () =>
 export const getTeamList = (currentGame) =>
   db.collection('games').doc(currentGame).collection('teams').get();
 
+export const getObjectiveList = (currentGame) =>
+  db.collection('games').doc(currentGame).collection('objectives').get();
+
 export const getCurrentGamePlayerValues = (currentGame, userId) => {
   var docRef = db.collection('games').doc(currentGame).collection('players').doc(userId);
   return docRef.get().then(function (doc) {

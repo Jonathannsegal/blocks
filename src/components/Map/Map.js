@@ -13,6 +13,7 @@ import { Avatar } from 'rsuite';
 import firebase from "firebase/app";
 import { db } from "../../firebase";
 import { db as dbSnapshot} from "../../firebase/firebase";
+import ObjectiveMarker from '../Create/objective-marker';
 
 const locationdotOptions = {
 	loop: true,
@@ -38,7 +39,7 @@ const objectiveLayer = {
 	source: mapAreaSource,
 	paint: {
 		'circle-color': '#0000ff',
-		'circle-opacity': 0.5,
+		'circle-opacity': 0,
 		'circle-radius': 15,
 	}
 }
@@ -50,7 +51,7 @@ const mapAreaLayer = {
 	paint: {
 		'fill-color': '#ff0000',
 		'fill-opacity': 0.2,
-		'fill-outline-color': '#000000'
+		'fill-outline-color': '#ff0000'
 	}
 }
 
@@ -103,7 +104,7 @@ class Map extends Component {
 			return geojson;
 	};
 
-	getPoints = (index) => {
+	getPoints = () => {
 		let geojson = {
 			type: 'FeatureCollection',
 			features: [
@@ -112,24 +113,27 @@ class Map extends Component {
 					properties: {},
 					geometry:{
 							type: 'Point',
-							coordinates: [objectiveArray[index][0], objectiveArray[index][1]]
+							coordinates: [0,0]
 					}
 				}
 			]
 		};
-		for(var i = 1; i < objectiveArray.length; i++){
-			let point = {
-					type: 'Feature',
-					properties: {},
-					geometry:{
-							type: 'Point',
-							coordinates: [objectiveArray[i][0], objectiveArray[i][1]]
-					}
-			};
-			geojson.features.push(point);
+		if(this.props.objectives != null){
+			for(var i = 0; i < this.props.objectives.length; i++){
+				let point = {
+						type: 'Feature',
+						properties: {},
+						geometry:{
+								type: 'Point',
+								coordinates: [this.props.objectives[i].position.longitude, this.props.objectives[i].position.latitude]
+						}
+				};
+				geojson.features.push(point);
+			}
 		}
 		return geojson;
 	}
+
 
 	updatePlayerGeoPoint = () => {
 		if(this.props.coords.latitude != null && this.props.coords.longitude != null){
@@ -167,66 +171,18 @@ class Map extends Component {
 		}
 
 		checkObjectives = () => {
-			for(var i = 0; i < objectiveArray.length; i++){
-				var center = [objectiveArray[i][0], objectiveArray[i][1]];
+			for(var i = 0; i < this.props.objectives.length; i++){
+				var center = [this.props.objectives[i].position.longitude, this.props.objectives[i].position.latitude];
 				var circle = turf.circle(center, 0.014);
 				var point = turf.point([this.props.coords.longitude, this.props.coords.latitude]);
-				//console.log(turf.inside(point, circle));
+				console.log(turf.inside(point, circle));
 				if(turf.inside(point, circle)){
-					
+						console.log();
 				}
 			}
 		}
-
-
-	_createObjectives = () => {
-		var minLat = this.props.gameValues.shape[0].latitude;
-		var maxLat = this.props.gameValues.shape[0].latitude;
-		var minLong = this.props.gameValues.shape[0].longitude;
-		var maxLong = this.props.gameValues.shape[0].longitude;
-		for(var i = 1; i < this.props.gameValues.shape.length; i++){
-			minLat = Math.min(minLat, this.props.gameValues.shape[i].latitude);
-			maxLat = Math.max(maxLat, this.props.gameValues.shape[i].latitude);
-			minLong = Math.min(minLong, this.props.gameValues.shape[i].longitude);
-			maxLong = Math.max(maxLong, this.props.gameValues.shape[i].longitude);
-		}
-		for(var i = 0; i < 3; i ++){
-			objectiveArray.push([(Math.random() * (maxLong - minLong) + minLong),(Math.random() * (maxLat - minLat) + minLat) ]);
-		}
-		let shape1 = [];
-		let shape2 = [];
-		for (var i = 0; i < this.props.gameValues.shape.length; i++) {
-				shape1.push(new Array(this.props.gameValues.shape[i].longitude, this.props.gameValues.shape[i].latitude));
-		}
-		shape2.push(shape1);
-		var polygon = turf.polygon(shape2);
-		//console.log(objectiveArray);
-		//console.log(turf.pointsWithinPolygon(turfPoints, polygon));
-		for(var i = 0; i < objectiveArray.length; i++){
-			var point = turf.point([objectiveArray[i][0], objectiveArray[i][1]]);
-			if(turf.inside(point,polygon)){
-				continue;
-			}
-			else{
-				var inside = false;
-				var count = 0;
-				while(inside == false){
-					if(count == 50){
-						inside = true;
-						break;
-					}
-					objectiveArray[i][0] = (Math.random() * (maxLong - minLong) + minLong);
-					objectiveArray[i][1] = (Math.random() * (maxLat - minLat) + minLat);
-					point = turf.point([objectiveArray[i][0], objectiveArray[i][1]]);
-					count++;
-					inside = turf.inside(point,polygon);
-				}
-			}
-		}
-	};
 
 	componentDidMount(){
-		this._createObjectives();
 		this.getTeammates();
 	}
 
@@ -246,7 +202,6 @@ class Map extends Component {
 					{...this.state.viewport}
 					latitude={this.props.coords.latitude}
 					longitude={this.props.coords.longitude}
-					zoom={16}
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
 				{this.updatePlayerGeoPoint()}
@@ -254,7 +209,7 @@ class Map extends Component {
 					<Source type="geojson" data={this.getValues()}>
 						<Layer {...mapAreaLayer} />
 					</Source>
-					<Source type="geojson" data={this.getPoints(0)}>
+					<Source type="geojson" data={this.getPoints()}>
 						<Layer {...objectiveLayer} />
 					</Source>
 					<Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>

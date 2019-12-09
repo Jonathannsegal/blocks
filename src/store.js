@@ -16,6 +16,7 @@ const initialState = {
     userValues: null,
     currentGame: null,
     currentGameValues: [],
+    currentObjectives: [],
     searchGameList: [],
     currentGamePlayerValues: [],
     homeState: HomeState.signIn,
@@ -85,6 +86,11 @@ const getGameList = (state, action) => ({
     searchGameList: action.list
 });
 
+const getObjectiveList = (state, action) => ({
+    ...state,
+    currentObjectives: action.list
+});
+
 const getTeamList = (state, action) => ({
     ...state,
     currentGameTeamList: action.list
@@ -131,6 +137,9 @@ const reducer = (state = { initialState, input: {} }, action) => {
             }
         case 'GET_GAMELIST': {
             return getGameList(state, action);
+        }
+        case 'GET_OBJECTIVELIST': {
+            return getObjectiveList(state, action);
         }
         case 'CURRENT_GAMEVALUE_SET': {
             return applyGameValueSet(state, action);

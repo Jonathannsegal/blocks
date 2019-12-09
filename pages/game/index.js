@@ -7,7 +7,7 @@ import Status from '../../src/components/Game/status';
 import Chat from '../../src/components/Game/chat';
 import { GameState } from '../../src/constants';
 import { AppWithAuthorization } from "../../src/components/App";
-// import { db } from "../../src/firebase";
+import { db } from "../../src/firebase";
 require('rsuite/lib/styles/index.less');
 
 const useGame = () => {
@@ -16,6 +16,23 @@ const useGame = () => {
 	const CurrentGame = useSelector(state => state.currentGame)
 	const gameValues = useSelector(state => state.currentGameValues)
 	const playerValues = useSelector(state => state.currentGamePlayerValues)
+
+	const objectiveList = useSelector(state => state.currentObjectives)
+	let getObjectiveList = function () {
+			return db.getObjectiveList(CurrentGame)
+					.then(list => {
+							return list.docs.map(doc => doc.data());
+					});
+	}
+	let currentObjectiveList = getObjectiveList();
+	currentObjectiveList.then(function (list) {
+			if (objectiveList.length != list.length) {
+					dispatch({
+							type: 'GET_OBJECTIVELIST',
+							list
+					})
+			}
+	});
 
 	// const userValues = useSelector(state => state.userValues)
 	const AuthUser = useSelector(state => state.authUser)
@@ -38,7 +55,7 @@ const useGame = () => {
 	// 	console.log(db.getGameId(AuthUser.uid));
 	// }
 
-	return { currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser }
+	return { currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList }
 }
 
 const Game = () => (
@@ -48,7 +65,7 @@ const Game = () => (
 );
 
 const GameBase = () => {
-	const { currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser } = useGame()
+	const { currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList } = useGame()
 	const handleChangeIndex = index => {
 		if (index === GameState.chat) {
 			gameChat();
@@ -72,6 +89,7 @@ const GameBase = () => {
 				<Map
 					gameValues={gameValues}
 					currentGame={CurrentGame}
+					objectives={objectiveList}
 					userId={AuthUser.uid}
 				/>
 				<Status gameMain={gameMain} gameValues={gameValues} />
