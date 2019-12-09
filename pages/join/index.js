@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Lottie from 'react-lottie'
 import Map from '../../src/components/Stats/Map'
 import { useDispatch, useSelector } from 'react-redux'
 import { db } from "../../src/firebase";
+import { db as dbSnapshot } from "../../src/firebase/firebase";
 import { withRedux } from '../../src/lib/redux'
 import Router from "next/router"
 import { JoinState, JoinEditState } from '../../src/constants';
@@ -25,7 +26,9 @@ import {
     Form,
     FormGroup,
     FormControl,
-    ControlLabel
+    ControlLabel,
+    ButtonToolbar,
+    ButtonGroup
 } from 'rsuite';
 import * as articulation from '../../src/db/articulation.json'
 require('rsuite/lib/styles/index.less');
@@ -49,27 +52,70 @@ const useJoin = () => {
     const currentPlayerValues = useSelector(state => state.currentGamePlayerValues)
     const teamList = useSelector(state => state.currentGameTeamList)
     const teamEdit = useSelector(state => state.teamEdit)
-    const edit = () => {
+    const allPlayerList = useSelector(state => state.playersForCurrentGame)
+    const SelectedteamView = useSelector(state => state.joinScreenSelected)
+    const edit = (item) => {
         dispatch({
             type: 'TEAMEDIT'
         })
+        dispatch({
+            type: 'JOIN_SELECTED_TEAM',
+            item
+        })
+        let getteamPreviousValues = function (gameId, teamId) {
+            return db.getSelectedTeamValues(gameId, teamId)
+                .then(
+                    value => {
+                        return value;
+                    }
+                );
+        }
+        let teamPreviousValues = getteamPreviousValues(CurrentGame, item.id);
+        teamPreviousValues.then(function (values) {
+            updateTeamName(values.name);
+            updateTeamColor(values.color);
+        });
     }
+
     const noEdit = () => {
         dispatch({
             type: 'TEAMCREATE'
         })
+        dispatch({
+            type: 'JOIN_SELECTED_TEAM',
+            item: null
+        })
     }
-    const teamlistfunction = () => {
+    const teamlistfunction = (item) => {
         dispatch({
             type: 'TEAMLIST'
         })
+        dispatch({
+            type: 'JOIN_SELECTED_TEAM',
+            item
+        })
     }
+
     const createTeam = () => {
-        db.doAddTeamToGame(CurrentGame, AuthUser.uid, teamCreateValues.name, teamCreateValues.color);
+        db.doAddTeamToGame(CurrentGame, AuthUser.uid, Date.now() + teamCreateValues.name + AuthUser.uid, teamCreateValues.name, teamCreateValues.color);
         dispatch({
             type: 'joinMain'
         })
     }
+
+    const updateTeam = () => {
+        db.doUpdateTeam(CurrentGame, SelectedteamView.id, teamCreateValues.name, teamCreateValues.color);
+        dispatch({
+            type: 'joinMain'
+        })
+    }
+    const deleteTeam = () => {
+        db.doDeleteTeam(CurrentGame, SelectedteamView.id);
+        dispatch({
+            type: 'joinMain'
+        })
+    }
+
     const close = () => {
         dispatch({
             type: 'joinMain'
@@ -112,7 +158,7 @@ const useJoin = () => {
     }
     let currentTeamList = getTeamList(CurrentGame);
     currentTeamList.then(function (list) {
-        if (list.length != teamList.length) {
+        if (JSON.stringify(list) != JSON.stringify(teamList)) {
             dispatch({
                 type: 'GET_TEAMLIST',
                 list
@@ -140,9 +186,9 @@ const useJoin = () => {
             })
         }
     });
-    const joinGame = (teamName) => {
+    const joinGame = (team) => {
         db.doSetGame(AuthUser.uid, CurrentGame);
-        db.doAddPlayerToGame(CurrentGame, AuthUser.uid, AuthUser.displayName, new firebase.firestore.GeoPoint(1, 1), teamName);
+        db.doAddPlayerToGame(CurrentGame, AuthUser.uid, AuthUser.displayName, new firebase.firestore.GeoPoint(1, 1), team.name, team.id);
         getPlayerValuesFunction();
         waitingScreen();
     }
@@ -168,7 +214,21 @@ const useJoin = () => {
             color
         })
     )
-    return { teamlistfunction, edit, noEdit, teamEdit, AuthUser, currentPlayerValues, waitingScreen, teamList, updateTeamName, updateTeamColor, createTeam, currentState, close, open, joinGame, gameValues, CurrentGame, goToGameFunction, setCurrentGame }
+    dbSnapshot.collection('games').doc(CurrentGame).collection('players').onSnapshot(
+        function (querySnapshot) {
+            let team = [];
+            querySnapshot.forEach(function (doc) {
+                team.push(doc.data());
+            })
+            if (team.length != allPlayerList.length) {
+                dispatch({
+                    type: 'GET_ALLCURRENTPLAYERSINGAME',
+                    team
+                })
+            }
+        }
+    );
+    return { updateTeam, deleteTeam, teamCreateValues, SelectedteamView, allPlayerList, teamlistfunction, edit, noEdit, teamEdit, AuthUser, currentPlayerValues, waitingScreen, teamList, updateTeamName, updateTeamColor, createTeam, currentState, close, open, joinGame, gameValues, CurrentGame, goToGameFunction, setCurrentGame }
 }
 
 
@@ -180,7 +240,7 @@ const join = () => (
 );
 
 const JoinBase = () => {
-    const { teamlistfunction, edit, noEdit, teamEdit, AuthUser, currentPlayerValues, waitingScreen, teamList, updateTeamName, updateTeamColor, createTeam, currentState, close, open, joinGame, gameValues, CurrentGame, goToGameFunction, setCurrentGame } = useJoin();
+    const { updateTeam, deleteTeam, teamCreateValues, SelectedteamView, allPlayerList, teamlistfunction, edit, noEdit, teamEdit, AuthUser, currentPlayerValues, waitingScreen, teamList, updateTeamName, updateTeamColor, createTeam, currentState, close, open, joinGame, gameValues, CurrentGame, goToGameFunction, setCurrentGame } = useJoin();
     return (
         <React.Fragment>
             <SwipeableViews disabled={(currentState == JoinState.waiting) ? false : true} onChangeIndex={index => (index == 1) ? waitingScreen() : close()} index={(currentState == JoinState.waiting) ? 1 : 0}>
@@ -192,7 +252,7 @@ const JoinBase = () => {
                                     return (
                                         <React.Fragment>
                                             <Modal.Header>
-                                                <Modal.Title>Make a Team</Modal.Title>
+                                                <Modal.Title>Edit {SelectedteamView.name}</Modal.Title>
                                             </Modal.Header>
                                             <Modal.Body>
                                                 <br />
@@ -201,23 +261,42 @@ const JoinBase = () => {
                                                         <Form fluid>
                                                             <FormGroup>
                                                                 <ControlLabel>Name</ControlLabel>
-                                                                <FormControl onChange={value => updateTeamName(value)} name="name" placeholder="Team Name" />
+                                                                <FormControl onChange={value => updateTeamName(value)} name="name" placeholder={teamCreateValues.name} />
                                                             </FormGroup>
                                                             <br />
                                                             <FormGroup>
-                                                                <CirclePicker onChange={value => updateTeamColor(value.hex)} />
+                                                                <CirclePicker color={teamCreateValues.color} onChange={value => updateTeamColor(value.hex)} />
                                                             </FormGroup>
                                                         </Form>
+                                                        <br />
+                                                        <br />
+                                                        <h2>Players</h2>
+                                                        <br />
+                                                        <List>
+                                                            {allPlayerList.map((item, index) => {
+                                                                if (item.teamId == SelectedteamView.id) {
+                                                                    return (
+                                                                        <List.Item key={index} index={index}>
+                                                                            {item.username}
+                                                                        </List.Item>
+                                                                    );
+                                                                } else {
+                                                                    return null;
+                                                                }
+                                                            }
+
+                                                            )}
+                                                        </List>
                                                     </FlexboxGrid.Item>
                                                 </FlexboxGrid>
                                                 <br />
                                             </Modal.Body>
                                             <Modal.Footer>
-                                                <Button onClick={() => createTeam()} appearance="primary">
+                                                <Button onClick={() => deleteTeam()} appearance="primary" color="red">
                                                     Delete
                                             </Button>
-                                                <Button onClick={() => createTeam()} appearance="primary">
-                                                    Create
+                                                <Button onClick={() => updateTeam()} appearance="primary">
+                                                    Update
                                             </Button>
                                                 <Button onClick={() => close()} appearance="subtle">
                                                     Cancel
@@ -262,21 +341,39 @@ const JoinBase = () => {
                                 case JoinEditState.list:
                                     return (<React.Fragment>
                                         <Modal.Header>
-                                            <Modal.Title>Make a Team</Modal.Title>
+                                            <Modal.Title>{SelectedteamView.name}</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
                                             <br />
-                                            <div>LIst</div>
+                                            <List>
+                                                {allPlayerList.map((item, index) => {
+                                                    if (item.teamId == SelectedteamView.id) {
+                                                        return (
+                                                            <List.Item key={index} index={index}>
+                                                                {item.username}
+                                                            </List.Item>
+                                                        );
+                                                    } else {
+                                                        return null;
+                                                    }
+                                                }
+
+                                                )}
+                                            </List>
                                             <br />
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button onClick={() => close()} appearance="subtle">
-                                                Cancel
+                                                Close
                                             </Button>
                                         </Modal.Footer>
                                     </React.Fragment>);
                                 default:
-                                    return null;
+                                    return (
+                                        <React.Fragment>
+                                            <div>nothing here</div>
+                                        </React.Fragment>
+                                    );
                             }
                         })()}
                     </Modal>
@@ -315,7 +412,7 @@ const JoinBase = () => {
                                                 <List.Item key={index} index={index}>
                                                     <FlexboxGrid align="middle">
                                                         <FlexboxGrid.Item colspan={14}>
-                                                            <a className="listItemsA" onClick={() => joinGame(item.name)}>
+                                                            <a className="listItemsA" onClick={() => joinGame(item)}>
                                                                 <FlexboxGrid justify="start">
                                                                     <FlexboxGrid.Item>
                                                                         {item.name}
@@ -329,9 +426,7 @@ const JoinBase = () => {
                                                                     <FlexboxGrid.Item colspan={10}>
                                                                         <FlexboxGrid justify="end">
                                                                             <FlexboxGrid.Item>
-                                                                                <a onClick={() => { teamlistfunction(); open() }}>View</a>
-                                                                                <span style={{ padding: 5 }}>|</span>
-                                                                                <a onClick={() => { edit(); open() }}>Edit</a>
+                                                                                <a onClick={() => { edit(item); open() }}>Edit / View</a>
                                                                             </FlexboxGrid.Item>
                                                                         </FlexboxGrid>
                                                                     </FlexboxGrid.Item>
@@ -341,7 +436,7 @@ const JoinBase = () => {
                                                                     <FlexboxGrid.Item colspan={10}>
                                                                         <FlexboxGrid justify="end">
                                                                             <FlexboxGrid.Item>
-                                                                                <a onClick={() => { teamlistfunction(); open() }}>View</a>
+                                                                                <a onClick={() => { teamlistfunction(item); open() }}>View</a>
                                                                             </FlexboxGrid.Item>
                                                                         </FlexboxGrid>
                                                                     </FlexboxGrid.Item>

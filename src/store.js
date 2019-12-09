@@ -20,7 +20,9 @@ const initialState = {
     currentGameValues: [],
     currentObjectives: [],
     searchGameList: [],
+    playersForCurrentGame: [],
     currentGamePlayerValues: [],
+    joinScreenSelected: null,
     homeState: HomeState.signIn,
     joinState: JoinState.main,
     signUpState: SignUpState.userName,
@@ -98,8 +100,21 @@ const getTeamList = (state, action) => ({
     currentGameTeamList: action.list
 });
 
+const getAllPlayerListForCurrentGame = (state, action) => ({
+    ...state,
+    playersForCurrentGame: action.team
+});
+
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case ('JOIN_SELECTED_TEAM'):
+            return {
+                ...state,
+                joinScreenSelected: action.item
+            }
+        case 'GET_ALLCURRENTPLAYERSINGAME': {
+            return getAllPlayerListForCurrentGame(state, action);
+        }
         case 'TEAMEDIT':
             return {
                 ...state,
@@ -110,7 +125,7 @@ const reducer = (state = { initialState, input: {} }, action) => {
                 ...state,
                 teamEdit: JoinEditState.create
             }
-        case 'TEAMList':
+        case 'TEAMLIST':
             return {
                 ...state,
                 teamEdit: JoinEditState.list

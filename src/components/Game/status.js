@@ -13,12 +13,7 @@ require('rsuite/lib/styles/index.less');
 
 class Status extends Component {
     state = {
-        teams: [
-            'Roses are red',
-            'Violets are blue',
-            'Sugar is sweet',
-            'And so are you'
-        ]
+        teams: []
     };
 
     componentDidMount() {
