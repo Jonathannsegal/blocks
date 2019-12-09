@@ -465,7 +465,7 @@ class Map extends Component {
 			for(var i = 0; i < this.props.objectives.length; i++){
 				var center = [this.props.objectives[i].position.longitude, this.props.objectives[i].position.latitude];
 				var circle = turf.circle(center, .013);
-				var point = turf.point([this.props.coords.longitude, this.props.coords.latitude]);
+				var point = turf.point([this.state.longitude, this.state.latitude]);
 				//console.log(turf.inside(point, circle));
 				if(turf.inside(point, circle)){
 					console.log(this.props.playerValues.team);
