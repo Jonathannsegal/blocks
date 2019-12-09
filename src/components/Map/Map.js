@@ -187,7 +187,7 @@ class Map extends Component {
 		_renderCityMarker = (objective, index) => {
         return (
             <Marker key={`marker-${index}`} longitude={objective.longitude} latitude={objective.latitude} draggable={true} onDragEnd={event => this.updateObjectiveLocation(index, event.lngLat)}>
-                <ObjectiveMarker size={20} />
+                <ObjectiveMarker size={15} color={"#00ff00"}/>
             </Marker>
         );
     };
