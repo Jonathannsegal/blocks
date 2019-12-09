@@ -19,19 +19,19 @@ const useGame = () => {
 
 	const objectiveList = useSelector(state => state.currentObjectives)
 	let getObjectiveList = function () {
-			return db.getObjectiveList(CurrentGame)
-					.then(list => {
-							return list.docs.map(doc => doc.data());
-					});
+		return db.getObjectiveList(CurrentGame)
+			.then(list => {
+				return list.docs.map(doc => doc.data());
+			});
 	}
 	let currentObjectiveList = getObjectiveList();
 	currentObjectiveList.then(function (list) {
-			if (objectiveList.length != list.length) {
-					dispatch({
-							type: 'GET_OBJECTIVELIST',
-							list
-					})
-			}
+		if (objectiveList.length != list.length) {
+			dispatch({
+				type: 'GET_OBJECTIVELIST',
+				list
+			})
+		}
 	});
 
 	// const userValues = useSelector(state => state.userValues)
@@ -78,6 +78,7 @@ const GameBase = () => {
 	return (
 		<React.Fragment>
 			<SwipeableViews
+				resistance={true}
 				index={currentGameState}
 				onChangeIndex={handleChangeIndex}>
 				<Chat
