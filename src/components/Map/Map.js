@@ -468,9 +468,11 @@ class Map extends Component {
 				var point = turf.point([this.state.longitude, this.state.latitude]);
 				//console.log(turf.inside(point, circle));
 				if(turf.inside(point, circle)){
+					//call to datatbase, get team getTeamColor
 					this.state.OBJECTIVES[i].color = "#ff0000";
 					this.setState({ dummy: this.state.dummy++ });
-						//db.updateObjectiveTeam(this.props.currentGame, i, )
+					//call to database, update objective to show team
+					//db.updateObjectiveTeam(this.props.currentGame, i, )
 				}
 			}
 		};
@@ -544,6 +546,7 @@ class Map extends Component {
 					{...this.state.viewport}
 					latitude={this.state.latitude}
 					longitude={this.state.longitude}
+					zoom={16}
 					// transitionDuration={1}
 					// transitionInterpolator={new FlyToInterpolator()}
 					onViewportChange={(viewport) => this.setState({ viewport })}
