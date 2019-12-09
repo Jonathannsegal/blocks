@@ -468,7 +468,8 @@ class Map extends Component {
 				var point = turf.point([this.state.longitude, this.state.latitude]);
 				//console.log(turf.inside(point, circle));
 				if(turf.inside(point, circle)){
-					console.log(this.props.playerValues.team);
+					this.state.OBJECTIVES[i].color = "#ff0000";
+					this.setState({ dummy: this.state.dummy++ });
 						//db.updateObjectiveTeam(this.props.currentGame, i, )
 				}
 			}
@@ -478,7 +479,7 @@ class Map extends Component {
 	_renderCityMarker = (objective, index) => {
 		return (
 			<Marker key={`marker-${index}`} longitude={objective.longitude} latitude={objective.latitude} draggable={true} onDragEnd={event => this.updateObjectiveLocation(index, event.lngLat)}>
-				<ObjectiveMarker size={15} color={"#00ff00"} />
+				<ObjectiveMarker size={15} color={objective.color} />
 			</Marker>
 		);
 	};
@@ -486,7 +487,7 @@ class Map extends Component {
 	populateStateObjective = () => {
 		for (var i = 0; i < this.props.objectives.length; i++) {
 			let objectiveArray = [...this.state.OBJECTIVES];
-			let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude };
+			let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color": "#00ff00" };
 			objectiveArray.push(marker);
 			this.state.OBJECTIVES = objectiveArray;
 			this.setState({ dummy: this.state.dummy++ });
