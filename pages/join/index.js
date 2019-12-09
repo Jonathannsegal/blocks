@@ -6,7 +6,7 @@ import { db } from "../../src/firebase";
 import { db as dbSnapshot } from "../../src/firebase/firebase";
 import { withRedux } from '../../src/lib/redux'
 import Router from "next/router"
-import { JoinState, JoinEditState } from '../../src/constants';
+import { JoinState, JoinEditState, GameStateGlobal } from '../../src/constants';
 import { CirclePicker } from 'react-color';
 import SwipeableViews from 'react-swipeable-views';
 import firebase from "firebase/app";
@@ -200,8 +200,18 @@ const useJoin = () => {
     )
     const goToGameFunction = () => {
         setCurrentGame(CurrentGame);
+        db.doStartGame(CurrentGame, GameStateGlobal.Ongoing);
         Router.push('/game');
     }
+    dbSnapshot.collection('games').doc(CurrentGame).onSnapshot(
+        function (querySnapshot) {
+            if (querySnapshot.data().state == GameStateGlobal.Ongoing) {
+                if (currentPlayerValues.length != 0) {
+                    Router.push('/game');
+                }
+            }
+        }
+    );
     const updateTeamName = (input) => (
         dispatch({
             type: 'UPDATE_TEAMCREATE_NAME',
@@ -496,7 +506,17 @@ const JoinBase = () => {
                                             <Footer>
                                                 <FlexboxGrid justify="center">
                                                     <FlexboxGrid.Item>
-                                                        <Button onClick={() => goToGameFunction()} color="cyan" size="lg" appearance="primary">Start Game</Button>
+                                                        {(function () {
+                                                            if (AuthUser.uid == gameValues.gameCreator) {
+                                                                return (
+                                                                    <Button onClick={() => goToGameFunction()} color="cyan" size="lg" appearance="primary">Start Game</Button>
+                                                                );
+                                                            } else {
+                                                                return (
+                                                                    <h5>waiting for game to start</h5>
+                                                                );
+                                                            }
+                                                        })()}
                                                     </FlexboxGrid.Item>
                                                 </FlexboxGrid>
                                             </Footer>

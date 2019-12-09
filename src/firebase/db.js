@@ -54,14 +54,19 @@ export const doUpdateTeam = (gameName, id, name, color) =>
 export const doDeleteTeam = (gameName, id) =>
   db.doc(`games/${gameName}`).collection('teams').doc(id).delete();
 
-export const doCreateGame = (gameCreator, id, name, shape, timeStamp) =>
+export const doCreateGame = (gameCreator, id, name, shape, timeStamp, state) =>
   db.doc(`games/${id}`).set({
     gameCreator,
     id,
     name,
     timeStamp,
     shape,
-    state: 'Created'
+    state
+  });
+
+export const doStartGame = (gameName, state) =>
+  db.doc(`games/${gameName}`).update({
+    state
   });
 
 export const onceGetGames = (gameName) => {
@@ -124,7 +129,8 @@ export const doSendMessage = (currentGame, messageId, timeStamp, text, creator, 
 export const doUpdateObjectives = (currentGame, markerId, position) =>
   db.doc(`games/${currentGame}/objectives/${markerId}`).set({
     position,
-    team: ""
+    team: "",
+    teamId: ""
   });
 
 

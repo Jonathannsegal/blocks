@@ -398,7 +398,9 @@ class Map extends Component {
 		viewport: {
 			width: '100vw',
 			height: '100vh',
-			zoom: 16
+			zoom: 16,
+			latitude: 41.7084025,
+			longitude: -93.6091826
 		},
 		latitude: 0,
 		longitude: 0,
@@ -580,8 +582,8 @@ class Map extends Component {
 					mapStyle="mapbox://styles/mapbox/streets-v9"
 					mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"
 					{...this.state.viewport}
-					latitude={this.state.latitude}
-					longitude={this.state.longitude}
+					// latitude={this.state.latitude}
+					// longitude={this.state.longitude}
 					// transitionDuration={1}
 					// transitionInterpolator={new FlyToInterpolator()}
 					onViewportChange={(viewport) => this.setState({ viewport })}
