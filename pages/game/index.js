@@ -92,14 +92,12 @@ const GameBase = () => {
 					objectives={objectiveList}
 					userId={AuthUser.uid}
 				/>
-				<Status gameMain={gameMain} gameValues={gameValues} />
+				<Status
+					currentGame={CurrentGame}
+					gameMain={gameMain}
+					gameValues={gameValues}
+				/>
 			</SwipeableViews>
-			<style jsx>{`
-                .fullSize{
-					width: 100vw;
-					height: 100vh;
-				}
-		`}</style>
 		</React.Fragment >
 	)
 }

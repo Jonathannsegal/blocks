@@ -8,6 +8,7 @@ import {
     Input,
     InputGroup,
     Footer,
+    Header,
     Icon,
     Form,
     List
@@ -34,7 +35,7 @@ class Chat extends Component {
     }
 
     componentDidMount() {
-        dbSnapshot.collection('games').doc("jdsSFvXOOzOovxhLarHSm70syKo21575772593813").collection('messages').onSnapshot(
+        dbSnapshot.collection('games').doc(this.props.currentGame).collection('messages').onSnapshot(
             function (querySnapshot) {
                 let snapshotMessages = [];
                 querySnapshot.forEach(function (doc) {
@@ -42,7 +43,7 @@ class Chat extends Component {
                 })
                 this.setState({ messages: snapshotMessages });
             }.bind(this)
-        ).bind(this)
+        ).bind(this);
     }
 
     render() {
@@ -50,10 +51,13 @@ class Chat extends Component {
             width: 350,
             marginBottom: 20
         };
+        const styles2 = {
+            height: 650,
+        };
         return (
             <React.Fragment>
                 <div className="fixedHeader">
-                    <Content>
+                    <Header>
                         <FlexboxGrid justify="center">
                             <FlexboxGrid.Item colspan={17}>
                                 <br />
@@ -63,17 +67,22 @@ class Chat extends Component {
                                     </FlexboxGrid.Item>
                                 </FlexboxGrid>
                             </FlexboxGrid.Item>
+                        </FlexboxGrid>
+                    </Header>
+                </div>
+                <div className="contentDiv">
+                    <Content>
+                        <FlexboxGrid justify="center">
                             <FlexboxGrid.Item colspan={18}>
-                                <div className="contentContainer">
-                                    <List>
-                                        {this.state.messages.map((item, index) =>
-                                            <List.Item key={index} index={item}>
-                                                <h6>{item.username}</h6> {item.text}
-                                            </List.Item>
-                                        )}
-                                    </List>
-                                </div>
+                                <List autoScroll={true} style={styles2}>
+                                    {this.state.messages.map((item, index) =>
+                                        <List.Item key={index} index={item}>
+                                            <h6>{item.username}</h6> {item.text}
+                                        </List.Item>
+                                    )}
+                                </List>
                             </FlexboxGrid.Item>
+
                         </FlexboxGrid>
                     </Content>
                 </div>
@@ -105,11 +114,11 @@ class Chat extends Component {
                     position: fixed;
                     width: 100vw;
                 }
-                .contentContainer::-webkit-scrollbar {
+                .contentDiv::-webkit-scrollbar {
                     display: none;
                 }
-                .contentContainer{
-                    height: auto;
+                .contentDiv{
+                    margin-top: 5em;
                     overflow: scroll;
                 }
                 .bottomFooter{
@@ -117,15 +126,16 @@ class Chat extends Component {
                     padding-top: 2em;
                     position: fixed;
                     bottom: 0;
+                    z-index: 2;
                     background-color: #ffffff;
                 }
-				.animationBox {
-					height: 50vh;
-				}
-				.center{
-					text-align: center;
-				}
-		`}</style>
+        		.animationBox {
+        			height: 50vh;
+        		}
+        		.center{
+        			text-align: center;
+        		}
+        `}</style>
             </React.Fragment >
         );
     }
