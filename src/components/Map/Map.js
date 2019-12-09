@@ -175,11 +175,12 @@ class Map extends Component {
 		checkObjectives = () => {
 			for(var i = 0; i < this.props.objectives.length; i++){
 				var center = [this.props.objectives[i].position.longitude, this.props.objectives[i].position.latitude];
-				var circle = turf.circle(center, 0.014);
+				var circle = turf.circle(center, .013);
 				var point = turf.point([this.props.coords.longitude, this.props.coords.latitude]);
-				console.log(turf.inside(point, circle));
+				//console.log(turf.inside(point, circle));
 				if(turf.inside(point, circle)){
-						console.log();
+					console.log(this.props.playerValues.team);
+						//db.updateObjectiveTeam(this.props.currentGame, i, )
 				}
 			}
 		}
@@ -223,6 +224,7 @@ class Map extends Component {
 					{...this.state.viewport}
 					latitude={this.props.coords.latitude}
 					longitude={this.props.coords.longitude}
+					zoom={16}
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
 				{this.state.OBJECTIVES.map(this._renderCityMarker)}
