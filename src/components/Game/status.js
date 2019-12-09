@@ -1,51 +1,60 @@
 import React, { Component } from 'react';
-import Lottie from 'react-lottie'
-import Map from '../Stats/Map'
+import Map from '../Stats/Map';
+import { db } from "../../firebase";
+import { db as dbSnapshot } from "../../firebase/firebase";
 import {
     Content,
     Footer,
     FlexboxGrid,
-    Button
+    Button,
+    List
 } from 'rsuite';
-import * as status from '../../db/status.json';
 require('rsuite/lib/styles/index.less');
-const statusOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: status.default,
-    rendererSettings: {
-        preserveAspectRatio: 'xMidYMid slice'
-    }
-};
 
 class Status extends Component {
+    state = {
+        teams: [
+            'Roses are red',
+            'Violets are blue',
+            'Sugar is sweet',
+            'And so are you'
+        ]
+    };
+
+    componentDidMount() {
+        dbSnapshot.collection('games').doc(this.props.currentGame).collection('teams').onSnapshot(
+            function (querySnapshot) {
+                let team = [];
+                querySnapshot.forEach(function (doc) {
+                    team.push(doc.data());
+                })
+                this.setState({ teams: team });
+            }.bind(this)
+        ).bind(this);
+    }
     render() {
         return (
             <React.Fragment>
                 <Content>
-                    <FlexboxGrid justify="center">
-                        {/* <FlexboxGrid.Item colspan={24}>
-                            <br /><br /><br />
-                            <div className="animationBox">
-                                <Lottie
-                                    options={statusOptions}
-                                    isClickToPauseDisabled={true}
-                                />
-                            </div>
-                        </FlexboxGrid.Item> */}
-                        <FlexboxGrid.Item colspan={17}>
-                            <br /><br />
-                            <FlexboxGrid justify="space-around">
-                                <FlexboxGrid.Item colspan={11}>
-                                    <h2 className="center">Status</h2>
-                                    <br />
-                                    <br />
-                                    <Button size="lg" color="cyan" block onClick={() => this.props.gameMain()}>Back</Button>
-                                </FlexboxGrid.Item>
-                            </FlexboxGrid>
-                            <br />
-                        </FlexboxGrid.Item>
-                    </FlexboxGrid>
+                    <div className="teamListHeight">
+                        <FlexboxGrid justify="center">
+                            <FlexboxGrid.Item colspan={20}>
+                                <br /><br /><br />
+                                {/* <Button size="lg" color="cyan" block onClick={() => this.props.gameMain()}>Back</Button> */}
+                                <List>
+                                    {this.state.teams.map((item, index) =>
+                                        <List.Item key={index} index={index}>
+                                            <div className="color" style={{ backgroundColor: `${item.color}` }} />
+                                            <div className="teamName">
+                                                <h4>{item.name}</h4>
+                                                <div className="teamName">Score: {item.score}</div>
+                                            </div>
+                                        </List.Item>
+                                    )}
+                                </List>
+                            </FlexboxGrid.Item>
+                        </FlexboxGrid>
+                    </div>
                 </Content>
                 <div className="bottomFooter">
                     <Footer>
@@ -53,6 +62,17 @@ class Status extends Component {
                     </Footer>
                 </div>
                 <style jsx>{`
+                .color{
+                    height: 3.8em;
+                    // margin-top: -0.6em;
+                    width: 2em;
+                    float: left;
+                    display:inline-block;
+                }
+                .teamName{
+                    margin-left: 1em;
+                    display:inline-block;
+                }
                 .bottomFooter{
                     width: 100vw;
                     position: fixed;
@@ -63,7 +83,12 @@ class Status extends Component {
 				}
 				.center{
 					text-align: center;
-				}
+                }
+                .teamListHeight{
+                    // margin-top: 14em;
+                    height: 65vh;
+                    overflow: scroll;
+                }
 		`}</style>
             </React.Fragment >
         );
