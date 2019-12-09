@@ -70,6 +70,8 @@ class Map extends Component {
 			longitude1:-93.645,
 			longitude2:0,
 			longitude3:0,
+			OBJECTIVES: [],
+			dummy: 0,
 		};
 
 
@@ -182,8 +184,27 @@ class Map extends Component {
 			}
 		}
 
+		_renderCityMarker = (objective, index) => {
+        return (
+            <Marker key={`marker-${index}`} longitude={objective.longitude} latitude={objective.latitude} draggable={true} onDragEnd={event => this.updateObjectiveLocation(index, event.lngLat)}>
+                <ObjectiveMarker size={20} />
+            </Marker>
+        );
+    };
+
+		populateStateObjective = () =>{
+			for(var i = 0; i < this.props.objectives.length; i++){
+				let objectiveArray = [...this.state.OBJECTIVES];
+				let marker =  { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude};
+				objectiveArray.push(marker);
+				this.state.OBJECTIVES = objectiveArray;
+				this.setState({ dummy: this.state.dummy++});
+			}
+		}
+
 	componentDidMount(){
 		this.getTeammates();
+		this.populateStateObjective();
 	}
 
 	componentDidUpdate(){
@@ -204,6 +225,7 @@ class Map extends Component {
 					longitude={this.props.coords.longitude}
 					onViewportChange={(viewport) => this.setState({ viewport })}
 				>
+				{this.state.OBJECTIVES.map(this._renderCityMarker)}
 				{this.updatePlayerGeoPoint()}
 				  <button onClick={() => this.checkObjectives()}>push marker</button>
 					<Source type="geojson" data={this.getValues()}>
