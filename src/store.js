@@ -7,7 +7,8 @@ import {
     GameState,
     PasswordForgotFormState,
     LeaderBoardState,
-    JoinState
+    JoinState,
+    JoinEditState
 } from './constants';
 
 const initialState = {
@@ -15,6 +16,7 @@ const initialState = {
     users: {},
     userValues: null,
     currentGame: null,
+    teamEdit: JoinEditState.create,
     currentGameValues: [],
     currentObjectives: [],
     searchGameList: [],
@@ -98,6 +100,21 @@ const getTeamList = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'TEAMEDIT':
+            return {
+                ...state,
+                teamEdit: JoinEditState.edit
+            }
+        case 'TEAMCREATE':
+            return {
+                ...state,
+                teamEdit: JoinEditState.create
+            }
+        case 'TEAMList':
+            return {
+                ...state,
+                teamEdit: JoinEditState.list
+            }
         case 'GET_CURRENTGAME_PLAYER_VALUES': {
             return getCurrentGamePlayerValues(state, action);
         }
