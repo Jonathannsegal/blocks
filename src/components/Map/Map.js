@@ -33,6 +33,7 @@ var longitude2 = 0;
 var longitude3 = 0;
 
 
+<<<<<<< HEAD
 const objectiveLayer = {
     id: 'objectives',
     type: 'circle',
@@ -44,6 +45,8 @@ const objectiveLayer = {
     }
 }
 
+=======
+>>>>>>> aa5ad0fa3b75f5f957f2352739b45e6050c33514
 const mapAreaLayer = {
     id: 'map-area',
     type: 'fill',
@@ -56,6 +59,7 @@ const mapAreaLayer = {
 }
 
 class Map extends Component {
+<<<<<<< HEAD
     state = {
         viewport: {
             width: '100vw',
@@ -295,6 +299,189 @@ class Map extends Component {
 								circle
 								size="sm"
 								src="https://avatars2.githubusercontent.com/u/12592949?s=460&v=4"
+=======
+	state = {
+		viewport: {
+			width: '100vw',
+			height: '100vh',
+			zoom: 16
+		},
+		latitude: 0,
+		longitude: 0,
+		OBJECTIVES: []
+	};
+
+	getValues = () => {
+		let geojson = {
+			type: 'FeatureCollection',
+			features: [
+				{
+					type: 'Feature',
+					properties: {},
+					geometry: {
+						type: 'Polygon',
+						coordinates: [
+							[
+								[0, 0],
+								[1, 1]
+							]
+						]
+					}
+				}
+			]
+		};
+		if (this.props.gameValues != null) {
+			if (this.props.gameValues.shape != null) {
+				let shape = [];
+				for (var i = 0; i < this.props.gameValues.shape.length; i++) {
+					shape.push(new Array(this.props.gameValues.shape[i].longitude, this.props.gameValues.shape[i].latitude));
+				}
+				geojson.features[0].geometry.coordinates.push(shape);
+			}
+		}
+		return geojson;
+	};
+
+
+	// updatePlayerGeoPoint = () => {
+	// 	if (this.props.coords.latitude != null && this.props.coords.longitude != null) {
+	// 		db.doUpdatePlayerPosition(this.props.currentGame, this.props.userId, new firebase.firestore.GeoPoint(
+	// 			this.props.coords.latitude,
+	// 			this.props.coords.longitude)
+	// 		);
+	// 		//console.log(this.props.coords.latitude,this.props.coords.longitude)
+	// 	}
+	// }
+
+
+	getTeammates = () => {
+		dbSnapshot.collection('games').doc(this.props.currentGame).collection('players').onSnapshot(function (querySnapshot) {
+			querySnapshot.forEach(function (doc) {
+				// //console.log(doc.id, " => ", doc.data());
+				// if (doc.id == "GBrTl2wHqNXsmRWC112x4SuleoA2") {
+				// 	latitude1 = doc.data().position.latitude;
+				// 	longitude1 = doc.data().position.longitude;
+				// 	//console.log(latitude1, longitude1);
+				// }
+				// if (doc.id == "jdsSFvXOOzOovxhLarHSm70syKo2") {
+				// 	latitude2 = doc.data().position.latitude;
+				// 	longitude2 = doc.data().position.longitude;
+				// 	//console.log(latitude2, longitude2);
+				// }
+				// if (doc.id == "nIU0RYydGfc0BPO6NymYqaPxyBy2") {
+				// 	latitude3 = doc.data().position.latitude;
+				// 	longitude3 = doc.data().position.longitude;
+				// 	//console.log(latitude3, longitude3);
+				// }
+			})
+			//return querySnapshot;
+		});
+	}
+
+		checkObjectives = () => {
+			for(var i = 0; i < this.props.objectives.length; i++){
+				var center = [this.props.objectives[i].position.longitude, this.props.objectives[i].position.latitude];
+				var circle = turf.circle(center, .013);
+				var point = turf.point([this.state.longitude, this.state.latitude]);
+				//console.log(turf.inside(point, circle));
+				if(turf.inside(point, circle)){
+					//call to datatbase, get team getTeamColor
+					this.state.OBJECTIVES[i].color = "#ff0000";
+					this.setState({ dummy: this.state.dummy++ });
+					//call to database, update objective to show team
+					//db.updateObjectiveTeam(this.props.currentGame, i, )
+				}
+			}
+		};
+
+
+	_renderCityMarker = (objective, index) => {
+		return (
+			<Marker key={`marker-${index}`} longitude={objective.longitude} latitude={objective.latitude} draggable={true} onDragEnd={event => this.updateObjectiveLocation(index, event.lngLat)}>
+				<ObjectiveMarker size={15} color={objective.color} />
+			</Marker>
+		);
+	};
+
+	populateStateObjective = () => {
+		for (var i = 0; i < this.props.objectives.length; i++) {
+			let objectiveArray = [...this.state.OBJECTIVES];
+			let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color": "#00ff00" };
+			objectiveArray.push(marker);
+			this.state.OBJECTIVES = objectiveArray;
+			this.setState({ dummy: this.state.dummy++ });
+		}
+	};
+
+	success(pos) {
+		// console.log(pos.coords.latitude);
+		// console.log(pos.coords.longitude);
+		this.setState({ latitude: pos.coords.latitude });
+		this.setState({ longitude: pos.coords.longitude });
+	};
+
+	error(err) {
+		console.warn('ERROR(' + err.code + '): ' + err.message);
+	};
+
+	options = {
+		enableHighAccuracy: true,
+		timeout: 100,
+		maximumAge: 0
+	};
+
+	positionId = navigator.geolocation.watchPosition(this.success.bind(this), this.error, options);
+
+	// _locateUser() {
+	// 	navigator.geolocation.getCurrentPosition(position => {
+	// 		// this.updateViewport({
+	// 		// 	longitude: position.coords.longitude,
+	// 		// 	latitude: position.coords.latitude
+	// 		// });
+	// 		console.log(position);
+	// 	});
+	// }
+
+	componentDidMount() {
+		this.getTeammates();
+		this.populateStateObjective();
+
+	}
+
+	componentDidUpdate() {
+		if (this.props.objectives.length != this.state.OBJECTIVES.length) {
+			this.populateStateObjective();
+		}
+	}
+
+	render() {
+		return (
+			<React.Fragment>
+				<ReactMapGL
+					mapStyle="mapbox://styles/mapbox/streets-v9"
+					mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"
+					{...this.state.viewport}
+					latitude={this.state.latitude}
+					longitude={this.state.longitude}
+					zoom={16}
+					// transitionDuration={1}
+					// transitionInterpolator={new FlyToInterpolator()}
+					onViewportChange={(viewport) => this.setState({ viewport })}
+				>
+					{this.state.OBJECTIVES.map(this._renderCityMarker)}
+					{/* {this.updatePlayerGeoPoint()} */}
+					{ <button onClick={() => this.checkObjectives()}>push marker</button> }
+					<Source type="geojson" data={this.getValues()}>
+						<Layer {...mapAreaLayer} />
+					</Source>
+					<Marker latitude={this.state.latitude} longitude={this.state.longitude}>
+						<div className="locationContainer">
+							<Lottie
+								height={60}
+								width={60}
+								options={locationdotOptions}
+								isClickToPauseDisabled={true}
+>>>>>>> aa5ad0fa3b75f5f957f2352739b45e6050c33514
 							/>
 						</div> */}
                         <div className="locationContainer">

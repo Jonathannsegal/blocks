@@ -9,6 +9,10 @@ export default class ObjectiveMarker extends PureComponent {
             <svg
             height={size*2}
             width={size*2}
+            style={{
+                    transform: `translate(${-size}px,${-size}px)`
+                }}
+
             >
                 <circle cx={size} cy={size} r={size} fill={color} opacity={0.5}/>
             </svg>

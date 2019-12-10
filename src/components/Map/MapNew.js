@@ -5,7 +5,7 @@ import Lottie from 'react-lottie'
 import * as locationdot from '../../db/locationdot.json'
 import ErrorScreen from '../../errors/ErrorScreen';
 import MapOverlay from './MapOverlay';
-import { RefreshTime } from '../../../src/constants';
+import { RefreshTime } from '../../constants';
 import * as mapAreaSource from '../../db/map.geojson';
 import * as turf from '@turf/turf';
 import mapboxgl from 'react-map-gl';

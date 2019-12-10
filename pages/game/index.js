@@ -92,6 +92,7 @@ const GameBase = () => {
 					currentGame={CurrentGame}
 					objectives={objectiveList}
 					userId={AuthUser.uid}
+					playerValues={playerValues}
 				/>
 				<Status
 					currentGame={CurrentGame}
