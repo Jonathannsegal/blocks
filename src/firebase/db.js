@@ -33,29 +33,45 @@ export const onceGetUsers = () =>
   db.collection('users');
 
 
-export const doAddPlayerToGame = (id, userId, username, position, team) =>
+export const doAddPlayerToGame = (id, userId, username, position, team, teamId) =>
   db.doc(`games/${id}`).collection('players').doc(userId).set({
     username,
     position,
-    team
+    team,
+    teamId
   });
 
-export const doAddTeamToGame = (id, creator, name, color) =>
-  db.doc(`games/${id}`).collection('teams').doc(name).set({
+export const doAddTeamToGame = (gameName, creator, id, name, color) =>
+  db.doc(`games/${gameName}`).collection('teams').doc(id).set({
+    id,
     creator,
     name,
     color,
     score: 0
   });
 
-export const doCreateGame = (gameCreator, id, name, shape, timeStamp) =>
+export const doUpdateTeam = (gameName, id, name, color) =>
+  db.doc(`games/${gameName}`).collection('teams').doc(id).update({
+    name,
+    color
+  });
+
+export const doDeleteTeam = (gameName, id) =>
+  db.doc(`games/${gameName}`).collection('teams').doc(id).delete();
+
+export const doCreateGame = (gameCreator, id, name, shape, timeStamp, state) =>
   db.doc(`games/${id}`).set({
     gameCreator,
     id,
     name,
     timeStamp,
     shape,
-    state: 'Created'
+    state
+  });
+
+export const doStartGame = (gameName, state) =>
+  db.doc(`games/${gameName}`).update({
+    state
   });
 
 export const onceGetGames = (gameName) => {
@@ -120,8 +136,23 @@ export const doSendMessage = (currentGame, messageId, timeStamp, text, creator, 
     team
   });
 
-  export const doUpdateObjectives = (currentGame, markerId, position) =>
-    db.doc(`games/${currentGame}/objectives/${markerId}`).set({
-      position,
-      team: ""
-    });
+export const doUpdateObjectives = (currentGame, markerId, position) =>
+  db.doc(`games/${currentGame}/objectives/${markerId}`).set({
+    position,
+    team: "",
+    teamId: ""
+  });
+
+
+export const getSelectedTeamValues = (currentGame, teamId) => {
+  var docRef = db.collection('games').doc(currentGame).collection('teams').doc(teamId);
+  return docRef.get().then(function (doc) {
+    if (doc.exists) {
+      return (doc.data());
+    } else {
+      return ("No such document!");
+    }
+  }).catch(function (error) {
+    return ("Error getting document:", error);
+  });
+}

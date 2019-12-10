@@ -16,7 +16,6 @@ const useGame = () => {
 	const CurrentGame = useSelector(state => state.currentGame)
 	const gameValues = useSelector(state => state.currentGameValues)
 	const playerValues = useSelector(state => state.currentGamePlayerValues)
-
 	const objectiveList = useSelector(state => state.currentObjectives)
 	let getObjectiveList = function () {
 		return db.getObjectiveList(CurrentGame)

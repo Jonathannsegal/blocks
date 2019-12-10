@@ -22,6 +22,7 @@ import {
     InputGroup,
     Input
 } from 'rsuite';
+import { GameStateGlobal } from '../../src/constants'
 import Map from '../../src/components/Create/Map';
 import { AppWithAuthorization } from "../../src/components/App";
 require('rsuite/lib/styles/index.less');
@@ -86,12 +87,13 @@ const useCreate = () => {
                 gameName,
                 createGameValues.name,
                 shape,
-                Date.now()
+                Date.now(),
+                GameStateGlobal.Created
             )
             .then(() => {
-              for(var i = 0; i < objectiveArray.length; i++){
-                db.doUpdateObjectives(gameName, i, new firebase.firestore.GeoPoint(objectiveArray[i].latitude, objectiveArray[i].longitude));
-              }
+                for (var i = 0; i < objectiveArray.length; i++) {
+                    db.doUpdateObjectives(gameName, i, new firebase.firestore.GeoPoint(objectiveArray[i].latitude, objectiveArray[i].longitude));
+                }
                 setCurrentGame(gameName);
                 Router.push('/join');
             })

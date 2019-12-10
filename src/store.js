@@ -20,7 +20,9 @@ const initialState = {
     currentGameValues: [],
     currentObjectives: [],
     searchGameList: [],
+    playersForCurrentGame: [],
     currentGamePlayerValues: [],
+    joinScreenSelected: null,
     homeState: HomeState.signIn,
     joinState: JoinState.main,
     signUpState: SignUpState.userName,
@@ -54,9 +56,27 @@ const initialState = {
     passwordForgotFormMessage: '',
     dashboardState: DashboardState.home,
     leaderBoardState: LeaderBoardState.friends,
-    gameState: GameState.main
+    gameState: GameState.main,
+    globalLeaderboardList: [],
+    friendsLeaderboardList: [],
+    pastGamesList: []
 
 }
+
+const setPastGamesList = (state, action) => ({
+    ...state,
+    pastGamesList: action.list
+});
+
+const setGlobalLeaderboardList = (state, action) => ({
+    ...state,
+    globalLeaderboardList: action.users
+});
+
+const setFriendsLeaderboardList = (state, action) => ({
+    ...state,
+    friendsLeaderboardList: action.users
+});
 
 const applySetUsers = (state, action) => ({
     ...state,
@@ -98,8 +118,30 @@ const getTeamList = (state, action) => ({
     currentGameTeamList: action.list
 });
 
+const getAllPlayerListForCurrentGame = (state, action) => ({
+    ...state,
+    playersForCurrentGame: action.team
+});
+
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'SET_PASTGAMES_LIST': {
+            return setPastGamesList(state, action);
+        }
+        case 'SET_GLOBALLEADERBOARDLIST': {
+            return setGlobalLeaderboardList(state, action);
+        }
+        case 'SET_FRIENDSLEADERBOARDLIST': {
+            return setFriendsLeaderboardList(state, action);
+        }
+        case ('JOIN_SELECTED_TEAM'):
+            return {
+                ...state,
+                joinScreenSelected: action.item
+            }
+        case 'GET_ALLCURRENTPLAYERSINGAME': {
+            return getAllPlayerListForCurrentGame(state, action);
+        }
         case 'TEAMEDIT':
             return {
                 ...state,
@@ -110,7 +152,7 @@ const reducer = (state = { initialState, input: {} }, action) => {
                 ...state,
                 teamEdit: JoinEditState.create
             }
-        case 'TEAMList':
+        case 'TEAMLIST':
             return {
                 ...state,
                 teamEdit: JoinEditState.list
