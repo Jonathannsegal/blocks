@@ -1,33 +1,40 @@
 import React, { Component } from 'react';
-import ReactMapGL, { Source, Layer } from 'react-map-gl';
-import PastGameCardOverlay from './pastGameCardOverlay'
+import ReactMapGl, { Source, Layer, LinearInterpolator } from 'react-map-gl';
+import WebMercatorViewport from 'viewport-mercator-project';
+import PastGameCardOverlay from './pastGameCardOverlay';
+import bbox from '@turf/bbox';
 import {
     Panel
 } from 'rsuite';
+const TOKEN = 'pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A';
 
 class PastGameCard extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            viewport: {
+                latitude: 42.02704516002396,
+                longitude: -93.64643096923828,
+                zoom: 11,
+                bearing: 0,
+                pitch: 0
+            }
+        };
+
+        this._map = React.createRef();
     }
 
     getValues = () => {
         let geojson = {
             type: 'FeatureCollection',
-            features: [
-                {
-                    type: 'Feature',
-                    properties: {},
-                    geometry: {
-                        type: 'Polygon',
-                        coordinates: [
-                            [
-                                [0, 0],
-                                [1, 1]
-                            ]
-                        ]
-                    }
-                }
-            ]
+            features: [{
+                geometry: {
+                    type: 'Polygon',
+                    coordinates: []
+                },
+                properties: {},
+                type: 'Feature'
+            }]
         };
         if (this.props.shape != null) {
             if (this.props.shape != null) {
@@ -41,19 +48,50 @@ class PastGameCard extends Component {
         return geojson;
     };
 
+    _updateViewport = viewport => {
+        this.setState({ viewport });
+    };
+
+    setViewportonShape() {
+        const feature = this.getValues().features[0];
+        if (feature) {
+            if (this.state.viewport.height) {
+                const [minLng, minLat, maxLng, maxLat] = bbox(feature);
+                const viewport = new WebMercatorViewport(this.state.viewport);
+                const { longitude, latitude, zoom } = viewport.fitBounds([[minLng, minLat], [maxLng, maxLat]], {
+                    padding: 40
+                });
+
+                this.setState({
+                    viewport: {
+                        ...this.state.viewport,
+                        longitude,
+                        latitude,
+                        zoom,
+                        transitionInterpolator: new LinearInterpolator({}),
+                        transitionDuration: 1
+                    }
+                });
+            }
+        }
+    };
+
     render() {
+        const { viewport } = this.state;
         return (
             <React.Fragment>
                 <Panel bodyFill shaded style={{ width: 300, height: 200, marginBottom: 30 }}>
                     <PastGameCardOverlay name={this.props.name} />
-                    <ReactMapGL
-                        width={"100vw"}
-                        height={"35vh"}
-                        latitude={42.02704516002396}
-                        longitude={-93.64643096923828}
-                        zoom={13}
+                    <ReactMapGl
+                        ref={this._map}
                         mapStyle="mapbox://styles/mapbox/streets-v9"
-                        mapboxApiAccessToken={"pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"}>
+                        {...viewport}
+                        width="75vw"
+                        height="35vh"
+                        onLoad={setTimeout(() => this.setViewportonShape(), 1)}
+                        onViewportChange={this._updateViewport}
+                        mapboxApiAccessToken={TOKEN}
+                    >
                         <Source type="geojson" data={this.getValues()}>
                             <Layer
                                 id="map-area"
@@ -64,10 +102,10 @@ class PastGameCard extends Component {
                                     'fill-outline-color': '#8b0000'
                                 }} />
                         </Source>
-                    </ReactMapGL>
+                    </ReactMapGl>
                 </Panel>
             </React.Fragment>
-        )
+        );
     }
 }
 
