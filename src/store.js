@@ -56,9 +56,27 @@ const initialState = {
     passwordForgotFormMessage: '',
     dashboardState: DashboardState.home,
     leaderBoardState: LeaderBoardState.friends,
-    gameState: GameState.main
+    gameState: GameState.main,
+    globalLeaderboardList: [],
+    friendsLeaderboardList: [],
+    pastGamesList: []
 
 }
+
+const setPastGamesList = (state, action) => ({
+    ...state,
+    pastGamesList: action.list
+});
+
+const setGlobalLeaderboardList = (state, action) => ({
+    ...state,
+    globalLeaderboardList: action.users
+});
+
+const setFriendsLeaderboardList = (state, action) => ({
+    ...state,
+    friendsLeaderboardList: action.users
+});
 
 const applySetUsers = (state, action) => ({
     ...state,
@@ -107,6 +125,15 @@ const getAllPlayerListForCurrentGame = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'SET_PASTGAMES_LIST': {
+            return setPastGamesList(state, action);
+        }
+        case 'SET_GLOBALLEADERBOARDLIST': {
+            return setGlobalLeaderboardList(state, action);
+        }
+        case 'SET_FRIENDSLEADERBOARDLIST': {
+            return setFriendsLeaderboardList(state, action);
+        }
         case ('JOIN_SELECTED_TEAM'):
             return {
                 ...state,

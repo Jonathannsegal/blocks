@@ -30,9 +30,11 @@ import * as ratings from '../../src/db/ratings.json'
 import * as trophy from '../../src/db/trophy.json'
 import FriendCard from '../../src/components/Dashboard/friendCard'
 import LeaderBoardCard from '../../src/components/Dashboard/leaderBoardCard'
+import PastGameCard from '../../src/components/Dashboard/pastGameCard'
 import { AppWithAuthorization } from "../../src/components/App";
 import { db, auth } from "../../src/firebase";
-import NotLoggedIn from '../../src/extraScreens/notLoggedIn'
+import NotLoggedIn from '../../src/extraScreens/notLoggedIn';
+import { db as dbSnapshot } from "../../src/firebase/firebase";
 require('rsuite/lib/styles/index.less');
 
 const ratingsOptions = {
@@ -54,13 +56,15 @@ const trophyOptions = {
 };
 
 const useDashboard = () => {
+    const dispatch = useDispatch()
     const authUser = useSelector(state => state.authUser)
     const currentDashboardState = useSelector(state => state.dashboardState)
     const currentLeaderboardState = useSelector(state => state.leaderBoardState)
     const newPasswordValue = useSelector(state => state.changePassword)
     const newUsernameValue = useSelector(state => state.changeUsername)
-
-    const dispatch = useDispatch()
+    const GlobalLeaderboardList = useSelector(state => state.globalLeaderboardList)
+    const friendsLeaderboardList = useSelector(state => state.globalLeaderboardList)
+    const PastGamesList = useSelector(state => state.pastGamesList)
     const leaderBoardStateFriends = () =>
         dispatch({
             type: 'leaderBoardStateFriends'
@@ -133,7 +137,40 @@ const useDashboard = () => {
                 });
         }
     }
-    return { updateNewUsernameValue, updateNewPasswordValue, changePassword, changeUsername, onSignOut, authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
+
+    dbSnapshot.collection('games').onSnapshot(
+        function (querySnapshot) {
+            let list = [];
+            querySnapshot.forEach(function (doc) {
+                list.push(doc.data());
+            })
+            if (JSON.stringify(list) != JSON.stringify(PastGamesList)) {
+                dispatch({
+                    type: 'SET_PASTGAMES_LIST',
+                    list
+                })
+            }
+        }
+    );
+    dbSnapshot.collection('users').onSnapshot(
+        function (querySnapshot) {
+            let users = [];
+            querySnapshot.forEach(function (doc) {
+                users.push(doc.data());
+            })
+            if (JSON.stringify(users) != JSON.stringify(GlobalLeaderboardList)) {
+                dispatch({
+                    type: 'SET_GLOBALLEADERBOARDLIST',
+                    users
+                })
+                dispatch({
+                    type: 'SET_FRIENDSLEADERBOARDLIST',
+                    users
+                })
+            }
+        }
+    );
+    return { PastGamesList, friendsLeaderboardList, GlobalLeaderboardList, updateNewUsernameValue, updateNewPasswordValue, changePassword, changeUsername, onSignOut, authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard }
 }
 
 const dashboard = () => (
@@ -143,8 +180,7 @@ const dashboard = () => (
 );
 
 const DashboardBase = () => {
-    const { updateNewUsernameValue, updateNewPasswordValue, changePassword, changeUsername, onSignOut, authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
-    const { Paragraph } = Placeholder;
+    const { PastGamesList, friendsLeaderboardList, GlobalLeaderboardList, updateNewUsernameValue, updateNewPasswordValue, changePassword, changeUsername, onSignOut, authUser, leaderBoardStateFriends, leaderBoardStateGlobal, currentDashboardState, currentLeaderboardState, dashboardProfile, dashboardHome, dashboardLeaderboard } = useDashboard()
     const handleChangeIndexDashboard = index => {
         if (index === DashboardState.profile) {
             dashboardProfile();
@@ -289,11 +325,13 @@ const DashboardBase = () => {
                                     <FlexboxGrid.Item colspan={24}>
                                         <div className="card">
                                             <div className="cardContentEnds" />
-                                            <FriendCard />
-                                            <FriendCard />
-                                            <FriendCard />
-                                            <FriendCard />
-                                            <FriendCard />
+                                            {friendsLeaderboardList.map(values => (
+                                                <FriendCard
+                                                    username={values.username}
+                                                    location={"location"}
+                                                    score={values.score}
+                                                />
+                                            ))}
                                             <div className="cardContentEnds" />
                                         </div>
                                     </FlexboxGrid.Item>
@@ -301,18 +339,13 @@ const DashboardBase = () => {
                                         <h2 className="sectionTitle">Past Games</h2>
                                     </FlexboxGrid.Item>
                                     <FlexboxGrid.Item colspan={17}>
-                                        <Panel header="" shaded>
-                                            <Paragraph rows={5} active />
-                                        </Panel>
-                                        <br />
-                                        <Panel header="" shaded>
-                                            <Paragraph rows={5} active />
-                                        </Panel>
-                                        <br />
-                                        <Panel header="" shaded>
-                                            <Paragraph rows={5} active />
-                                        </Panel>
-                                        <br />
+                                        {PastGamesList.map(values => (
+                                            <PastGameCard
+                                                name={values.name}
+                                                shape={values.shape}
+                                                score={values.score}
+                                            />
+                                        ))}
                                     </FlexboxGrid.Item>
                                 </FlexboxGrid>
                             </Content>
@@ -321,11 +354,13 @@ const DashboardBase = () => {
                                     <div className="leaderBoardHeight">
                                         <FlexboxGrid justify="center">
                                             <FlexboxGrid.Item colspan={20}>
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
+                                                {friendsLeaderboardList.map(values => (
+                                                    <LeaderBoardCard
+                                                        username={values.username}
+                                                        location={"location"}
+                                                        score={values.score}
+                                                    />
+                                                ))}
                                                 <div className="leaderBoardend" />
                                             </FlexboxGrid.Item>
                                         </FlexboxGrid>
@@ -333,19 +368,13 @@ const DashboardBase = () => {
                                     <div className="leaderBoardHeight">
                                         <FlexboxGrid justify="center">
                                             <FlexboxGrid.Item colspan={20}>
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
-                                                <LeaderBoardCard />
+                                                {GlobalLeaderboardList.map(values => (
+                                                    <LeaderBoardCard
+                                                        username={values.username}
+                                                        location={"location"}
+                                                        score={values.score}
+                                                    />
+                                                ))}
                                                 <div className="leaderBoardend" />
                                             </FlexboxGrid.Item>
                                         </FlexboxGrid>

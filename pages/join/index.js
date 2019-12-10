@@ -294,7 +294,6 @@ const JoinBase = () => {
                                                                     return null;
                                                                 }
                                                             }
-
                                                             )}
                                                         </List>
                                                     </FlexboxGrid.Item>
