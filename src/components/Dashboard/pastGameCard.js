@@ -13,8 +13,8 @@ class PastGameCard extends Component {
         super(props);
         this.state = {
             viewport: {
-                latitude: 42.02704516002396,
-                longitude: -93.64643096923828,
+                latitude: 0,
+                longitude: 0,
                 zoom: 11,
                 bearing: 0,
                 pitch: 0
@@ -31,7 +31,6 @@ class PastGameCard extends Component {
             },
             viewSet: false
         };
-
         this._map = React.createRef();
     }
 

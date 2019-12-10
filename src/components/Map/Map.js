@@ -167,8 +167,8 @@ class Map extends Component {
             var point = turf.point([this.props.coords.longitude, this.props.coords.latitude]);
             console.log(turf.inside(point, circle));
             if (turf.inside(point, circle)) {
-							//this.state.OBJECTIVES[i].color = "ff0000";
-              console.log(this.state.OBJECTIVES[i].color);
+                //this.state.OBJECTIVES[i].color = "ff0000";
+                console.log(this.state.OBJECTIVES[i].color);
             }
         }
     }
@@ -184,7 +184,7 @@ class Map extends Component {
     populateStateObjective = () => {
         for (var i = 0; i < this.props.objectives.length; i++) {
             let objectiveArray = [...this.state.OBJECTIVES];
-            let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color":"00ff00" };
+            let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color": "00ff00" };
             objectiveArray.push(marker);
             this.state.OBJECTIVES = objectiveArray;
             this.setState({ dummy: this.state.dummy++ });
@@ -216,7 +216,7 @@ class Map extends Component {
                     {...this.state.viewport}
                     latitude={this.props.coords.latitude}
                     longitude={this.props.coords.longitude}
-										
+
                     onViewportChange={(viewport) => this.setState({ viewport })}
                 >
                     {this.state.OBJECTIVES.map(this._renderCityMarker)}
@@ -293,8 +293,6 @@ class Map extends Component {
                             />
                         </div>
                     </Marker>
-
-
                     <style jsx>{`
 					:global(body) {
 						margin: 0;
@@ -304,7 +302,7 @@ class Map extends Component {
 						position: absolute;
 						margin-left: -14px;
 						margin-top: -16.5px;
-					}
+                    }
 					.locationContainer {
 						z-index: 9;
 						margin-left: -30px;
