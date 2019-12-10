@@ -160,15 +160,27 @@ class Map extends Component {
         });
     }
 
+     getSelectedTeamValues = (currentGame, teamId) => {
+      var docRef = dbSnapshot.collection('games').doc(currentGame).collection('teams').doc(teamId);
+      return docRef.get()
+    }
+
     checkObjectives = () => {
         for (var i = 0; i < this.props.objectives.length; i++) {
             var center = [this.props.objectives[i].position.longitude, this.props.objectives[i].position.latitude];
             var circle = turf.circle(center, 0.014);
             var point = turf.point([this.props.coords.longitude, this.props.coords.latitude]);
-            console.log(turf.inside(point, circle));
+            //console.log(turf.inside(point, circle));
             if (turf.inside(point, circle)) {
-							//this.state.OBJECTIVES[i].color = "ff0000";
-              console.log(this.state.OBJECTIVES[i].color);
+              var index = i;
+              //console.log(this.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId));
+              //console.log(db.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId))
+                this.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId).then(values=>{
+                    this.state.OBJECTIVES[index].color = values.data().color;
+                });
+                //console.log(this.props.currentGame, this.props.playerValues);
+                db.updateObjectiveTeam(this.props.currentGame, (""+index), this.props.playerValues.team, this.props.playerValues.teamId);
+              //this.state.OBJECTIVES[i].color = color;
             }
         }
     }
@@ -184,7 +196,7 @@ class Map extends Component {
     populateStateObjective = () => {
         for (var i = 0; i < this.props.objectives.length; i++) {
             let objectiveArray = [...this.state.OBJECTIVES];
-            let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color":"00ff00" };
+            let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color":"#00ff00" };
             objectiveArray.push(marker);
             this.state.OBJECTIVES = objectiveArray;
             this.setState({ dummy: this.state.dummy++ });
@@ -216,7 +228,7 @@ class Map extends Component {
                     {...this.state.viewport}
                     latitude={this.props.coords.latitude}
                     longitude={this.props.coords.longitude}
-										
+                    zoom={16}
                     onViewportChange={(viewport) => this.setState({ viewport })}
                 >
                     {this.state.OBJECTIVES.map(this._renderCityMarker)}

@@ -24,9 +24,10 @@ export const updateUserName = (id, username) =>
     username
   });
 
-export const updateObjectiveTeam = (currentGame, num, team) =>
-  db.doc(`games/${currentGame}`).collection('objectives').doc(num).update({
-    team
+export const updateObjectiveTeam = (currentGame, num, team, teamId) =>
+  db.collection('games').doc(currentGame).collection('objectives').doc(num).update({
+    team,
+    teamId
   });
 
 export const onceGetUsers = () =>
@@ -105,11 +106,6 @@ export const onceGetGamesReadyToJoin = () =>
 
 export const getTeamList = (currentGame) =>
   db.collection('games').doc(currentGame).collection('teams').get();
-
-export const getTeamColor = (currentGame, team) =>{
-  db.collection('games').doc(currentGame).collection('teams').doc(team).get();
-}
-
 
 export const getObjectiveList = (currentGame) =>
   db.collection('games').doc(currentGame).collection('objectives').get();
