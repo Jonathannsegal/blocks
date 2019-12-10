@@ -293,8 +293,7 @@ const DashboardBase = () => {
                                     </FlexboxGrid>
                                 </Content>
                             </div>
-
-                            <div className="minFitContent">
+                            <div className="minFullHeight">
                                 <Content>
                                     <FlexboxGrid justify="center">
                                         <FlexboxGrid.Item colspan={18}>
@@ -389,9 +388,6 @@ const DashboardBase = () => {
                 <style jsx>{`
                 .minFullHeight{
                     min-height: 100vh;
-                }
-                .minFitContent{
-                    min-height: fit-content;
                 }
                 .textInputTop{
                     border-top-left-radius: 6px;
