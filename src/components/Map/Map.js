@@ -469,8 +469,10 @@ class Map extends Component {
 				//console.log(turf.inside(point, circle));
 				if(turf.inside(point, circle)){
 					//call to datatbase, get team getTeamColor
+					var data = db.getTeamColor(this.props.currentGame, this.props.playerValues.team);
+
+					console.log(data);
 					this.state.OBJECTIVES[i].color = "#ff0000";
-					this.setState({ dummy: this.state.dummy++ });
 					//call to database, update objective to show team
 					//db.updateObjectiveTeam(this.props.currentGame, i, )
 				}
@@ -553,6 +555,7 @@ class Map extends Component {
 				>
 					{this.state.OBJECTIVES.map(this._renderCityMarker)}
 					{/* {this.updatePlayerGeoPoint()} */}
+					{this.checkObjectives()}
 					{ <button onClick={() => this.checkObjectives()}>push marker</button> }
 					<Source type="geojson" data={this.getValues()}>
 						<Layer {...mapAreaLayer} />

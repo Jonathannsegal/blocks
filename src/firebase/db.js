@@ -90,8 +90,10 @@ export const onceGetGamesReadyToJoin = () =>
 export const getTeamList = (currentGame) =>
   db.collection('games').doc(currentGame).collection('teams').get();
 
-export const getTeamColor = (currentGame, team) =>
+export const getTeamColor = (currentGame, team) =>{
   db.collection('games').doc(currentGame).collection('teams').doc(team).get();
+}
+
 
 export const getObjectiveList = (currentGame) =>
   db.collection('games').doc(currentGame).collection('objectives').get();
