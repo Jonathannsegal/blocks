@@ -63,20 +63,18 @@ class Map extends Component {
     };
 
     _goToCurrentLocation = () => {
-        if (navigator) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function (position) {
-                        this.setState({
-                            viewport: {
-                                ...this.state.viewport,
-                                longitude: position.coords.longitude,
-                                latitude: position.coords.latitude
-                            }
-                        });
-                    }.bind(this)
-                );
-            }
+        if (typeof window !== 'undefined' && typeof window.navigator !== 'undefined') {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    this.setState({
+                        viewport: {
+                            ...this.state.viewport,
+                            longitude: position.coords.longitude,
+                            latitude: position.coords.latitude
+                        }
+                    });
+                }.bind(this)
+            );
         }
     };
 

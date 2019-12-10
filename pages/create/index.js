@@ -23,7 +23,7 @@ import {
     Input
 } from 'rsuite';
 import { GameStateGlobal } from '../../src/constants'
-import Map from '../../src/components/Create/MapExport';
+import Map from '../../src/components/Create/Map';
 import { AppWithAuthorization } from "../../src/components/App";
 require('rsuite/lib/styles/index.less');
 
