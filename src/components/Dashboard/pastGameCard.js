@@ -18,7 +18,18 @@ class PastGameCard extends Component {
                 zoom: 11,
                 bearing: 0,
                 pitch: 0
-            }
+            },
+            interactionState: {},
+            settings: {
+                dragPan: true,
+                dragRotate: true,
+                scrollZoom: true,
+                touchZoom: true,
+                touchRotate: true,
+                keyboard: true,
+                doubleClickZoom: true
+            },
+            viewSet: false
         };
 
         this._map = React.createRef();
@@ -56,28 +67,43 @@ class PastGameCard extends Component {
         const feature = this.getValues().features[0];
         if (feature) {
             if (this.state.viewport.height) {
-                const [minLng, minLat, maxLng, maxLat] = bbox(feature);
-                const viewport = new WebMercatorViewport(this.state.viewport);
-                const { longitude, latitude, zoom } = viewport.fitBounds([[minLng, minLat], [maxLng, maxLat]], {
-                    padding: 40
-                });
-
-                this.setState({
-                    viewport: {
-                        ...this.state.viewport,
-                        longitude,
-                        latitude,
-                        zoom,
-                        transitionInterpolator: new LinearInterpolator({}),
-                        transitionDuration: 1
-                    }
-                });
+                if (this.state.viewSet == false) {
+                    const [minLng, minLat, maxLng, maxLat] = bbox(feature);
+                    const viewport = new WebMercatorViewport(this.state.viewport);
+                    const { longitude, latitude, zoom } = viewport.fitBounds([[minLng, minLat], [maxLng, maxLat]], {
+                        padding: 40
+                    });
+                    this.setState({
+                        viewport: {
+                            ...this.state.viewport,
+                            longitude,
+                            latitude,
+                            zoom,
+                            transitionInterpolator: new LinearInterpolator({}),
+                            transitionDuration: 1
+                        }
+                    });
+                    this.setState({
+                        settings: {
+                            dragPan: false,
+                            dragRotate: false,
+                            scrollZoom: false,
+                            touchZoom: false,
+                            touchRotate: false,
+                            keyboard: false,
+                            doubleClickZoom: false,
+                            minZoom: zoom,
+                            maxZoom: zoom
+                        },
+                    })
+                    this.setState({ viewSet: true });
+                }
             }
         }
     };
 
     render() {
-        const { viewport } = this.state;
+        const { viewport, settings } = this.state;
         return (
             <React.Fragment>
                 <Panel bodyFill shaded style={{ width: 300, height: 200, marginBottom: 30 }}>
@@ -86,6 +112,7 @@ class PastGameCard extends Component {
                         ref={this._map}
                         mapStyle="mapbox://styles/mapbox/streets-v9"
                         {...viewport}
+                        {...settings}
                         width="75vw"
                         height="35vh"
                         onLoad={setTimeout(() => this.setViewportonShape(), 1)}
