@@ -1,16 +1,17 @@
 import { Component } from 'react';
 import ReactMapGL, { Marker, FullscreenControl, GeolocateControl } from 'react-map-gl';
-import { geolocated } from 'react-geolocated';
 import Lottie from 'react-lottie'
 import * as pencil from '../../db/pencil.json'
 import * as trash from '../../db/trash.json'
 import * as resize from '../../db/resize.json'
-import ErrorScreen from '../../errors/ErrorScreen';
-import { RefreshTime } from '../../../src/constants'
 import { Editor, EditorModes } from 'react-map-gl-draw';
 import { getFeatureStyle, getEditHandleStyle } from './style';
 import ObjectiveMarker from './objective-marker';
 import * as turf from '@turf/turf';
+import {
+    Icon
+} from 'rsuite';
+require('rsuite/lib/styles/index.less');
 
 const pencilOptions = {
     loop: true,
@@ -48,8 +49,6 @@ class Map extends Component {
             viewport: {
                 width: '100%',
                 height: '100%',
-                latitude: 42.03,
-                longitude: -93.645,
                 zoom: 14
             },
             OBJECTIVES: [],
@@ -61,6 +60,20 @@ class Map extends Component {
 
     _updateViewport = viewport => {
         this.setState({ viewport });
+    };
+
+    _goToCurrentLocation = () => {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                this.setState({
+                    viewport: {
+                        ...this.state.viewport,
+                        longitude: position.coords.longitude,
+                        latitude: position.coords.latitude
+                    }
+                });
+            }.bind(this)
+        );
     };
 
     _onUpdate = ({ editType }) => {
@@ -114,41 +127,27 @@ class Map extends Component {
                     <div className="fullscreen">
                         <FullscreenControl />
                     </div>
-                    <GeolocateControl
-                        positionOptions={{ enableHighAccuracy: true }}
-                        trackUserLocation={true}
-                        showUserLocation={false}
-                    />
-                    {/* <div className="fullscreen">
-                        <GeolocateControl
-                            positionOptions={{ enableHighAccuracy: true }}
-                            trackUserLocation={true}
-                        />
-                    </div> */}
-                    {/* <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
+                    <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
                         <button
                             className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"
-                            title="Polygon tool (p)"
-                            onClick={() => this.setState({ mode: EditorModes.DRAW_POLYGON })}
-                        > <Lottie
-                                height={28}
-                                width={28}
-                                options={resizeOptions}
-                                isClickToPauseDisabled={true}
-                            /> </button>
-                    </div> */}
+                            title="goToCurrentLocation"
+                            onClick={() => this._goToCurrentLocation()}
+                        >
+                            <Icon size="lg" icon='compass' />
+                        </button>
+                    </div>
                 </div>
             </React.Fragment>
         );
     };
 
-    updateObjectiveLocation = (index, position) =>{
-      let objectiveArray = [...this.state.OBJECTIVES];
-      objectiveArray[index].latitude = position[1];
-      objectiveArray[index].longitude = position[0];
-      this.state.OBJECTIVES = objectiveArray;
-      this.setState({ dummy: this.state.dummy++});
-      this.props.anotherCallback(this.state.OBJECTIVES);
+    updateObjectiveLocation = (index, position) => {
+        let objectiveArray = [...this.state.OBJECTIVES];
+        objectiveArray[index].latitude = position[1];
+        objectiveArray[index].longitude = position[0];
+        this.state.OBJECTIVES = objectiveArray;
+        this.setState({ dummy: this.state.dummy++ });
+        this.props.anotherCallback(this.state.OBJECTIVES);
     }
 
     _renderCityMarker = (objective, index) => {
@@ -160,62 +159,62 @@ class Map extends Component {
     };
 
     _createObjectives = (objectiveNum) => {
-      var minLat = this.state.geometry[0].geometry.coordinates[0][0][1];
-      var maxLat = this.state.geometry[0].geometry.coordinates[0][0][1];
-      var minLong = this.state.geometry[0].geometry.coordinates[0][0][0];
-      var maxLong = this.state.geometry[0].geometry.coordinates[0][0][0];
-      for(var i = 1; i < this.state.geometry[0].geometry.coordinates[0].length; i++){
-        minLat = Math.min(minLat, this.state.geometry[0].geometry.coordinates[0][i][1]);
-        maxLat = Math.max(maxLat, this.state.geometry[0].geometry.coordinates[0][i][1]);
-        minLong = Math.min(minLong, this.state.geometry[0].geometry.coordinates[0][i][0]);
-        maxLong = Math.max(maxLong, this.state.geometry[0].geometry.coordinates[0][i][0]);
-      }
-      for(var i = 0; i < objectiveNum; i++){
-        let objectiveArray = [...this.state.OBJECTIVES];
-        let marker = { "latitude": (Math.random() * (maxLat - minLat) + minLat), "longitude": (Math.random() * (maxLong - minLong) + minLong) };
-        objectiveArray.push(marker);
-        //this.setState({ OBJECTIVES: objectiveArray })
-        this.state.OBJECTIVES = objectiveArray;
-        this.setState({ dummy: this.state.dummy++});
-        //objectiveArray.push([(Math.random() * (maxLong - minLong) + minLong),(Math.random() * (maxLat - minLat) + minLat) ]);
-      }
-      let shape1 = [];
-      let shape2 = [];
-      for (var i = 0; i < this.state.geometry[0].geometry.coordinates[0].length; i++) {
-          shape1.push(new Array(this.state.geometry[0].geometry.coordinates[0][i][0], this.state.geometry[0].geometry.coordinates[0][i][1]));
-      }
-      shape2.push(shape1);
-      var polygon = turf.polygon(shape2);
-      //console.log(objectiveArray);
-      //console.log(turf.pointsWithinPolygon(turfPoints, polygon));
-      for(var i = 0; i < this.state.OBJECTIVES.length; i++){
-        var point = turf.point([this.state.OBJECTIVES[i].longitude, this.state.OBJECTIVES[i].latitude]);
-        if(turf.inside(point,polygon)){
-          continue;
+        var minLat = this.state.geometry[0].geometry.coordinates[0][0][1];
+        var maxLat = this.state.geometry[0].geometry.coordinates[0][0][1];
+        var minLong = this.state.geometry[0].geometry.coordinates[0][0][0];
+        var maxLong = this.state.geometry[0].geometry.coordinates[0][0][0];
+        for (var i = 1; i < this.state.geometry[0].geometry.coordinates[0].length; i++) {
+            minLat = Math.min(minLat, this.state.geometry[0].geometry.coordinates[0][i][1]);
+            maxLat = Math.max(maxLat, this.state.geometry[0].geometry.coordinates[0][i][1]);
+            minLong = Math.min(minLong, this.state.geometry[0].geometry.coordinates[0][i][0]);
+            maxLong = Math.max(maxLong, this.state.geometry[0].geometry.coordinates[0][i][0]);
         }
-        else{
-          var inside = false;
-          var count = 0;
-          while(inside == false){
-            if(count == 100){
-              inside = true;
-              break;
-            }
+        for (var i = 0; i < objectiveNum; i++) {
             let objectiveArray = [...this.state.OBJECTIVES];
-            objectiveArray[i].longitude = (Math.random() * (maxLong - minLong) + minLong);
-            objectiveArray[i].latitude = (Math.random() * (maxLat - minLat) + minLat);
-            this.state.OBJECTIVES = objectiveArray
-            this.setState({ dummy: this.state.dummy++});
-            point = turf.point([this.state.OBJECTIVES[i].longitude, this.state.OBJECTIVES[i].longitude]);
-            count++;
-            inside = turf.inside(point,polygon);
-          }
+            let marker = { "latitude": (Math.random() * (maxLat - minLat) + minLat), "longitude": (Math.random() * (maxLong - minLong) + minLong) };
+            objectiveArray.push(marker);
+            //this.setState({ OBJECTIVES: objectiveArray })
+            this.state.OBJECTIVES = objectiveArray;
+            this.setState({ dummy: this.state.dummy++ });
+            //objectiveArray.push([(Math.random() * (maxLong - minLong) + minLong),(Math.random() * (maxLat - minLat) + minLat) ]);
         }
-      }
-      this.props.anotherCallback(this.state.OBJECTIVES);
+        let shape1 = [];
+        let shape2 = [];
+        for (var i = 0; i < this.state.geometry[0].geometry.coordinates[0].length; i++) {
+            shape1.push(new Array(this.state.geometry[0].geometry.coordinates[0][i][0], this.state.geometry[0].geometry.coordinates[0][i][1]));
+        }
+        shape2.push(shape1);
+        var polygon = turf.polygon(shape2);
+        //console.log(objectiveArray);
+        //console.log(turf.pointsWithinPolygon(turfPoints, polygon));
+        for (var i = 0; i < this.state.OBJECTIVES.length; i++) {
+            var point = turf.point([this.state.OBJECTIVES[i].longitude, this.state.OBJECTIVES[i].latitude]);
+            if (turf.inside(point, polygon)) {
+                continue;
+            }
+            else {
+                var inside = false;
+                var count = 0;
+                while (inside == false) {
+                    if (count == 100) {
+                        inside = true;
+                        break;
+                    }
+                    let objectiveArray = [...this.state.OBJECTIVES];
+                    objectiveArray[i].longitude = (Math.random() * (maxLong - minLong) + minLong);
+                    objectiveArray[i].latitude = (Math.random() * (maxLat - minLat) + minLat);
+                    this.state.OBJECTIVES = objectiveArray
+                    this.setState({ dummy: this.state.dummy++ });
+                    point = turf.point([this.state.OBJECTIVES[i].longitude, this.state.OBJECTIVES[i].longitude]);
+                    count++;
+                    inside = turf.inside(point, polygon);
+                }
+            }
+        }
+        this.props.anotherCallback(this.state.OBJECTIVES);
     };
 
-    componentDidMount(){
+    componentDidMount() {
 
     }
 
@@ -231,7 +230,7 @@ class Map extends Component {
                     height="100%"
                     onViewportChange={(viewport) => this.setState({ viewport })}
                 >
-                {this.state.OBJECTIVES.map(this._renderCityMarker)}
+                    {this.state.OBJECTIVES.map(this._renderCityMarker)}
                     <Editor
                         ref={_ => (this._editorRef = _)}
                         style={{ width: '100%', height: '100%' }}
@@ -244,6 +243,7 @@ class Map extends Component {
                         editHandleStyle={getEditHandleStyle}
                     />
                     {this._renderDrawTools()}
+                    {this._goToCurrentLocation()}
                 </ReactMapGL>
             </React.Fragment >
         );

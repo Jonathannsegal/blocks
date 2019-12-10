@@ -157,7 +157,10 @@ const CreateBase = () => {
                                 </FormGroup>
                                 <FormGroup>
                                     <div className="content2">
-                                        <Map parentCallback={callbackFunction} anotherCallback={anotherCallbackFunction} ref={map} />
+                                        <Map
+                                            parentCallback={callbackFunction}
+                                            anotherCallback={anotherCallbackFunction}
+                                            ref={map} />
                                     </div>
                                 </FormGroup>
                                 <FormGroup>
