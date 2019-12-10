@@ -305,8 +305,6 @@ class Map extends Component {
                             />
                         </div>
                     </Marker>
-
-
                     <style jsx>{`
 					:global(body) {
 						margin: 0;
@@ -316,7 +314,7 @@ class Map extends Component {
 						position: absolute;
 						margin-left: -14px;
 						margin-top: -16.5px;
-					}
+                    }
 					.locationContainer {
 						z-index: 9;
 						margin-left: -30px;

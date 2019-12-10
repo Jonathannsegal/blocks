@@ -23,7 +23,7 @@ import {
     Input
 } from 'rsuite';
 import { GameStateGlobal } from '../../src/constants'
-import Map from '../../src/components/Create/Map';
+import Map from '../../src/components/Create/MapExport';
 import { AppWithAuthorization } from "../../src/components/App";
 require('rsuite/lib/styles/index.less');
 
@@ -157,7 +157,10 @@ const CreateBase = () => {
                                 </FormGroup>
                                 <FormGroup>
                                     <div className="content2">
-                                        <Map parentCallback={callbackFunction} anotherCallback={anotherCallbackFunction} ref={map} />
+                                        <Map
+                                            parentCallback={callbackFunction}
+                                            anotherCallback={anotherCallbackFunction}
+                                            ref={map} />
                                     </div>
                                 </FormGroup>
                                 <FormGroup>
