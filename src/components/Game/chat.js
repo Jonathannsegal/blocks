@@ -52,64 +52,68 @@ class Chat extends Component {
             marginBottom: 20
         };
         const styles2 = {
-            height: 650,
+            height: 670,
         };
         return (
-            <React.Fragment>
-                <div className="fixedHeader">
-                    <Header>
-                        <FlexboxGrid justify="center">
-                            <FlexboxGrid.Item colspan={17}>
-                                <br />
-                                <FlexboxGrid justify="space-around">
-                                    <FlexboxGrid.Item colspan={11}>
-                                        <h2 className="center">Chat</h2>
-                                    </FlexboxGrid.Item>
-                                </FlexboxGrid>
-                            </FlexboxGrid.Item>
-                        </FlexboxGrid>
-                    </Header>
-                </div>
-                <div className="contentDiv">
-                    <Content>
-                        <FlexboxGrid justify="center">
-                            <FlexboxGrid.Item colspan={18}>
-                                <List autoScroll={true} style={styles2}>
-                                    {this.state.messages.map((item, index) =>
-                                        <List.Item key={index} index={item}>
-                                            <h6>{item.username}</h6> {item.text}
-                                        </List.Item>
-                                    )}
-                                </List>
-                            </FlexboxGrid.Item>
+            <div className="fullHeight">
+                <React.Fragment>
+                    <div className="fixedHeader">
+                        <Header>
+                            <FlexboxGrid justify="center">
+                                <FlexboxGrid.Item colspan={17}>
+                                    <FlexboxGrid justify="space-around">
+                                        <FlexboxGrid.Item colspan={11}>
+                                            <h2 className="center">Chat</h2>
+                                        </FlexboxGrid.Item>
+                                    </FlexboxGrid>
+                                </FlexboxGrid.Item>
+                            </FlexboxGrid>
+                        </Header>
+                    </div>
+                    <div className="contentDiv">
+                        <Content>
+                            <FlexboxGrid justify="center">
+                                <FlexboxGrid.Item colspan={18}>
+                                    <List autoScroll={true} style={styles2}>
+                                        {this.state.messages.map((item, index) =>
+                                            <List.Item key={index} index={item}>
+                                                <h6>{item.username}</h6> {item.text}
+                                            </List.Item>
+                                        )}
+                                    </List>
+                                </FlexboxGrid.Item>
 
-                        </FlexboxGrid>
-                    </Content>
-                </div>
-                <div className="bottomFooter">
-                    <Footer>
-                        <FlexboxGrid justify="center">
-                            <FlexboxGrid.Item>
-                                <Form onSubmit={event => {
-                                    event.preventDefault();
-                                    this.sendMessage();
-                                }}>
-                                    <InputGroup inside style={styles}>
-                                        <Input value={this.state.messageText} onChange={value => this.setState({ messageText: value })} />
-                                        <InputGroup.Button type="submit" onClick={event => {
-                                            event.preventDefault();
-                                            this.sendMessage();
-                                        }}>
-                                            <Icon icon="send" />
-                                        </InputGroup.Button>
-                                    </InputGroup>
-                                </Form>
-                            </FlexboxGrid.Item>
-                        </FlexboxGrid>
-                    </Footer>
-                </div>
-                <style jsx>{`
+                            </FlexboxGrid>
+                        </Content>
+                    </div>
+                    <div className="bottomFooter">
+                        <Footer>
+                            <FlexboxGrid justify="center">
+                                <FlexboxGrid.Item>
+                                    <Form onSubmit={event => {
+                                        event.preventDefault();
+                                        this.sendMessage();
+                                    }}>
+                                        <InputGroup inside style={styles}>
+                                            <Input value={this.state.messageText} onChange={value => this.setState({ messageText: value })} />
+                                            <InputGroup.Button type="submit" onClick={event => {
+                                                event.preventDefault();
+                                                this.sendMessage();
+                                            }}>
+                                                <Icon icon="send" />
+                                            </InputGroup.Button>
+                                        </InputGroup>
+                                    </Form>
+                                </FlexboxGrid.Item>
+                            </FlexboxGrid>
+                        </Footer>
+                    </div>
+                    <style jsx>{`
                 .fixedHeader {
+                    top: 0;
+                    padding-top: 1em;
+                    padding-bottom: 1em;
+                    background-color: #ffffff;
                     z-index: 1;
                     position: fixed;
                     width: 100vw;
@@ -136,7 +140,8 @@ class Chat extends Component {
         			text-align: center;
         		}
         `}</style>
-            </React.Fragment >
+                </React.Fragment >
+            </div>
         );
     }
 }
