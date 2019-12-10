@@ -294,61 +294,63 @@ const DashboardBase = () => {
                                 </Content>
                             </div>
 
-                            <Content>
-                                <FlexboxGrid justify="center">
-                                    <FlexboxGrid.Item colspan={18}>
-                                        <br /><br /><br />
-                                        <div className="animationBox">
-                                            <Lottie
-                                                options={ratingsOptions}
-                                                isClickToPauseDisabled={true}
-                                            />
-                                        </div>
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item colspan={18}>
-                                        <h2 className="sectionTitle" >Play</h2>
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item colspan={17}>
-                                        <FlexboxGrid justify="space-around">
-                                            <FlexboxGrid.Item colspan={11}>
-                                                <Button size="lg" color="cyan" block href="/create">Create</Button>
-                                            </FlexboxGrid.Item>
-                                            <FlexboxGrid.Item colspan={11}>
-                                                <Button size="lg" color="cyan" block href="/search">Search</Button>
-                                            </FlexboxGrid.Item>
-                                        </FlexboxGrid>
-                                        <br />
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item colspan={18}>
-                                        <h2 className="sectionTitle">Friends</h2>
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item colspan={24}>
-                                        <div className="card">
-                                            <div className="cardContentEnds" />
-                                            {friendsLeaderboardList.map(values => (
-                                                <FriendCard
-                                                    username={values.username}
-                                                    location={"location"}
+                            <div className="minFullHeight">
+                                <Content>
+                                    <FlexboxGrid justify="center">
+                                        <FlexboxGrid.Item colspan={18}>
+                                            <br /><br /><br />
+                                            <div className="animationBox">
+                                                <Lottie
+                                                    options={ratingsOptions}
+                                                    isClickToPauseDisabled={true}
+                                                />
+                                            </div>
+                                        </FlexboxGrid.Item>
+                                        <FlexboxGrid.Item colspan={18}>
+                                            <h2 className="sectionTitle" >Play</h2>
+                                        </FlexboxGrid.Item>
+                                        <FlexboxGrid.Item colspan={17}>
+                                            <FlexboxGrid justify="space-around">
+                                                <FlexboxGrid.Item colspan={11}>
+                                                    <Button size="lg" color="cyan" block href="/create">Create</Button>
+                                                </FlexboxGrid.Item>
+                                                <FlexboxGrid.Item colspan={11}>
+                                                    <Button size="lg" color="cyan" block href="/search">Search</Button>
+                                                </FlexboxGrid.Item>
+                                            </FlexboxGrid>
+                                            <br />
+                                        </FlexboxGrid.Item>
+                                        <FlexboxGrid.Item colspan={18}>
+                                            <h2 className="sectionTitle">Friends</h2>
+                                        </FlexboxGrid.Item>
+                                        <FlexboxGrid.Item colspan={24}>
+                                            <div className="card">
+                                                <div className="cardContentEnds" />
+                                                {friendsLeaderboardList.map(values => (
+                                                    <FriendCard
+                                                        username={values.username}
+                                                        location={"location"}
+                                                        score={values.score}
+                                                    />
+                                                ))}
+                                                <div className="cardContentEnds" />
+                                            </div>
+                                        </FlexboxGrid.Item>
+                                        <FlexboxGrid.Item colspan={18}>
+                                            <h2 className="sectionTitle">Past Games</h2>
+                                        </FlexboxGrid.Item>
+                                        <FlexboxGrid.Item colspan={17}>
+                                            {PastGamesList.map(values => (
+                                                <PastGameCard
+                                                    name={values.name}
+                                                    shape={values.shape}
                                                     score={values.score}
                                                 />
                                             ))}
-                                            <div className="cardContentEnds" />
-                                        </div>
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item colspan={18}>
-                                        <h2 className="sectionTitle">Past Games</h2>
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item colspan={17}>
-                                        {PastGamesList.map(values => (
-                                            <PastGameCard
-                                                name={values.name}
-                                                shape={values.shape}
-                                                score={values.score}
-                                            />
-                                        ))}
-                                    </FlexboxGrid.Item>
-                                </FlexboxGrid>
-                            </Content>
+                                        </FlexboxGrid.Item>
+                                    </FlexboxGrid>
+                                </Content>
+                            </div>
                             <Content>
                                 <SwipeableViews index={currentLeaderboardState} onChangeIndex={handleChangeIndexLeaderboard}>
                                     <div className="leaderBoardHeight">
