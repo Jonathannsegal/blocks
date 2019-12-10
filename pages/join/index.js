@@ -399,13 +399,18 @@ const JoinBase = () => {
                                 <FlexboxGrid justify="center">
                                     <FlexboxGrid.Item colspan={18}>
                                         <FlexboxGrid justify="space-around">
-                                            <h2 className="sectionTitle">Choose a team</h2>
+                                            <h2 className="sectionTitle">{gameValues.name}</h2>
                                         </FlexboxGrid>
                                     </FlexboxGrid.Item>
                                     <FlexboxGrid.Item colspan={18}>
                                         <br />
                                         <FlexboxGrid justify="space-around">
-                                            <Button onClick={() => { noEdit(); open() }} color="cyan" size="lg" appearance="primary">Make a Team</Button>
+                                            <ButtonToolbar>
+                                                <ButtonGroup>
+                                                    <Button appearance="subtle" size="lg">Choose a team</Button>
+                                                    <Button appearance="primary" color="cyan" size="lg" onClick={() => { noEdit(); open() }}>Make a Team</Button>
+                                                </ButtonGroup>
+                                            </ButtonToolbar>
                                         </FlexboxGrid>
                                         <br />
                                     </FlexboxGrid.Item>
