@@ -14,7 +14,7 @@ export default class ObjectiveMarker extends PureComponent {
                 }}
 
             >
-                <circle cx={size} cy={size} r={size} fill={color} opacity={0.5}/>
+                <circle cx={size} cy={size} r={size} fill={"00ff00"} opacity={0.5}/>
             </svg>
         );
     }

@@ -32,17 +32,6 @@ var longitude2 = 0;
 var longitude3 = 0;
 
 
-const objectiveLayer = {
-    id: 'objectives',
-    type: 'circle',
-    source: mapAreaSource,
-    paint: {
-        'circle-color': '#0000ff',
-        'circle-opacity': 0,
-        'circle-radius': 15,
-    }
-}
-
 const mapAreaLayer = {
     id: 'map-area',
     type: 'fill',
@@ -178,7 +167,8 @@ class Map extends Component {
             var point = turf.point([this.props.coords.longitude, this.props.coords.latitude]);
             console.log(turf.inside(point, circle));
             if (turf.inside(point, circle)) {
-							this.state.OBJECTIVES[i].color = "ff0000";
+							//this.state.OBJECTIVES[i].color = "ff0000";
+              console.log(this.state.OBJECTIVES[i].color);
             }
         }
     }
@@ -186,7 +176,7 @@ class Map extends Component {
     _renderCityMarker = (objective, index) => {
         return (
             <Marker key={`marker-${index}`} longitude={objective.longitude} latitude={objective.latitude} draggable={true} onDragEnd={event => this.updateObjectiveLocation(index, event.lngLat)}>
-                <ObjectiveMarker size={15} color={this.state.OBJECTIVES[index].color} />
+                <ObjectiveMarker size={15} color={objective.color} />
             </Marker>
         );
     };
@@ -226,7 +216,7 @@ class Map extends Component {
                     {...this.state.viewport}
                     latitude={this.props.coords.latitude}
                     longitude={this.props.coords.longitude}
-										zoom={16}
+										
                     onViewportChange={(viewport) => this.setState({ viewport })}
                 >
                     {this.state.OBJECTIVES.map(this._renderCityMarker)}
@@ -234,9 +224,6 @@ class Map extends Component {
                     {this.checkObjectives()}
                     <Source type="geojson" data={this.getValues()}>
                         <Layer {...mapAreaLayer} />
-                    </Source>
-                    <Source type="geojson" data={this.getPoints()}>
-                        <Layer {...objectiveLayer} />
                     </Source>
                     <Marker latitude={this.props.coords.latitude} longitude={this.props.coords.longitude}>
                         {/* <div className="avatarContainer">
