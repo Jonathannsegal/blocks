@@ -24,6 +24,7 @@ const useGame = () => {
 	const playerValues = useSelector(state => state.currentGamePlayerValues)
 	const isGameOver = useSelector(state => state.gameisOver)
 	const objectiveList = useSelector(state => state.currentObjectives)
+	const GameTeamList = useSelector(state => state.currentGameTeamList)
 	let getObjectiveList = function () {
 		return db.getObjectiveList(CurrentGame)
 			.then(list => {
@@ -97,7 +98,7 @@ const useGame = () => {
 	// 	console.log(db.getGameId(AuthUser.uid));
 	// }
 
-	return { isGameOver, currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList }
+	return { GameTeamList, isGameOver, currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList }
 }
 
 const Game = () => (
@@ -107,7 +108,7 @@ const Game = () => (
 );
 
 const GameBase = () => {
-	const { isGameOver, currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList } = useGame()
+	const { GameTeamList, isGameOver, currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList } = useGame()
 	const handleChangeIndex = index => {
 		if (index === GameState.chat) {
 			gameChat();
@@ -123,9 +124,12 @@ const GameBase = () => {
 				if (isGameOver) {
 					return (
 						<GameOver
+							AuthUser={AuthUser}
 							currentGame={CurrentGame}
 							gameMain={gameMain}
 							gameValues={gameValues}
+							playerValues={playerValues}
+							GameTeamList={GameTeamList}
 						/>
 					);
 				} else {

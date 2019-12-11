@@ -39,6 +39,28 @@ export const onceGetUsers = () =>
   db.collection('users');
 
 
+
+
+
+export const updateUserScore = (id, score) =>
+  db.doc(`users/${id}`).update({
+    score
+  });
+
+export const getUserScore = (userId) => {
+  var docRef = db.collection('users').doc(userId);
+  return docRef.get().then(function (doc) {
+    if (doc.exists) {
+      return (doc.data());
+    } else {
+      return ("No such document!");
+    }
+  }).catch(function (error) {
+    return ("Error getting document:", error);
+  });
+}
+
+
 export const doAddPlayerToGame = (id, userId, username, position, team, teamId) =>
   db.doc(`games/${id}`).collection('players').doc(userId).set({
     username,

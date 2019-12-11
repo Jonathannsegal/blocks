@@ -29,6 +29,16 @@ class GameOver extends Component {
                 this.setState({ teams: team });
             }.bind(this)
         ).bind(this);
+
+        let score = 0;
+
+        for (let i = 0; i < this.props.GameTeamList.length; i++) {
+            if (this.props.GameTeamList[i].id == this.props.playerValues.teamId) {
+                score = this.props.GameTeamList[i].score;
+            }
+        }
+        db.getUserScore(this.props.AuthUser.uid).then(
+            values => db.updateUserScore(this.props.AuthUser.uid, values.score + score));
     }
     render() {
         return (
