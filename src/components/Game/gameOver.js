@@ -10,6 +10,7 @@ import {
     List,
     Header
 } from 'rsuite';
+import Router from "next/router"
 import { GameStateGlobal } from '../../constants';
 require('rsuite/lib/styles/index.less');
 
@@ -76,7 +77,7 @@ class GameOver extends Component {
                     <Footer>
                         <FlexboxGrid justify="center">
                             <FlexboxGrid.Item colspan={15}>
-                                <Button size="lg" color="cyan" block onClick={() => this.props.gameMain()}>Home</Button>
+                                <Button size="lg" color="cyan" block onClick={() => Router.push('/dashboard')}>Home</Button>
                             </FlexboxGrid.Item>
                         </FlexboxGrid>
                     </Footer>
