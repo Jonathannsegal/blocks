@@ -54,7 +54,7 @@ const useGame = () => {
 var teamArray = [];
 db.getTeamList(CurrentGame).then(values => {
 	values.docs.map(doc => {
-		let teamVal = { "teamID": doc.data().id, "score": 0 };
+		let teamVal = { "teamID": doc.data().id, "score": doc.data().score };
 		teamArray.push(teamVal);
 	})
 });
