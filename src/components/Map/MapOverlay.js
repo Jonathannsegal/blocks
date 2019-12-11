@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector, shallowEqual } from 'react-redux'
+import { useSelector, shallowEqual, useDispatch } from 'react-redux'
 import Lottie from 'react-lottie'
 import Link from 'next/link';
 import * as loop from '../../db/loop.json'
@@ -37,6 +37,7 @@ const useMapOverlay = () => {
 }
 
 const getTime = time => {
+    const dispatch = useDispatch()
     const gameValues = useSelector(state => state.currentGameValues)
     let endTime = new Date(gameValues.endTime * 1000);
     let currentTime = new Date(time * 1000);
@@ -45,6 +46,11 @@ const getTime = time => {
     const seconds = timeInSeconds % 60;
     const timeString = minutes.toString().padStart(2, '0') + ':' +
         seconds.toString().padStart(2, '0');
+    if (timeInSeconds < 1) {
+        dispatch({
+            type: 'GAMEISOVER_TRUE'
+        })
+    }
     return timeString;
 }
 

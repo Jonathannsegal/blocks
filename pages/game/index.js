@@ -4,6 +4,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { useSelector, useDispatch } from 'react-redux'
 import Map from '../../src/components/Map/Map';
 import Status from '../../src/components/Game/status';
+import GameOver from '../../src/components/Game/gameOver';
 import Chat from '../../src/components/Game/chat';
 import Router from "next/router"
 import useInterval from '../../src/lib/useInterval'
@@ -21,6 +22,7 @@ const useGame = () => {
 	const CurrentGame = useSelector(state => state.currentGame)
 	const gameValues = useSelector(state => state.currentGameValues)
 	const playerValues = useSelector(state => state.currentGamePlayerValues)
+	const isGameOver = useSelector(state => state.gameisOver)
 	const objectiveList = useSelector(state => state.currentObjectives)
 	let getObjectiveList = function () {
 		return db.getObjectiveList(CurrentGame)
@@ -51,25 +53,25 @@ const useGame = () => {
 			lastUpdate: (Date.now() / 1000),
 		})
 	}, 1000)
-var teamArray = [];
-db.getTeamList(CurrentGame).then(values => {
-	values.docs.map(doc => {
-		let teamVal = { "teamID": doc.data().id, "score": doc.data().score };
-		teamArray.push(teamVal);
-	})
-});
+	var teamArray = [];
+	db.getTeamList(CurrentGame).then(values => {
+		values.docs.map(doc => {
+			let teamVal = { "teamID": doc.data().id, "score": doc.data().score };
+			teamArray.push(teamVal);
+		})
+	});
 
 	useInterval(() => {
 		db.getObjectiveList(CurrentGame).then(values => {
 			values.docs.map(doc => {
-				for(var i = 0; i < teamArray.length; i++){
-					if(doc.data().teamId == teamArray[i].teamID){
+				for (var i = 0; i < teamArray.length; i++) {
+					if (doc.data().teamId == teamArray[i].teamID) {
 						teamArray[i].score++;
 					}
 				}
 			})
 		})
-		for(var i = 0; i < teamArray.length; i++){
+		for (var i = 0; i < teamArray.length; i++) {
 			db.updateTeamScore(CurrentGame, teamArray[i].teamID, teamArray[i].score);
 		}
 	}, 5000)
@@ -95,7 +97,7 @@ db.getTeamList(CurrentGame).then(values => {
 	// 	console.log(db.getGameId(AuthUser.uid));
 	// }
 
-	return { currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList }
+	return { isGameOver, currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList }
 }
 
 const Game = () => (
@@ -105,7 +107,7 @@ const Game = () => (
 );
 
 const GameBase = () => {
-	const { currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList } = useGame()
+	const { isGameOver, currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList } = useGame()
 	const handleChangeIndex = index => {
 		if (index === GameState.chat) {
 			gameChat();
@@ -117,29 +119,43 @@ const GameBase = () => {
 	};
 	return (
 		<React.Fragment>
-			<SwipeableViews
-				resistance={true}
-				index={currentGameState}
-				onChangeIndex={handleChangeIndex}>
-				<Chat
-					gameMain={gameMain}
-					currentGame={CurrentGame}
-					userId={AuthUser}
-					playerValues={playerValues}
-				/>
-				<Map
-					gameValues={gameValues}
-					currentGame={CurrentGame}
-					objectives={objectiveList}
-					userId={AuthUser.uid}
-					playerValues={playerValues}
-				/>
-				<Status
-					currentGame={CurrentGame}
-					gameMain={gameMain}
-					gameValues={gameValues}
-				/>
-			</SwipeableViews>
+			{(function () {
+				if (isGameOver) {
+					return (
+						<GameOver
+							currentGame={CurrentGame}
+							gameMain={gameMain}
+							gameValues={gameValues}
+						/>
+					);
+				} else {
+					return (
+						<SwipeableViews
+							resistance={true}
+							index={currentGameState}
+							onChangeIndex={handleChangeIndex}>
+							<Chat
+								gameMain={gameMain}
+								currentGame={CurrentGame}
+								userId={AuthUser}
+								playerValues={playerValues}
+							/>
+							<Map
+								gameValues={gameValues}
+								currentGame={CurrentGame}
+								objectives={objectiveList}
+								userId={AuthUser.uid}
+								playerValues={playerValues}
+							/>
+							<Status
+								currentGame={CurrentGame}
+								gameMain={gameMain}
+								gameValues={gameValues}
+							/>
+						</SwipeableViews>
+					);
+				}
+			})()}
 		</React.Fragment >
 	)
 }
