@@ -108,7 +108,7 @@ const Game = () => (
 );
 
 const GameBase = () => {
-	const { GameTeamList, isGameOver, currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList } = useGame()
+	const { GameTeamList, isGameOver, currentGameState, gameValues, playerValues, gameChat, gameMain, gameStatus, CurrentGame, AuthUser, objectiveList} = useGame()
 	const handleChangeIndex = index => {
 		if (index === GameState.chat) {
 			gameChat();
@@ -150,6 +150,7 @@ const GameBase = () => {
 								objectives={objectiveList}
 								userId={AuthUser.uid}
 								playerValues={playerValues}
+								teamList={GameTeamList}
 							/>
 							<Status
 								currentGame={CurrentGame}

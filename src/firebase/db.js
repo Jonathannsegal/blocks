@@ -172,7 +172,8 @@ export const doUpdateObjectives = (currentGame, markerId, position) =>
   db.doc(`games/${currentGame}/objectives/${markerId}`).set({
     position,
     team: "",
-    teamId: ""
+    teamId: "",
+    num: markerId
   });
 
 
