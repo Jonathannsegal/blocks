@@ -129,7 +129,7 @@ class Map extends Component {
                     <div className="fullscreen">
                         <FullscreenControl />
                     </div>
-                    <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
+                    {/* <div className="mapboxgl-ctrl-group mapboxgl-ctrl">
                         <button
                             className="mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"
                             title="goToCurrentLocation"
@@ -137,7 +137,7 @@ class Map extends Component {
                         >
                             <Icon size="lg" icon='compass' />
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </React.Fragment>
         );
