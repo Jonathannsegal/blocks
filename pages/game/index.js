@@ -59,13 +59,6 @@ db.getTeamList(CurrentGame).then(values => {
 	})
 });
 
-const initiateTeamArray = function () {
-	for(var i = 0; i < numTeams; i++){
-		let teamVal = { "teamId": "test" , "numObjectives": 0 };
-		teamArray.push(teamVal);
-	}
-}
-
 	useInterval(() => {
 		db.getObjectiveList(CurrentGame).then(values => {
 			values.docs.map(doc => {
