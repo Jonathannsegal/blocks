@@ -5,6 +5,7 @@ import * as searching from '../../src/db/searching.json'
 import { db } from "../../src/firebase";
 import { withRedux } from '../../src/lib/redux'
 import Router from "next/router"
+import { GameStateGlobal } from '../../src/constants';
 import {
     Content,
     FlexboxGrid,
@@ -90,9 +91,16 @@ const search = () => {
                             <div className="leaderBoardHeight">
                                 <FlexboxGrid justify="center">
                                     <FlexboxGrid.Item colspan={18}>
-                                        {gameList.map(gameValues => (
-                                            <GameCard goToGame={goToGameFunction} roomData={gameValues} />
-                                        ))}
+                                        {gameList.map(gameValues => {
+                                            if (gameValues.state != GameStateGlobal.Finished) {
+                                                return (
+                                                    <GameCard goToGame={goToGameFunction} roomData={gameValues} />
+                                                );
+                                            } else {
+                                                return null;
+                                            }
+                                        }
+                                        )}
                                     </FlexboxGrid.Item>
                                 </FlexboxGrid>
                             </div>

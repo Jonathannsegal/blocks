@@ -39,13 +39,13 @@ const useGame = () => {
 			})
 		}
 	});
-	dbSnapshot.collection('games').doc(CurrentGame).onSnapshot(
-		function (querySnapshot) {
-			if (querySnapshot.data().state == GameStateGlobal.Finished) {
-				Router.push('/dashboard');
-			}
-		}
-	);
+	// dbSnapshot.collection('games').doc(CurrentGame).onSnapshot(
+	// 	function (querySnapshot) {
+	// 		if (querySnapshot.data().state == GameStateGlobal.Finished) {
+	// 			Router.push('/dashboard');
+	// 		}
+	// 	}
+	// );
 	useInterval(() => {
 		dispatch({
 			type: 'TICK',

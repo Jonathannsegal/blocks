@@ -30,10 +30,10 @@ export const updateObjectiveTeam = (currentGame, num, team, teamId) =>
     teamId
   });
 
-  export const updateTeamScore = (currentGame, teamId, score) =>
-    db.collection('games').doc(currentGame).collection('teams').doc(teamId).update({
-      score,
-    });
+export const updateTeamScore = (currentGame, teamId, score) =>
+  db.collection('games').doc(currentGame).collection('teams').doc(teamId).update({
+    score,
+  });
 
 export const onceGetUsers = () =>
   db.collection('users');
@@ -82,6 +82,11 @@ export const doStartGame = (gameName, state, startTime, endTime) =>
     state,
     startTime,
     endTime
+  });
+
+export const doEndGame = (gameName, state) =>
+  db.doc(`games/${gameName}`).update({
+    state
   });
 
 export const onceGetGames = (gameName) => {

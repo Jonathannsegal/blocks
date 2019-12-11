@@ -10,6 +10,7 @@ import {
     List,
     Header
 } from 'rsuite';
+import { GameStateGlobal } from '../../constants';
 require('rsuite/lib/styles/index.less');
 
 class GameOver extends Component {
@@ -18,6 +19,7 @@ class GameOver extends Component {
     };
 
     componentDidMount() {
+        db.doEndGame(this.props.currentGame, GameStateGlobal.Finished);
         dbSnapshot.collection('games').doc(this.props.currentGame).collection('teams').onSnapshot(
             function (querySnapshot) {
                 let team = [];
