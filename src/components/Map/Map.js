@@ -196,7 +196,7 @@ class Map extends Component {
     populateStateObjective = () => {
         for (var i = 0; i < this.props.objectives.length; i++) {
             let objectiveArray = [...this.state.OBJECTIVES];
-            let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color": "#00ff00" };
+            let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color": "#000000" };
             objectiveArray.push(marker);
             this.state.OBJECTIVES = objectiveArray;
             this.setState({ dummy: this.state.dummy++ });
