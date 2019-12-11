@@ -456,7 +456,11 @@ const JoinBase = () => {
                                                             <a className="listItemsA" onClick={() => joinGame(item)}>
                                                                 <FlexboxGrid justify="start">
                                                                     <FlexboxGrid.Item>
-                                                                        {item.name}
+                                                                        <div className="color" style={{ backgroundColor: `${item.color}` }} />
+                                                                        <div className="teamName">
+                                                                            <h4>{item.name}</h4>
+                                                                        </div>
+                                                                        {/* {item.name} */}
                                                                     </FlexboxGrid.Item>
                                                                 </FlexboxGrid>
                                                             </a>
@@ -515,7 +519,7 @@ const JoinBase = () => {
                                                     </Navbar.Body>
                                                 </Navbar>
                                                 <FlexboxGrid justify="center">
-                                                    <FlexboxGrid.Item colspan={18}>
+                                                    <FlexboxGrid.Item colspan={24}>
                                                         <FlexboxGrid justify="space-around">
                                                             <h2 className="sectionTitle">{currentPlayerValues.team}</h2>
                                                         </FlexboxGrid>
@@ -561,6 +565,17 @@ const JoinBase = () => {
                 })()}
             </SwipeableViews>
             <style jsx>{`
+                .color{
+                    height: 2.5em;
+                    // margin-top: -0.6em;
+                    width: 2em;
+                    float: left;
+                    display:inline-block;
+                }
+                .teamName{
+                    margin-left: 1em;
+                    display:inline-block;
+                }
                 .listItemsA {
                     color: #000000;
                 }
