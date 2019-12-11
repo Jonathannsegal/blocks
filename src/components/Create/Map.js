@@ -217,7 +217,7 @@ class Map extends Component {
     };
 
     componentDidMount() {
-
+        this._goToCurrentLocation()
     }
 
     render() {
@@ -245,7 +245,6 @@ class Map extends Component {
                         editHandleStyle={getEditHandleStyle}
                     />
                     {this._renderDrawTools()}
-                    {this._goToCurrentLocation()}
                 </ReactMapGL>
             </React.Fragment >
         );
