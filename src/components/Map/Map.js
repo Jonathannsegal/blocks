@@ -160,9 +160,9 @@ class Map extends Component {
         });
     }
 
-     getSelectedTeamValues = (currentGame, teamId) => {
-      var docRef = dbSnapshot.collection('games').doc(currentGame).collection('teams').doc(teamId);
-      return docRef.get()
+    getSelectedTeamValues = (currentGame, teamId) => {
+        var docRef = dbSnapshot.collection('games').doc(currentGame).collection('teams').doc(teamId);
+        return docRef.get()
     }
 
     checkObjectives = () => {
@@ -172,15 +172,15 @@ class Map extends Component {
             var point = turf.point([this.props.coords.longitude, this.props.coords.latitude]);
             //console.log(turf.inside(point, circle));
             if (turf.inside(point, circle)) {
-              var index = i;
-              //console.log(this.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId));
-              //console.log(db.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId))
-                this.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId).then(values=>{
+                var index = i;
+                //console.log(this.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId));
+                //console.log(db.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId))
+                this.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId).then(values => {
                     this.state.OBJECTIVES[index].color = values.data().color;
                 });
                 //console.log(this.props.currentGame, this.props.playerValues);
-                db.updateObjectiveTeam(this.props.currentGame, (""+index), this.props.playerValues.team, this.props.playerValues.teamId);
-              //this.state.OBJECTIVES[i].color = color;
+                db.updateObjectiveTeam(this.props.currentGame, ("" + index), this.props.playerValues.team, this.props.playerValues.teamId);
+                //this.state.OBJECTIVES[i].color = color;
             }
         }
     }
@@ -196,7 +196,7 @@ class Map extends Component {
     populateStateObjective = () => {
         for (var i = 0; i < this.props.objectives.length; i++) {
             let objectiveArray = [...this.state.OBJECTIVES];
-            let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color":"#00ff00" };
+            let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color": "#00ff00" };
             objectiveArray.push(marker);
             this.state.OBJECTIVES = objectiveArray;
             this.setState({ dummy: this.state.dummy++ });
@@ -222,6 +222,7 @@ class Map extends Component {
             <ErrorScreen message={`Geolocation \n is not \n enabled \n\n Big Sad`} />
         ) : this.props.coords ? (
             <React.Fragment>
+                <MapOverlay />
                 <ReactMapGL
                     mapStyle="mapbox://styles/mapbox/streets-v9"
                     mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"

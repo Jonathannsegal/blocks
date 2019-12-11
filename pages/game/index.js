@@ -5,9 +5,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import Map from '../../src/components/Map/Map';
 import Status from '../../src/components/Game/status';
 import Chat from '../../src/components/Game/chat';
+import Router from "next/router"
+import useInterval from '../../src/lib/useInterval'
 import { GameState } from '../../src/constants';
 import { AppWithAuthorization } from "../../src/components/App";
 import { db } from "../../src/firebase";
+import { db as dbSnapshot } from "../../src/firebase/firebase";
+import { GameStateGlobal } from '../../src/constants';
+
 require('rsuite/lib/styles/index.less');
 
 const useGame = () => {
@@ -32,6 +37,20 @@ const useGame = () => {
 			})
 		}
 	});
+	dbSnapshot.collection('games').doc(CurrentGame).onSnapshot(
+		function (querySnapshot) {
+			if (querySnapshot.data().state == GameStateGlobal.Finished) {
+				Router.push('/dashboard');
+			}
+		}
+	);
+	useInterval(() => {
+		dispatch({
+			type: 'TICK',
+			light: true,
+			lastUpdate: Date.now(),
+		})
+	}, 1000)
 
 	// const userValues = useSelector(state => state.userValues)
 	const AuthUser = useSelector(state => state.authUser)
@@ -101,6 +120,17 @@ const GameBase = () => {
 			</SwipeableViews>
 		</React.Fragment >
 	)
+}
+
+useGame.getInitialProps = ({ reduxStore }) => {
+	const { dispatch } = reduxStore
+	dispatch({
+		type: 'TICK',
+		light: typeof window === 'object',
+		lastUpdate: Date.now(),
+	})
+
+	return {}
 }
 
 export default withRedux(Game);

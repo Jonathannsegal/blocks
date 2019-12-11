@@ -20,6 +20,8 @@ const initialState = {
     currentGameValues: [],
     currentObjectives: [],
     searchGameList: [],
+    lastUpdate: 0,
+    light: false,
     playersForCurrentGame: [],
     currentGamePlayerValues: [],
     joinScreenSelected: null,
@@ -125,6 +127,12 @@ const getAllPlayerListForCurrentGame = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'TICK':
+            return {
+                ...state,
+                lastUpdate: action.lastUpdate,
+                light: !!action.light,
+            }
         case 'SET_PASTGAMES_LIST': {
             return setPastGamesList(state, action);
         }
