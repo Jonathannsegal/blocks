@@ -30,6 +30,7 @@ var latitude3 = 0;
 var longitude1 = 0;
 var longitude2 = 0;
 var longitude3 = 0;
+var teamList = [];
 
 
 const mapAreaLayer = {
@@ -165,6 +166,22 @@ class Map extends Component {
         return docRef.get()
     }
 
+    setObjectiveColor = () => {
+      var objectiveArray = [...this.state.OBJECTIVES];
+      dbSnapshot.collection('games').doc(this.props.currentGame).collection('objectives').onSnapshot(function (querySnapshot){
+        querySnapshot.forEach(function (doc) {
+          for(var i = 0; i < teamList.length; i++){
+            if(doc.data().teamId == teamList[i].id){
+              if(objectiveArray != null){
+                objectiveArray[doc.data().num].color = teamList[i].color;
+              }
+            }
+          }
+        })
+      })
+      this.state.OBJECTIVES = objectiveArray;
+    }
+
     checkObjectives = () => {
         for (var i = 0; i < this.props.objectives.length; i++) {
             var center = [this.props.objectives[i].position.longitude, this.props.objectives[i].position.latitude];
@@ -194,6 +211,7 @@ class Map extends Component {
     };
 
     populateStateObjective = () => {
+      teamList = this.props.teamList;
         for (var i = 0; i < this.props.objectives.length; i++) {
             let objectiveArray = [...this.state.OBJECTIVES];
             let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color": "#000000" };
@@ -235,6 +253,7 @@ class Map extends Component {
                     {this.state.OBJECTIVES.map(this._renderCityMarker)}
                     {this.updatePlayerGeoPoint()}
                     {this.checkObjectives()}
+                    {this.setObjectiveColor()}
                     <Source type="geojson" data={this.getValues()}>
                         <Layer {...mapAreaLayer} />
                     </Source>
