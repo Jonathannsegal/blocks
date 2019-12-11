@@ -30,6 +30,11 @@ export const updateObjectiveTeam = (currentGame, num, team, teamId) =>
     teamId
   });
 
+  export const updateTeamScore = (currentGame, teamId, score) =>
+    db.collection('games').doc(currentGame).collection('teams').doc(teamId).update({
+      score,
+    });
+
 export const onceGetUsers = () =>
   db.collection('users');
 

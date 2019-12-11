@@ -51,6 +51,28 @@ const useGame = () => {
 			lastUpdate: (Date.now() / 1000),
 		})
 	}, 1000)
+var teamArray = [];
+db.getTeamList(CurrentGame).then(values => {
+	values.docs.map(doc => {
+		let teamVal = { "teamID": doc.data().id, "score": doc.data().score };
+		teamArray.push(teamVal);
+	})
+});
+
+	useInterval(() => {
+		db.getObjectiveList(CurrentGame).then(values => {
+			values.docs.map(doc => {
+				for(var i = 0; i < teamArray.length; i++){
+					if(doc.data().teamId == teamArray[i].teamID){
+						teamArray[i].score++;
+					}
+				}
+			})
+		})
+		for(var i = 0; i < teamArray.length; i++){
+			db.updateTeamScore(CurrentGame, teamArray[i].teamID, teamArray[i].score);
+		}
+	}, 5000)
 
 	// const userValues = useSelector(state => state.userValues)
 	const AuthUser = useSelector(state => state.authUser)
