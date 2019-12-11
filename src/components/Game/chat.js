@@ -22,7 +22,7 @@ class Chat extends Component {
     };
 
     sendMessage = () => {
-        const timeStamp = Date.now();
+        const timeStamp = (Date.now() / 1000);
         db.doSendMessage(
             this.props.currentGame,
             timeStamp + this.props.userId.uid,

@@ -67,12 +67,16 @@ export const doCreateGame = (gameCreator, id, name, shape, timeStamp, state) =>
     name,
     timeStamp,
     shape,
-    state
+    state,
+    startTime: 0,
+    endTime: 0
   });
 
-export const doStartGame = (gameName, state) =>
+export const doStartGame = (gameName, state, startTime, endTime) =>
   db.doc(`games/${gameName}`).update({
-    state
+    state,
+    startTime,
+    endTime
   });
 
 export const onceGetGames = (gameName) => {

@@ -73,7 +73,7 @@ const useCreate = () => {
     )
     const onGameCreate = () => {
         let shape = [];
-        let gameName = authUserUid.uid + Date.now();
+        let gameName = authUserUid.uid + (Date.now() / 1000);
         let gameCreator = authUserUid.uid;
         for (let i = 0; i < createGameValues.geometry[0].geometry.coordinates[0].length; i++) {
             shape.push(new firebase.firestore.GeoPoint(
@@ -87,7 +87,7 @@ const useCreate = () => {
                 gameName,
                 createGameValues.name,
                 shape,
-                Date.now(),
+                (Date.now() / 1000),
                 GameStateGlobal.Created
             )
             .then(() => {

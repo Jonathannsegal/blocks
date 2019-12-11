@@ -48,7 +48,7 @@ const useGame = () => {
 		dispatch({
 			type: 'TICK',
 			light: true,
-			lastUpdate: Date.now(),
+			lastUpdate: (Date.now() / 1000),
 		})
 	}, 1000)
 
@@ -127,7 +127,7 @@ useGame.getInitialProps = ({ reduxStore }) => {
 	dispatch({
 		type: 'TICK',
 		light: typeof window === 'object',
-		lastUpdate: Date.now(),
+		lastUpdate: (Date.now() / 1000),
 	})
 
 	return {}

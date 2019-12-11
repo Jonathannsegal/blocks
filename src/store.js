@@ -25,6 +25,7 @@ const initialState = {
     playersForCurrentGame: [],
     currentGamePlayerValues: [],
     joinScreenSelected: null,
+    gameisOver: false,
     homeState: HomeState.signIn,
     joinState: JoinState.main,
     signUpState: SignUpState.userName,
@@ -127,6 +128,16 @@ const getAllPlayerListForCurrentGame = (state, action) => ({
 
 const reducer = (state = { initialState, input: {} }, action) => {
     switch (action.type) {
+        case 'GAMEISOVER_TRUE':
+            return {
+                ...state,
+                gameisOver: true
+            }
+        case 'GAMEISOVER_FALSE':
+            return {
+                ...state,
+                gameisOver: false
+            }
         case 'TICK':
             return {
                 ...state,

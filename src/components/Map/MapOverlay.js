@@ -26,7 +26,7 @@ const loopOptions = {
     }
 };
 
-const userMapOverlay = () => {
+const useMapOverlay = () => {
     return useSelector(
         state => ({
             lastUpdate: state.lastUpdate,
@@ -36,12 +36,20 @@ const userMapOverlay = () => {
     )
 }
 
-const formatTime = time => {
-    return new Date(time).toJSON().slice(14, 19)
+const getTime = time => {
+    const gameValues = useSelector(state => state.currentGameValues)
+    let endTime = new Date(gameValues.endTime * 1000);
+    let currentTime = new Date(time * 1000);
+    let timeInSeconds = parseInt((endTime - currentTime) / 1000);
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    const timeString = minutes.toString().padStart(2, '0') + ':' +
+        seconds.toString().padStart(2, '0');
+    return timeString;
 }
 
 const MapOverlay = () => {
-    const { lastUpdate, light } = userMapOverlay()
+    const { lastUpdate, light } = useMapOverlay()
     return (
         <React.Fragment>
             <div className="overlay">
@@ -62,7 +70,7 @@ const MapOverlay = () => {
                         <FlexboxGrid.Item>
                             <div className="clockDiv">
                                 <h2 className={light ? 'light' : ''}>
-                                    {formatTime(lastUpdate)}
+                                    {getTime(lastUpdate)}
                                 </h2>
                             </div>
                         </FlexboxGrid.Item>

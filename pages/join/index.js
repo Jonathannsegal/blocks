@@ -97,7 +97,7 @@ const useJoin = () => {
     }
 
     const createTeam = () => {
-        db.doAddTeamToGame(CurrentGame, AuthUser.uid, Date.now() + teamCreateValues.name + AuthUser.uid, teamCreateValues.name, teamCreateValues.color);
+        db.doAddTeamToGame(CurrentGame, AuthUser.uid, (Date.now() / 1000) + teamCreateValues.name + AuthUser.uid, teamCreateValues.name, teamCreateValues.color);
         dispatch({
             type: 'joinMain'
         })
@@ -179,13 +179,38 @@ const useJoin = () => {
     }
     let currentGameValues = functionGameValues(CurrentGame);
     currentGameValues.then(function (values) {
-        if (values.length != gameValues.length) {
+        if (JSON.stringify(values) != JSON.stringify(gameValues)) {
             dispatch({
                 type: 'CURRENT_GAMEVALUE_SET',
                 values
             })
         }
     });
+
+    const updateCurrentGameValues = () => {
+        let functionGameValues = function (gameId) {
+            if (gameId == null) {
+                gameId = "none";
+            }
+            return db.onceGetGames(gameId)
+                .then(value => {
+                    if (value == "No such document!") {
+                        Router.push('/dashboard');
+                    }
+                    return value;
+                });
+        }
+        let currentGameValues = functionGameValues(CurrentGame);
+        currentGameValues.then(function (values) {
+            if (JSON.stringify(values) != JSON.stringify(gameValues)) {
+                dispatch({
+                    type: 'CURRENT_GAMEVALUE_SET',
+                    values
+                })
+            }
+        });
+    };
+
     const joinGame = (team) => {
         db.doSetGame(AuthUser.uid, CurrentGame);
         db.doAddPlayerToGame(CurrentGame, AuthUser.uid, AuthUser.displayName, new firebase.firestore.GeoPoint(1, 1), team.name, team.id);
@@ -200,13 +225,15 @@ const useJoin = () => {
     )
     const goToGameFunction = () => {
         setCurrentGame(CurrentGame);
-        db.doStartGame(CurrentGame, GameStateGlobal.Ongoing);
+        db.doStartGame(CurrentGame, GameStateGlobal.Ongoing, (Date.now() / 1000), (Date.now() / 1000) + (60 * 5));
+        updateCurrentGameValues();
         Router.push('/game');
     }
     dbSnapshot.collection('games').doc(CurrentGame).onSnapshot(
         function (querySnapshot) {
             if (querySnapshot.data().state == GameStateGlobal.Ongoing) {
                 if (currentPlayerValues.length != 0) {
+                    updateCurrentGameValues();
                     Router.push('/game');
                 }
             }
