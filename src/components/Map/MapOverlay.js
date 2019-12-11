@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux'
 import Lottie from 'react-lottie'
 import Link from 'next/link';
+import { db as dbSnapshot } from "../../firebase/firebase";
 import * as loop from '../../db/loop.json'
 import {
     Content,
@@ -36,6 +37,29 @@ const useMapOverlay = () => {
     )
 }
 
+const getTeamList = () => {
+    const dispatch = useDispatch()
+    const teamList = useSelector(state => state.currentGameTeamList)
+    // const CurrentGame = useSelector(state => state.currentGame)
+    // dbSnapshot.collection('games').doc(CurrentGame).collection('teams').onSnapshot(
+    //     function (querySnapshot) {
+    //         let list = [];
+    //         querySnapshot.forEach(function (doc) {
+    //             list.push(doc.data());
+    //         })
+    //         if (list[0].score != teamList[0].score) {
+    //             dispatch({
+    //                 type: 'GET_TEAMLIST',
+    //                 list
+    //             })
+    //         }
+    //     }
+    // );
+    return { teamList };
+}
+
+
+
 const getTime = time => {
     const dispatch = useDispatch()
     const gameValues = useSelector(state => state.currentGameValues)
@@ -56,8 +80,10 @@ const getTime = time => {
 
 const MapOverlay = () => {
     const { lastUpdate, light } = useMapOverlay()
+    const { teamList } = getTeamList();
     return (
         <React.Fragment>
+            {console.log(teamList)}
             <div className="overlay">
                 <div className="animationMargin">
                     <div className="animationPosition">
@@ -81,6 +107,21 @@ const MapOverlay = () => {
                             </div>
                         </FlexboxGrid.Item>
                     </FlexboxGrid>
+
+                    <div className="ScorePosition">
+                        <FlexboxGrid justify="center">
+                            <FlexboxGrid.Item>
+                                {teamList.map(values => {
+                                    return (
+                                        <div className={light ? 'light' : ''}>
+                                            <div style={{ backgroundColor: `${values.color}` }} className="ScoreDiv">{values.score}</div>
+                                        </div>
+                                    );
+                                }
+                                )}
+                            </FlexboxGrid.Item>
+                        </FlexboxGrid>
+                    </div>
                 </div>
             </div>
             <style jsx>{`
@@ -90,6 +131,20 @@ const MapOverlay = () => {
                     padding: 0.5em 1.5em;
                     width: 32vw;
                     border-radius: 25px;
+                }
+                .ScoreDiv{
+                    // background-color: rgba(0,0,0,0.5);
+                    color: #000;
+                    margin: 1em 0;
+                    padding: 0.5em 4em 0.5em 1.5em;
+                    width: 10vw;
+                    border-radius: 25px 0 0 25px;
+                }
+                .ScorePosition{
+                    top: 0;
+                    right: 0;
+                    position: absolute;
+                    float: left;
                 }
                 .animationPosition{
                     top: 0;
