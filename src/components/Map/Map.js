@@ -5,6 +5,8 @@ import Lottie from 'react-lottie'
 import * as locationdot from '../../db/locationdot.json'
 import ErrorScreen from '../../errors/ErrorScreen';
 import MapOverlay from './MapOverlay';
+import MapOverlayScores from './MapOverlayScores';
+
 import { RefreshTime } from '../../constants'
 import * as mapAreaSource from '../../db/map.geojson';
 import * as turf from '@turf/turf';
@@ -167,19 +169,19 @@ class Map extends Component {
     }
 
     setObjectiveColor = () => {
-      var objectiveArray = [...this.state.OBJECTIVES];
-      dbSnapshot.collection('games').doc(this.props.currentGame).collection('objectives').onSnapshot(function (querySnapshot){
-        querySnapshot.forEach(function (doc) {
-          for(var i = 0; i < teamList.length; i++){
-            if(doc.data().teamId == teamList[i].id){
-              if(objectiveArray != null){
-                objectiveArray[doc.data().num].color = teamList[i].color;
-              }
-            }
-          }
+        var objectiveArray = [...this.state.OBJECTIVES];
+        dbSnapshot.collection('games').doc(this.props.currentGame).collection('objectives').onSnapshot(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                for (var i = 0; i < teamList.length; i++) {
+                    if (doc.data().teamId == teamList[i].id) {
+                        if (objectiveArray != null) {
+                            objectiveArray[doc.data().num].color = teamList[i].color;
+                        }
+                    }
+                }
+            })
         })
-      })
-      this.state.OBJECTIVES = objectiveArray;
+        this.state.OBJECTIVES = objectiveArray;
     }
 
     checkObjectives = () => {
@@ -211,7 +213,7 @@ class Map extends Component {
     };
 
     populateStateObjective = () => {
-      teamList = this.props.teamList;
+        teamList = this.props.teamList;
         for (var i = 0; i < this.props.objectives.length; i++) {
             let objectiveArray = [...this.state.OBJECTIVES];
             let marker = { "latitude": this.props.objectives[i].position.latitude, "longitude": this.props.objectives[i].position.longitude, "color": "#000000" };
@@ -241,6 +243,9 @@ class Map extends Component {
         ) : this.props.coords ? (
             <React.Fragment>
                 <MapOverlay />
+                <MapOverlayScores
+                    CurrentGame={this.props.currentGame}
+                />
                 <ReactMapGL
                     mapStyle="mapbox://styles/mapbox/streets-v9"
                     mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"

@@ -158,6 +158,7 @@ const useDashboard = () => {
             querySnapshot.forEach(function (doc) {
                 users.push(doc.data());
             })
+            users.sort((a, b) => (a.score > b.score) ? -1 : 1)
             if (JSON.stringify(users) != JSON.stringify(GlobalLeaderboardList)) {
                 dispatch({
                     type: 'SET_GLOBALLEADERBOARDLIST',
