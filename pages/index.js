@@ -152,7 +152,7 @@ const HomeBase = () => {
 								showIcon
 								type="success"
 								title="Sent"
-								description="Check your email for the reset link."
+								description="Check your email for the reset link. "
 							/>
 						</div>
 					) : (
