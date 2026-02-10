@@ -1,0 +1,91 @@
+name: Gitleaks Secret Scan
+
+on:
+  push:
+    branches: [ main, master, develop, staging ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  gitleaks:
+    name: Gitleaks Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      security-events: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for complete scanning
+      
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional: For organization accounts, uncomment and add license:
+          # GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+          
+          # Optional: Alert specific users when secrets are found
+          # GITLEAKS_NOTIFY_USER_LIST: @youruser
+          
+          # Optional: Custom config path if needed
+          # GITLEAKS_CONFIG: config/gitleaks.toml
+        
+      - name: Upload artifact on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-report
+          path: |
+            gitleaks-report.json
+            gitleaks-report.sarif
+          retention-days: 30
+      
+      - name: Comment on PR with findings
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'gitleaks-report.json';
+            
+            if (!fs.existsSync(reportPath)) {
+              return;
+            }
+            
+            const findings = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+            
+            if (!findings || findings.length === 0) {
+              return;
+            }
+            
+            let comment = '## ⚠️ Gitleaks Alert\n\n';
+            comment += `Found **${findings.length}** potential secrets in this PR.\n\n`;
+            comment += '### Findings:\n\n';
+            
+            findings.forEach((finding, index) => {
+              comment += `${index + 1}. **${finding.RuleID}** (${finding.Severity})\n`;
+              comment += `   - File: \`${finding.File}\`\n`;
+              comment += `   - Match: \`${finding.Match.substring(0, 50)}...\`\n`;
+              comment += `   - Commit: ${finding.Commit}\n\n`;
+            });
+            
+            comment += '### Action Required:\n';
+            comment += '1. **DO NOT merge this PR** until secrets are removed\n';
+            comment += '2. Remove the exposed secret from your code\n';
+            comment += '3. Rotate/revoke the credential immediately\n';
+            comment += '4. For older commits: Consider using `git-filter-repo` to rewrite history\n';
+            comment += '5. Force-push only if absolutely necessary and team agrees\n';
+            comment += '6. Re-run this scan after fixing\n\n';
+            comment += '_For more info: https://gitleaks.io_';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
