@@ -1,14 +1,3 @@
----
-layout: "projects"
-title: "Blocks"
-publishedAt: "2019-02-18"
-summary: "I received an email from the Game Development Club here at Iowa State about there upcoming Game Jam."
-image: "https://cdn-images-1.medium.com/max/1600/1*MVqNXfbIfdlOecwil1Z1Fg.png"
-duration: "June–September \n Summer 2019 Internship"
-role: "Inclusive Experience Design Intern"
-team: "Design Language System & Digital Accessibility (Reliquary Team)"
----
-
 # Blocks
 
 Blocks is a geolocation based capture the flag game. You compeate against others on teams to get the most points, win games, and climb up the leaderboard.
