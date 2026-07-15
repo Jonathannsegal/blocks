@@ -1,6 +1,7 @@
 {
 	"version": 2,
 	"name": "Blocks",
+	"installCommand": "yarn install --frozen-lockfile --ignore-optional",
 	"routes": [
 		{
 			"src": "^/service-worker.js$",
