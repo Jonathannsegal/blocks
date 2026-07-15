@@ -1,12 +1,14 @@
 import { Component } from 'react';
 import ReactMapGL, { Marker, FullscreenControl, GeolocateControl } from 'react-map-gl';
-import Lottie from 'react-lottie'
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 import * as pencil from '../../db/pencil.json'
 import * as trash from '../../db/trash.json'
 import * as resize from '../../db/resize.json'
 import { Editor, EditorModes } from 'react-map-gl-draw';
 import { getFeatureStyle, getEditHandleStyle } from './style';
 import ObjectiveMarker from './objective-marker';
+import openStreetMapStyle from '../../lib/openStreetMapStyle';
 import * as turf from '@turf/turf';
 import {
     Icon
@@ -225,8 +227,7 @@ class Map extends Component {
         return (
             <React.Fragment>
                 <ReactMapGL
-                    mapStyle="mapbox://styles/mapbox/streets-v9"
-                    mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"
+                    mapStyle={openStreetMapStyle}
                     {...this.state.viewport}
                     width="100%"
                     height="100%"

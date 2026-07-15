@@ -26,7 +26,7 @@ class MyApp extends App {
 					<meta property="og:image" content="/static/banner.jpg" />
 					<meta content="en_US" property="og:locale" />
 					<meta content={description} property="og:description" />
-					<meta content="https://next-mapbox-demo.now.sh" property="og:url" />
+					<meta content="https://blocks-jonathan-segals-projects.vercel.app" property="og:url" />
 				</Head>
 				<Component {...pageProps} />
 				<style global jsx>{`

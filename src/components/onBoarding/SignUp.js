@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import Lottie from 'react-lottie';
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 import * as success from '../../db/success.json'
 import * as error from '../../db/error.json'
 import Link from "next/link"

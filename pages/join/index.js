@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import Lottie from 'react-lottie'
+import dynamic from 'next/dynamic';
+
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 import Map from '../../src/components/Stats/Map'
 import { useDispatch, useSelector } from 'react-redux'
 import { db } from "../../src/firebase";

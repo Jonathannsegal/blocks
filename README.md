@@ -1,11 +1,17 @@
 # Blocks
 
-Blocks is a geolocation based capture the flag game. You compeate against others on teams to get the most points, win games, and climb up the leaderboard.
+Blocks is a location-based capture-the-flag game. Players compete in teams to earn points, win games, and climb the leaderboard.
 
-Live: [Play](https://blocks.jonathansegal.now.sh)
-Github: [Source Code](https://github.com/jonathannsegal/blocks)
+> **Project status:** Maintained as a portfolio demo. The code uses an older Next.js/Firebase stack and is preserved primarily as a record of the original class project.
+
+- Demo: [blocks-jonathan-segals-projects.vercel.app](https://blocks-jonathan-segals-projects.vercel.app/)
+- Source: [github.com/Jonathannsegal/blocks](https://github.com/Jonathannsegal/blocks)
 
 ![Banner image](/public/static/BlocksHeader.png)
+
+## Local development
+
+Run `yarn install` and `yarn dev`. The current portfolio build uses OpenStreetMap raster tiles and does not require a Mapbox access token.
 
 ## Intro
 
@@ -15,19 +21,19 @@ I took the class SE319, Construction of User Interfaces at Iowa State which has 
 
 ##### 1. Gameplay
 
-Capture the flag game with user generated maps and objectives using players geoloation. Teams compeate to capture objectives and gain points.
+Capture the flag using user-generated maps, real-world player locations, and map objectives. Teams compete to capture objectives and gain points.
 
 ##### 2. Friends
 
-High score leaderboards to compeate with friends. Search for games to join and play with others as well as in game team chat.
+High-score leaderboards for competing with friends, game discovery, multiplayer sessions, and in-game team chat.
 
 ##### 3. User Experience
 
-Mobile optimized game to be usable on both Android and IOS. Thoughtfull UX with animations and and intuitive design.
+A mobile-optimized experience for Android and iOS, with animation and an intuitive interface.
 
 ## THE PROJECT: Construction of a User Interface
 
-Design and build an application that with great UI/UX and a robust implementation to fufill goals that you define.
+Design and build an application with a strong user experience and a robust implementation that fulfills goals you define.
 **—SE319**
 
 ##### The development process:
@@ -47,7 +53,7 @@ After coming up with a few ideas for the application that we wanted to build. We
 Due to the amount of time that my teammate and I had for this project we decided to:
 
 1. Build a `PWA` ( progressive web app ) to save time and reduce amount of code needed.
-2. Move streach goals such as Multiple game modes and `AR` ( Augmented Reality ) to future tasks.
+2. Move stretch goals such as multiple game modes and `AR` (augmented reality) to future tasks.
 
 ## 02 - Research & Proposal
 
@@ -162,8 +168,8 @@ Redux is incredibly powerful and great for managing state in larger applications
 
 ### Deployment
 
-For hosting and deployment we are using [Vercel](https://vercel.com/). Vercel is great for setting up an easy continuous deployment pipeline. When the master branch is updated in version control it triggers a deployment and updates in a few minutes.
+The portfolio demo is deployed with [Vercel](https://vercel.com/). Updates to the `master` branch trigger a production deployment.
 
 ## Summary
 
-I learned a lot about application development during this project. Going from an idea to a fully deployed project in a short period of time is great for learning how to do tasks quickly and efficiently for an agile development process. Integrating tools and frameworks into a project and handling dependencies for complex applications can be very difficult but finding solutions or alternatives is very rewarding. Overall it was a great project, I learned a lot, and the project is a functioning tech demo that is live.
+I learned a lot about application development during this project. Going from an idea to a deployed project in a short period of time was a practical lesson in agile development. Integrating tools and frameworks into a complex application can be difficult, but finding workable solutions is rewarding. The hosted build should be treated as a portfolio demo rather than an actively supported product.

@@ -1,5 +1,7 @@
 import React from 'react'
-import Lottie from 'react-lottie'
+import dynamic from 'next/dynamic';
+
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 import { withRedux } from '../src/lib/redux'
 import { useSelector, useDispatch } from 'react-redux'
 import * as pinjump from '../src/db/pinjump.json'

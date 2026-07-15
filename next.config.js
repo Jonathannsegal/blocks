@@ -4,7 +4,7 @@ const withLess = require('@zeit/next-less');
 
 module.exports = withOffline(
 	withLess({
-		target: process.env.NEXT_TARGET || 'serverless',
+		target: process.env.NEXT_TARGET || 'server',
 		webpack: (config, options) => {
 			config.module.rules.push({
 				test: /\.geojson/,

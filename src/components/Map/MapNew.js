@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import ReactMapGL, { FlyToInterpolator, Marker, Layer, Source } from 'react-map-gl';
 import { geolocated } from 'react-geolocated';
-import Lottie from 'react-lottie'
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 import * as locationdot from '../../db/locationdot.json'
 import ErrorScreen from '../../errors/ErrorScreen';
 import MapOverlay from './MapOverlay';
@@ -14,6 +15,7 @@ import firebase from "firebase/app";
 import { db } from "../../firebase";
 import { db as dbSnapshot } from "../../firebase/firebase";
 import ObjectiveMarker from '../Create/objective-marker';
+import openStreetMapStyle from '../../lib/openStreetMapStyle';
 
 const locationdotOptions = {
 	loop: true,
@@ -236,8 +238,7 @@ class Map extends Component {
 		return (
 			<React.Fragment>
 				<ReactMapGL
-					mapStyle="mapbox://styles/mapbox/streets-v9"
-					mapboxApiAccessToken="pk.eyJ1Ijoiam9uYXRoYW5zZWdhbCIsImEiOiJjamxrODVuamgwazI0M3BsZHIwNW5xZjNrIn0.UTtfn21uo6LCNkh-Pn1b4A"
+					mapStyle={openStreetMapStyle}
 					{...this.state.viewport}
 					// latitude={this.state.latitude}
 					// longitude={this.state.longitude}

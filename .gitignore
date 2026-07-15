@@ -5,3 +5,6 @@ dist
 node_modules
 *.log
 .next
+.env
+.env.*
+!.env.example

@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import Lottie from 'react-lottie'
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 import { Content, FlexboxGrid } from 'rsuite';
 import * as liquidspinner from '../../src/db/liquidspinner.json'
 require('rsuite/lib/styles/index.less');

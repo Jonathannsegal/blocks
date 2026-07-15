@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux'
-import Lottie from 'react-lottie'
+import dynamic from 'next/dynamic';
+const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 import Link from 'next/link';
 import { db as dbSnapshot } from "../../firebase/firebase";
 import * as loop from '../../db/loop.json'
