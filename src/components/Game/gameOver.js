@@ -12,7 +12,6 @@ import {
 } from 'rsuite';
 import Router from "next/router"
 import { GameStateGlobal } from '../../constants';
-require('rsuite/lib/styles/index.less');
 
 class GameOver extends Component {
     state = {

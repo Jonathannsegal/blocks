@@ -3,17 +3,27 @@ import { ServerStyleSheet } from 'styled-components';
 import GlobalStyle from '../src/components/GlobalStyle';
 
 export default class MyDocument extends Document {
-	static getInitialProps({ renderPage }) {
+	static async getInitialProps(ctx) {
 		const sheet = new ServerStyleSheet();
-		const page = renderPage((App) => (props) => sheet.collectStyles(<App {...props} />));
-		const styleTags = sheet.getStyleElement();
-		return { ...page, styleTags };
+		const originalRenderPage = ctx.renderPage;
+		try {
+			ctx.renderPage = () => originalRenderPage({
+				enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
+			});
+			const initialProps = await Document.getInitialProps(ctx);
+			return {
+				...initialProps,
+				styles: <>{initialProps.styles}{sheet.getStyleElement()}</>,
+			};
+		} finally {
+			sheet.seal();
+		}
 	}
 
 	render() {
 		return (
 			<html lang="en">
-				<Head>{this.props.styleTags}</Head>
+				<Head />
 				<body>
 					<noscript>
 						<a href="http://devhumor.com/tags/javascript">You dont have javascript enabled, Big Sad</a>

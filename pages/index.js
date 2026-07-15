@@ -28,7 +28,6 @@ import {
 } from '../src/constants'
 import { AppIfAuthorized } from "../src/components/App";
 
-require('rsuite/lib/styles/index.less');
 
 const pinjumpOptions = {
 	loop: true,

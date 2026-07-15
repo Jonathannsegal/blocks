@@ -8,7 +8,6 @@ import {
     FlexboxGrid,
     Button
 } from 'rsuite';
-require('rsuite/lib/styles/index.less');
 
 const fourzerofourOptions = {
     loop: true,

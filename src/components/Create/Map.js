@@ -13,7 +13,6 @@ import * as turf from '@turf/turf';
 import {
     Icon
 } from 'rsuite';
-require('rsuite/lib/styles/index.less');
 
 const pencilOptions = {
     loop: true,
@@ -193,7 +192,7 @@ class Map extends Component {
         //console.log(turf.pointsWithinPolygon(turfPoints, polygon));
         for (var i = 0; i < this.state.OBJECTIVES.length; i++) {
             var point = turf.point([this.state.OBJECTIVES[i].longitude, this.state.OBJECTIVES[i].latitude]);
-            if (turf.inside(point, polygon)) {
+            if (turf.booleanPointInPolygon(point, polygon)) {
                 continue;
             }
             else {
@@ -211,7 +210,7 @@ class Map extends Component {
                     this.setState({ dummy: this.state.dummy++ });
                     point = turf.point([this.state.OBJECTIVES[i].longitude, this.state.OBJECTIVES[i].longitude]);
                     count++;
-                    inside = turf.inside(point, polygon);
+                    inside = turf.booleanPointInPolygon(point, polygon);
                 }
             }
         }

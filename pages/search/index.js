@@ -18,7 +18,6 @@ import {
     Container
 } from 'rsuite';
 import GameCard from '../../src/components/Search/gameCard'
-require('rsuite/lib/styles/index.less');
 
 const searchingOptions = {
     loop: true,

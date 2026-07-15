@@ -17,7 +17,6 @@ import {
     Form,
     List
 } from 'rsuite';
-require('rsuite/lib/styles/index.less');
 
 const loopOptions = {
     loop: true,

@@ -37,7 +37,6 @@ import { AppWithAuthorization } from "../../src/components/App";
 import { db, auth } from "../../src/firebase";
 import NotLoggedIn from '../../src/extraScreens/notLoggedIn';
 import { db as dbSnapshot } from "../../src/firebase/firebase";
-require('rsuite/lib/styles/index.less');
 
 const ratingsOptions = {
     loop: true,

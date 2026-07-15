@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-require('rsuite/lib/styles/index.less');
 
 class pastGameCardOverlay extends Component {
     render() {

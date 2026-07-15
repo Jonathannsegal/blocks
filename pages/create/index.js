@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { withRedux } from '../../src/lib/redux'
 import { db } from "../../src/firebase";
 import Router from "next/router"
-import firebase from "firebase/app";
+import firebase from "firebase/compat/app";
 import * as createheader from '../../src/db/createheader.json'
 import {
     Content,
@@ -27,7 +27,6 @@ import {
 import { GameStateGlobal } from '../../src/constants'
 import Map from '../../src/components/Create/Map';
 import { AppWithAuthorization } from "../../src/components/App";
-require('rsuite/lib/styles/index.less');
 
 const createheaderOptions = {
     loop: true,

@@ -9,7 +9,6 @@ import {
     Button,
     List
 } from 'rsuite';
-require('rsuite/lib/styles/index.less');
 
 class Status extends Component {
     state = {

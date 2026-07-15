@@ -13,7 +13,7 @@ import * as mapAreaSource from '../../db/map.geojson';
 import * as turf from '@turf/turf';
 import mapboxgl from 'react-map-gl';
 import { Avatar } from 'rsuite';
-import firebase from "firebase/app";
+import firebase from "firebase/compat/app";
 import { db } from "../../firebase";
 import { db as dbSnapshot } from "../../firebase/firebase";
 import ObjectiveMarker from '../Create/objective-marker';
@@ -192,7 +192,7 @@ class Map extends Component {
             var circle = turf.circle(center, 0.014);
             var point = turf.point([this.props.coords.longitude, this.props.coords.latitude]);
             //console.log(turf.inside(point, circle));
-            if (turf.inside(point, circle)) {
+            if (turf.booleanPointInPolygon(point, circle)) {
                 var index = i;
                 //console.log(this.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId));
                 //console.log(db.getSelectedTeamValues(this.props.currentGame, this.props.playerValues.teamId))

@@ -11,7 +11,7 @@ import Router from "next/router"
 import { JoinState, JoinEditState, GameStateGlobal } from '../../src/constants';
 import { CirclePicker } from 'react-color';
 import SwipeableViews from 'react-swipeable-views';
-import firebase from "firebase/app";
+import firebase from "firebase/compat/app";
 import { AppWithAuthorization } from "../../src/components/App";
 import {
     Content,
@@ -33,7 +33,6 @@ import {
     ButtonGroup
 } from 'rsuite';
 import * as articulation from '../../src/db/articulation.json'
-require('rsuite/lib/styles/index.less');
 
 const articulationOptions = {
     loop: true,

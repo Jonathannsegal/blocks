@@ -3,6 +3,7 @@
 .jest-*
 dist
 node_modules
+serviceAccountKey.json
 *.log
 .next
 .env

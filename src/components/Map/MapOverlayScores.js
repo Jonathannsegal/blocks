@@ -3,7 +3,6 @@ import { db as dbSnapshot } from "../../firebase/firebase";
 import {
     FlexboxGrid,
 } from 'rsuite';
-require('rsuite/lib/styles/index.less');
 
 class MapOverlayScores extends Component {
     state = {

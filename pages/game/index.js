@@ -14,7 +14,6 @@ import { db } from "../../src/firebase";
 import { db as dbSnapshot } from "../../src/firebase/firebase";
 import { GameStateGlobal } from '../../src/constants';
 
-require('rsuite/lib/styles/index.less');
 
 const useGame = () => {
 	const currentGameState = useSelector(state => state.gameState)

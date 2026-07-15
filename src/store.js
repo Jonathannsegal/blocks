@@ -1,5 +1,4 @@
-import { createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { createStore } from 'redux'
 import {
     SignUpState,
     HomeState,
@@ -441,13 +440,6 @@ const reducer = (state = { initialState, input: {} }, action) => {
     }
 }
 
-const composeEnhancers = composeWithDevTools({
-    trace: true
-})
 export const initializeStore = (preloadedState = initialState) => {
-    return createStore(
-        reducer,
-        preloadedState,
-        composeEnhancers(applyMiddleware())
-    )
+    return createStore(reducer, preloadedState)
 }

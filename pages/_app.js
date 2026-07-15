@@ -1,6 +1,7 @@
 import React from 'react';
 import App from 'next/app';
 import Head from 'next/head';
+import 'rsuite/dist/styles/rsuite-default.css';
 
 class MyApp extends App {
 	render() {

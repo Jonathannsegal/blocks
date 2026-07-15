@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic';
 const Lottie = dynamic(() => import('react-lottie'), { ssr: false });
 import { Content, FlexboxGrid, Button } from 'rsuite';
 import * as nolocation from '../../src/db/nolocation.json'
-require('rsuite/lib/styles/index.less');
 
 const nolocationOptions = {
     loop: true,

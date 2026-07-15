@@ -13,7 +13,6 @@ import {
     Form,
     List
 } from 'rsuite';
-require('rsuite/lib/styles/index.less');
 
 class Chat extends Component {
     state = {
