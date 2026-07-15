@@ -20,7 +20,7 @@
         "@turf/turf": "^5.1.6",
         "@zeit/next-less": "^1.0.1",
         "file-loader": "^4.2.0",
-        "firebase": "^7.3.0",
+        "firebase": "8.10.1",
         "immutable": "^4.0.0-rc.12",
         "less": "^3.10.3",
         "next": "^9.3.2",
