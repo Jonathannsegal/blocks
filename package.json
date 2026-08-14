@@ -15,7 +15,7 @@
     "@turf/turf": "^7.3.4",
     "firebase": "12.16.0",
     "immutable": "5.1.9",
-    "next": "16.2.11",
+    "next": "16.3.1",
     "react": "18.3.1",
     "react-color": "^2.19.3",
     "react-dom": "18.3.1",
