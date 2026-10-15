@@ -35,7 +35,8 @@
   },
   "overrides": {
     "node-fetch": "2.7.0",
-    "postcss": "8.5.10",
-    "uuid": "11.1.1"
+    "postcss": "8.5.30",
+    "uuid": "11.1.1",
+    "@grpc/grpc-js@<1.14.6": "1.14.6"
   }
 }
